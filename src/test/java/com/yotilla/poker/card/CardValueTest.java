@@ -58,4 +58,34 @@ public class CardValueTest
 		CardValue value = CardValue.getByCode(null);
 		assertNull(value, "Null shouldn't match anything and the function should be able to handle it wihtout NPE.");
 	}
+
+	/**
+	 * thirteenMatchesKing
+	 */
+	@Test
+	public void thirteenMatchesKing()
+	{
+		CardValue value = CardValue.getByNumericalValue(13);
+		assertEquals(CardValue.KING, value, "The value 13 should match the king.");
+	}
+
+	/**
+	 * zeroMatchesNoCardValue
+	 */
+	@Test
+	public void zeroMatchesNoCardValue()
+	{
+		CardValue value = CardValue.getByNumericalValue(0);
+		assertNull(value, "Zero shouldn't match anything.");
+	}
+
+	/**
+	 * twentyMatchesNoCardValue
+	 */
+	@Test
+	public void twentyMatchesNoCardValue()
+	{
+		CardValue value = CardValue.getByNumericalValue(20);
+		assertNull(value, "Twenty shouldn't match anything.");
+	}
 }

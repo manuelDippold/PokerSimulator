@@ -11,4 +11,12 @@ package com.yotilla.poker.error;
 public class HandExceededException extends Exception
 {
 	private static final long serialVersionUID = -7955136988193841987L;
+
+	/**
+	 * @param argString
+	 */
+	public HandExceededException(String argString)
+	{
+		super(argString);
+	}
 }

@@ -2,10 +2,12 @@ package com.yotilla.poker;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -39,6 +41,102 @@ public class HandOfCardsTest
 		Mockito.when(card.getCardValue()).thenReturn(argCardValue);
 
 		return card;
+	}
+
+	/**
+	 * Creates and returns a pseudo - randomly generated card mock. Does in no way
+	 * guarantee the cards to be unique.
+	 *
+	 * @return a card mock
+	 */
+	private Card getRandomCardMock()
+	{
+		// roll the dice for a card value between 2 and 14.
+		int numericalCardValue = (int) Math.ceil((Math.random()) * 13 + 1);
+
+		// correct for the very unlikely case that random() returned zero.
+		if (numericalCardValue == 1)
+		{
+			numericalCardValue = 2;
+		}
+
+		CardValue cardValue = CardValue.getByNumericalValue(numericalCardValue);
+
+		// roll again for the suit
+		int suitValue = (int) Math.ceil(Math.random() * 4);
+		CardSuit suit;
+
+		switch (suitValue) {
+		case 1:
+			suit = CardSuit.CLUBS;
+			break;
+		case 2:
+			suit = CardSuit.DIAMONDS;
+			break;
+		case 3:
+			suit = CardSuit.HEARTS;
+			break;
+		case 4:
+			suit = CardSuit.SPADES;
+			break;
+		default:
+			suit = null;
+			break;
+		}
+
+		return getCardMock(suit, cardValue);
+	}
+
+	/**
+	 * Create a list filled with randomly - generated cards
+	 *
+	 * @param argAmountOfCards amount of cards to be added to the list. Positive
+	 *                         integer expected, negatives will be assumed zero.
+	 * @return list of card mocks
+	 */
+	private List<Card> getRandomCardMocksAsList(final int argAmountOfCards)
+	{
+		List<Card> mocks = new LinkedList<>();
+
+		int amountOfCards = argAmountOfCards;
+
+		if (amountOfCards < 0)
+		{
+			amountOfCards = 0;
+		}
+
+		for (int i = 0; i < amountOfCards; i++)
+		{
+			mocks.add(getRandomCardMock());
+		}
+
+		return mocks;
+	}
+
+	/**
+	 * Create an array filled with randomly - generated cards
+	 *
+	 * @param argAmountOfCards amount of cards to be added to the array. Positive
+	 *                         integer expected, negatives will be assumed zero.
+	 * @return array of card mocks
+	 */
+	private Card[] getRandomCardMocksAsArray(final int argAmountOfCards)
+	{
+		int amountOfCards = argAmountOfCards;
+
+		if (amountOfCards < 0)
+		{
+			amountOfCards = 0;
+		}
+
+		Card[] mocks = new Card[amountOfCards];
+
+		for (int i = 0; i < amountOfCards; i++)
+		{
+			mocks[i] = getRandomCardMock();
+		}
+
+		return mocks;
 	}
 
 	/**
@@ -130,12 +228,38 @@ public class HandOfCardsTest
 		assertNull(hand.getCards(), "Adding null as cards doesn't make sense, hand ought to ignore that.");
 	}
 
+	/**
+	 * settingSixCardsThrowsException
+	 */
+	@Test
+	public void settingSixCardsThrowsException()
+	{
+		HandOfCards hand = new HandOfCards();
+
+		List<Card> sixCards = new ArrayList<>(getRandomCardMocksAsList(6));
+
+		assertThrows(HandExceededException.class, () -> {
+			hand.setCards(sixCards);
+		}, "Setting the hand to six cards ought to throw an exception.");
+	}
+
+	// TODO: set five cards
+
+	/**
+	 * addingSixCardsAtOnceThrowsException
+	 */
 	@Test
 	public void addingSixCardsAtOnceThrowsException()
 	{
-		List<Card> sixCards = new ArrayList<Card>(Arrays.asList(getCardMock(CardSuit.HEARTS, CardValue.FIVE),
-				getCardMock(CardSuit.DIAMONDS, CardValue.SIX), getCardMock(CardSuit.HEARTS, CardValue.QUEEN),
-				getCardMock(CardSuit.SPADES, CardValue.JACK), getCardMock(CardSuit.DIAMONDS, CardValue.TEN),
-				getCardMock(CardSuit.CLUBS, CardValue.SEVEN)));
+		HandOfCards hand = new HandOfCards();
+
+		Card[] sixCards = getRandomCardMocksAsArray(6);
+
+		assertThrows(HandExceededException.class, () -> {
+			hand.addCards(sixCards);
+		}, "Setting the hand to six cards ought to throw an exception.");
 	}
+
+	// TODO: add five cards
+
 }

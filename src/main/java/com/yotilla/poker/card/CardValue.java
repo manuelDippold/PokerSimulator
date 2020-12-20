@@ -70,4 +70,23 @@ public enum CardValue
 
 		return null;
 	}
+
+	/**
+	 * Returns the value with this numerical value, if one exists.
+	 *
+	 * @param numericalValueToMatch numerical value to match
+	 * @return card value, if found. Null, if not.
+	 */
+	public static CardValue getByNumericalValue(final int numericalValueToMatch)
+	{
+		for (CardValue cardValue : values())
+		{
+			if (cardValue.getNumericalValue() == numericalValueToMatch)
+			{
+				return cardValue;
+			}
+		}
+
+		return null;
+	}
 }
