@@ -58,12 +58,6 @@ public class HandOfCards
 			return;
 		}
 
-		if (toAdd.length > MAX_HAND_SIZE)
-		{
-			throw new HandExceededException(
-					String.format("A hand of cards must not hold more than %d cards.", MAX_HAND_SIZE));
-		}
-
 		for (int i = 0; i < toAdd.length; i++)
 		{
 			addCard(toAdd[i]);
@@ -80,7 +74,6 @@ public class HandOfCards
 	 */
 	public void addCard(final Card toAdd) throws HandExceededException
 	{
-		// TODO: HandExceededException
 		if (toAdd == null)
 		{
 			return;
@@ -89,6 +82,12 @@ public class HandOfCards
 		if (cards == null)
 		{
 			cards = new ArrayList<>(MAX_HAND_SIZE);
+		}
+
+		if (cards.size() == MAX_HAND_SIZE)
+		{
+			throw new HandExceededException(
+					String.format("A hand of cards must not hold more than %d cards.", MAX_HAND_SIZE));
 		}
 
 		cards.add(toAdd);
