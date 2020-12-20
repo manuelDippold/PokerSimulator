@@ -1,8 +1,8 @@
-package com.yotilla.poker;
+package com.yotilla.poker.error;
 
 /**
- * Description: An exception that is thrown when a player gets more than five
- * cards. <br>
+ * Description: An exception that is thrown when a player gets more cards than
+ * allowed. <br>
  * Date: 20.12.2020
  *
  * @author Manuel

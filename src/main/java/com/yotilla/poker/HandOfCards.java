@@ -1,11 +1,13 @@
 package com.yotilla.poker;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.yotilla.poker.card.Card;
+import com.yotilla.poker.error.HandExceededException;
 
 /**
- * Description: A hand of five cards. <br>
+ * Description: A hand of cards. <br>
  * Date: 20.12.2020
  *
  * @author Manuel
@@ -13,6 +15,11 @@ import com.yotilla.poker.card.Card;
  */
 public class HandOfCards
 {
+	/**
+	 * How many cards a hand is allowed to hold
+	 */
+	public static final int MAX_HAND_SIZE = 5;
+
 	private List<Card> cards;
 
 	/**
@@ -25,21 +32,56 @@ public class HandOfCards
 
 	/**
 	 * @param argCards the cards to set
+	 * @throws HandExceededException if argCards contains more elements than allowed
 	 */
-	public void setCards(List<Card> argCards)
+	public void setCards(List<Card> argCards) throws HandExceededException
 	{
+		// TODO: HandExceededException
 		cards = argCards;
 	}
 
 	/**
-	 * Add a card to this hand. Will only work
+	 * Add multiple cards to this hand
 	 *
-	 * @param toAdd Cards to add to this hand
-	 * @throws HandExceededException whenever someone tries to add more than five
-	 *                               cards.
+	 * @param toAdd cards to add
+	 * @throws HandExceededException if adding these cards exceeds the limit
 	 */
-	public void addCard(final Card... toAdd) throws HandExceededException
+	public void addCards(final Card... toAdd) throws HandExceededException
 	{
-		// TODO
+		// TODO: HandExceededException
+
+		if (toAdd == null)
+		{
+			return;
+		}
+
+		for (int i = 0; i < toAdd.length; i++)
+		{
+			addCard(toAdd[i]);
+		}
+
+	}
+
+	/**
+	 * Add one card to this hand.
+	 *
+	 * @param toAdd Card to add to this hand
+	 * @throws HandExceededException whenever someone tries to add more than the
+	 *                               allowed amount of cards.
+	 */
+	public void addCard(final Card toAdd) throws HandExceededException
+	{
+		// TODO: HandExceededException
+		if (toAdd == null)
+		{
+			return;
+		}
+
+		if (cards == null)
+		{
+			cards = new ArrayList<Card>(MAX_HAND_SIZE);
+		}
+
+		cards.add(toAdd);
 	}
 }

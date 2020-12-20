@@ -1,6 +1,8 @@
 package com.yotilla.poker.card;
 
-import org.junit.jupiter.api.Assertions;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+
 import org.junit.jupiter.api.Test;
 
 /**
@@ -21,7 +23,7 @@ public class CardValueTest
 	public void nineMatchesNine()
 	{
 		CardValue value = CardValue.getByCode("9");
-		Assertions.assertEquals(CardValue.NINE, value, "The String \"9\" should match the value 9.");
+		assertEquals(CardValue.NINE, value, "The String \"9\" should match the value 9.");
 	}
 
 	/**
@@ -31,10 +33,10 @@ public class CardValueTest
 	public void AMatchesAce()
 	{
 		CardValue value = CardValue.getByCode("A");
-		Assertions.assertEquals(CardValue.ACE, value, "The String \"A\" should match the Ace.");
+		assertEquals(CardValue.ACE, value, "The String \"A\" should match the Ace.");
 
 		value = CardValue.getByCode("a");
-		Assertions.assertEquals(CardValue.ACE, value, "The String \"a\" should match the Ace.");
+		assertEquals(CardValue.ACE, value, "The String \"a\" should match the Ace.");
 	}
 
 	/**
@@ -44,7 +46,7 @@ public class CardValueTest
 	public void xMatchesNoCardValue()
 	{
 		CardValue value = CardValue.getByCode("X");
-		Assertions.assertNull(value, "The String \"X\" shouldn't match anything.");
+		assertNull(value, "The String \"X\" shouldn't match anything.");
 	}
 
 	/**
@@ -54,7 +56,6 @@ public class CardValueTest
 	public void getCardValueByCodeIsNullSafe()
 	{
 		CardValue value = CardValue.getByCode(null);
-		Assertions.assertNull(value,
-				"Null shouldn't match anything and the function should be able to handle it wihtout NPE.");
+		assertNull(value, "Null shouldn't match anything and the function should be able to handle it wihtout NPE.");
 	}
 }

@@ -1,6 +1,7 @@
 package com.yotilla.poker.card;
 
-import org.junit.jupiter.api.Assertions;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -23,7 +24,7 @@ public class CardTest
 		Card ace = new Card(CardSuit.HEARTS, CardValue.ACE);
 		Card king = new Card(CardSuit.HEARTS, CardValue.KING);
 
-		Assertions.assertTrue(ace.compareTo(king) > 0, "An ace should rank higher than a king.");
+		assertTrue(ace.compareTo(king) > 0, "An ace should rank higher than a king.");
 	}
 
 	/**
@@ -34,14 +35,14 @@ public class CardTest
 	{
 		Card twoOfSpades = new Card(CardSuit.SPADES, CardValue.TWO);
 
-		Assertions.assertTrue(twoOfSpades.compareTo(null) > 0,
+		assertTrue(twoOfSpades.compareTo(null) > 0,
 				"Any card ought to rank higher than no card. And compare shouldn't throw a NPE.");
 
 		// Mock a card that has a suit, but null as a value.
 		Card nothingOfSpades = Mockito.mock(Card.class);
 		Mockito.when(nothingOfSpades.getCardSuit()).thenReturn(CardSuit.SPADES);
 
-		Assertions.assertTrue(twoOfSpades.compareTo(nothingOfSpades) > 0,
+		assertTrue(twoOfSpades.compareTo(nothingOfSpades) > 0,
 				"Any card ought to rank higher than a card withour a value set. And compare shouldn't throw a NPE.");
 	}
 
@@ -54,7 +55,18 @@ public class CardTest
 		Card twoOfDiamonds = new Card(CardSuit.DIAMONDS, CardValue.TWO);
 		Card fourOfHearts = new Card(CardSuit.HEARTS, CardValue.FOUR);
 
-		Assertions.assertTrue(twoOfDiamonds.compareTo(fourOfHearts) < 0,
-				"A two ranks below a four, independent of suit.");
+		assertTrue(twoOfDiamonds.compareTo(fourOfHearts) < 0, "A two ranks below a four, independent of suit.");
+	}
+
+	/**
+	 * twoQueensAreEqual
+	 */
+	@Test
+	public void twoQueensAreEqual()
+	{
+		Card queenOfClubs = new Card(CardSuit.CLUBS, CardValue.QUEEN);
+		Card queenOfDiamonds = new Card(CardSuit.DIAMONDS, CardValue.QUEEN);
+
+		assertTrue(queenOfClubs.compareTo(queenOfDiamonds) == 0, "Two queens ought to be of equal value.");
 	}
 }

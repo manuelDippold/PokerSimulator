@@ -1,6 +1,8 @@
 package com.yotilla.poker.card;
 
-import org.junit.jupiter.api.Assertions;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+
 import org.junit.jupiter.api.Test;
 
 /**
@@ -21,7 +23,7 @@ public class CardSuitTest
 	public void capitalCMatchesClubs()
 	{
 		CardSuit suit = CardSuit.getByCode("C");
-		Assertions.assertEquals(CardSuit.CLUBS, suit, "A 'C' should match the clubs.");
+		assertEquals(CardSuit.CLUBS, suit, "A 'C' should match the clubs.");
 	}
 
 	/**
@@ -31,7 +33,7 @@ public class CardSuitTest
 	public void lowerCaseHMatchesHearts()
 	{
 		CardSuit suit = CardSuit.getByCode("h");
-		Assertions.assertEquals(CardSuit.HEARTS, suit, "A 'h' should match the hearts.");
+		assertEquals(CardSuit.HEARTS, suit, "A 'h' should match the hearts.");
 	}
 
 	/**
@@ -41,7 +43,7 @@ public class CardSuitTest
 	public void theLetterXDoesNotMatchAnySuit()
 	{
 		CardSuit suit = CardSuit.getByCode("X");
-		Assertions.assertNull(suit, "An 'X' should not match anything.");
+		assertNull(suit, "An 'X' should not match anything.");
 	}
 
 	/**
@@ -51,7 +53,7 @@ public class CardSuitTest
 	public void getByCodeIsNullSafe()
 	{
 		CardSuit suit = CardSuit.getByCode(null);
-		Assertions.assertNull(suit,
+		assertNull(suit,
 				"A null value should not match anything and the method should be able to handle it without an NPE.");
 	}
 }
