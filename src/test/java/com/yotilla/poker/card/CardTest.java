@@ -13,13 +13,13 @@ import org.mockito.Mockito;
  * @author Manuel
  *
  */
-public class CardTest
+class CardTest
 {
 	/**
 	 * aceRanksHigherThanKing
 	 */
 	@Test
-	public void aceRanksHigherThanKing()
+	void aceRanksHigherThanKing()
 	{
 		Card ace = new Card(CardSuit.HEARTS, CardValue.ACE);
 		Card king = new Card(CardSuit.HEARTS, CardValue.KING);
@@ -31,7 +31,7 @@ public class CardTest
 	 * cardCompareIsNullSafe
 	 */
 	@Test
-	public void cardCompareIsNullSafe()
+	void cardCompareIsNullSafe()
 	{
 		Card twoOfSpades = new Card(CardSuit.SPADES, CardValue.TWO);
 
@@ -50,7 +50,7 @@ public class CardTest
 	 * twoIsLessThanFour
 	 */
 	@Test
-	public void twoIsLessThanFour()
+	void twoIsLessThanFour()
 	{
 		Card twoOfDiamonds = new Card(CardSuit.DIAMONDS, CardValue.TWO);
 		Card fourOfHearts = new Card(CardSuit.HEARTS, CardValue.FOUR);
@@ -62,7 +62,7 @@ public class CardTest
 	 * twoQueensAreEqual
 	 */
 	@Test
-	public void twoQueensAreEqual()
+	void twoQueensAreEqual()
 	{
 		Card queenOfClubs = new Card(CardSuit.CLUBS, CardValue.QUEEN);
 		Card queenOfDiamonds = new Card(CardSuit.DIAMONDS, CardValue.QUEEN);

@@ -14,13 +14,13 @@ import org.junit.jupiter.api.Test;
  * @author Manuel
  *
  */
-public class CardSuitTest
+class CardSuitTest
 {
 	/**
 	 * capitalCMatchesClubs
 	 */
 	@Test
-	public void capitalCMatchesClubs()
+	void capitalCMatchesClubs()
 	{
 		CardSuit suit = CardSuit.getByCode("C");
 		assertEquals(CardSuit.CLUBS, suit, "A 'C' should match the clubs.");
@@ -30,7 +30,7 @@ public class CardSuitTest
 	 * lowerCaseHMatchesHearts()
 	 */
 	@Test
-	public void lowerCaseHMatchesHearts()
+	void lowerCaseHMatchesHearts()
 	{
 		CardSuit suit = CardSuit.getByCode("h");
 		assertEquals(CardSuit.HEARTS, suit, "A 'h' should match the hearts.");
@@ -40,7 +40,7 @@ public class CardSuitTest
 	 * theLetterXDoesNotMatchAnySuit
 	 */
 	@Test
-	public void theLetterXDoesNotMatchAnySuit()
+	void theLetterXDoesNotMatchAnySuit()
 	{
 		CardSuit suit = CardSuit.getByCode("X");
 		assertNull(suit, "An 'X' should not match anything.");
@@ -50,7 +50,7 @@ public class CardSuitTest
 	 * getByCodeIsNullSafe
 	 */
 	@Test
-	public void getByCodeIsNullSafe()
+	void getByCodeIsNullSafe()
 	{
 		CardSuit suit = CardSuit.getByCode(null);
 		assertNull(suit,

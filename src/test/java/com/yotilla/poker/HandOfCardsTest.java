@@ -24,7 +24,7 @@ import com.yotilla.poker.error.HandExceededException;
  * @author Manuel
  *
  */
-public class HandOfCardsTest
+class HandOfCardsTest
 {
 	/**
 	 * Create and return the mock of a card with the specified suit and value
@@ -144,7 +144,7 @@ public class HandOfCardsTest
 	 * @throws HandExceededException error case
 	 */
 	@Test
-	public void addCardsCreatesCardsListIfThereIsNone() throws HandExceededException
+	void addCardsCreatesCardsListIfThereIsNone() throws HandExceededException
 	{
 		// Create a new, empty hand
 		HandOfCards hand = new HandOfCards();
@@ -165,7 +165,7 @@ public class HandOfCardsTest
 	 * @throws HandExceededException error case
 	 */
 	@Test
-	public void addCardActuallyAddsACard() throws HandExceededException
+	void addCardActuallyAddsACard() throws HandExceededException
 	{
 		HandOfCards hand = new HandOfCards();
 
@@ -181,7 +181,7 @@ public class HandOfCardsTest
 	 * @throws HandExceededException error case
 	 */
 	@Test
-	public void addCardIsNullSafe() throws HandExceededException
+	void addCardIsNullSafe() throws HandExceededException
 	{
 		// Create a new hand and assure it is empty
 		HandOfCards hand = new HandOfCards();
@@ -200,7 +200,7 @@ public class HandOfCardsTest
 	 * @throws HandExceededException error case
 	 */
 	@Test
-	public void addCardsActuallyAddsMultipleCards() throws HandExceededException
+	void addCardsActuallyAddsMultipleCards() throws HandExceededException
 	{
 		HandOfCards hand = new HandOfCards();
 
@@ -219,7 +219,7 @@ public class HandOfCardsTest
 	 * @throws HandExceededException in case of an error
 	 */
 	@Test
-	public void addCardsIsNullsafe() throws HandExceededException
+	void addCardsIsNullsafe() throws HandExceededException
 	{
 		HandOfCards hand = new HandOfCards();
 		hand.addCards((Card[]) null);
@@ -231,7 +231,7 @@ public class HandOfCardsTest
 	 * settingSixCardsThrowsException
 	 */
 	@Test
-	public void settingSixCardsThrowsException()
+	void settingSixCardsThrowsException()
 	{
 		HandOfCards hand = new HandOfCards();
 
@@ -248,7 +248,7 @@ public class HandOfCardsTest
 	 * @throws HandExceededException error case
 	 */
 	@Test
-	public void settingFiveCardsWorksFine() throws HandExceededException
+	void settingFiveCardsWorksFine() throws HandExceededException
 	{
 		HandOfCards hand = new HandOfCards();
 		List<Card> maximumCards = getRandomCardMocksAsList(HandOfCards.MAX_HAND_SIZE);
@@ -262,7 +262,7 @@ public class HandOfCardsTest
 	 * addingSixCardsAtOnceThrowsException
 	 */
 	@Test
-	public void addingSixCardsAtOnceThrowsException()
+	void addingSixCardsAtOnceThrowsException()
 	{
 		HandOfCards hand = new HandOfCards();
 
@@ -279,7 +279,7 @@ public class HandOfCardsTest
 	 * @throws HandExceededException error case
 	 */
 	@Test
-	public void addingFiveCardsAtOnceIsFine() throws HandExceededException
+	void addingFiveCardsAtOnceIsFine() throws HandExceededException
 	{
 		HandOfCards hand = new HandOfCards();
 		Card[] maximumCards = getRandomCardMocksAsArray(HandOfCards.MAX_HAND_SIZE);
@@ -294,7 +294,7 @@ public class HandOfCardsTest
 	 * @throws HandExceededException first error, then expected
 	 */
 	@Test
-	public void addingTheSixthCardThrowsException() throws HandExceededException
+	void addingTheSixthCardThrowsException() throws HandExceededException
 	{
 		// Create a hand and add five cards
 		HandOfCards hand = new HandOfCards();

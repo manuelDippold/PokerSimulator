@@ -14,13 +14,13 @@ import org.junit.jupiter.api.Test;
  * @author Manuel
  *
  */
-public class CardValueTest
+class CardValueTest
 {
 	/**
 	 * nineMatchesNine
 	 */
 	@Test
-	public void nineMatchesNine()
+	void nineMatchesNine()
 	{
 		CardValue value = CardValue.getByCode("9");
 		assertEquals(CardValue.NINE, value, "The String \"9\" should match the value 9.");
@@ -30,7 +30,7 @@ public class CardValueTest
 	 * AMatchesAce. Both lower and upper case
 	 */
 	@Test
-	public void AMatchesAce()
+	void AMatchesAce()
 	{
 		CardValue value = CardValue.getByCode("A");
 		assertEquals(CardValue.ACE, value, "The String \"A\" should match the Ace.");
@@ -43,7 +43,7 @@ public class CardValueTest
 	 * xMatchesNoCardValue
 	 */
 	@Test
-	public void xMatchesNoCardValue()
+	void xMatchesNoCardValue()
 	{
 		CardValue value = CardValue.getByCode("X");
 		assertNull(value, "The String \"X\" shouldn't match anything.");
@@ -53,7 +53,7 @@ public class CardValueTest
 	 * getCardValueByCodeIsNullSafe
 	 */
 	@Test
-	public void getCardValueByCodeIsNullSafe()
+	void getCardValueByCodeIsNullSafe()
 	{
 		CardValue value = CardValue.getByCode(null);
 		assertNull(value, "Null shouldn't match anything and the function should be able to handle it wihtout NPE.");
@@ -63,7 +63,7 @@ public class CardValueTest
 	 * thirteenMatchesKing
 	 */
 	@Test
-	public void thirteenMatchesKing()
+	void thirteenMatchesKing()
 	{
 		CardValue value = CardValue.getByNumericalValue(13);
 		assertEquals(CardValue.KING, value, "The value 13 should match the king.");
@@ -73,7 +73,7 @@ public class CardValueTest
 	 * zeroMatchesNoCardValue
 	 */
 	@Test
-	public void zeroMatchesNoCardValue()
+	void zeroMatchesNoCardValue()
 	{
 		CardValue value = CardValue.getByNumericalValue(0);
 		assertNull(value, "Zero shouldn't match anything.");
@@ -83,7 +83,7 @@ public class CardValueTest
 	 * twentyMatchesNoCardValue
 	 */
 	@Test
-	public void twentyMatchesNoCardValue()
+	void twentyMatchesNoCardValue()
 	{
 		CardValue value = CardValue.getByNumericalValue(20);
 		assertNull(value, "Twenty shouldn't match anything.");
