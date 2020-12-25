@@ -127,4 +127,27 @@ class CardTest
 		result = incomplete.equals(aceOfHearts);
 		assertFalse(result, "This boolean should still be false");
 	}
+
+	/**
+	 * toStringTest
+	 */
+	@Test
+	void toStringTest()
+	{
+		Card aceOfSpades = new Card(CardSuit.SPADES, CardValue.ACE);
+
+		String result = aceOfSpades.toString();
+		assertEquals("ACE of SPADES", result, "These strings should match");
+	}
+
+	/**
+	 * toStringNullTest
+	 */
+	@Test
+	void toStringNullTest()
+	{
+		Card incomplete = new Card(null, null);
+		String result = incomplete.toString();
+		assertEquals("? of ?", result, "These should strings match");
+	}
 }
