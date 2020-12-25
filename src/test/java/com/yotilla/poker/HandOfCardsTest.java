@@ -1,5 +1,6 @@
 package com.yotilla.poker;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -255,7 +256,7 @@ class HandOfCardsTest
 
 		hand.setCards(maximumCards);
 
-		assertTrue(hand.getCards().equals(maximumCards), "Adding this many cards shouldn't be a problem.");
+		assertEquals(maximumCards, hand.getCards(), "Adding this many cards shouldn't be a problem.");
 	}
 
 	/**
@@ -285,7 +286,7 @@ class HandOfCardsTest
 		Card[] maximumCards = getRandomCardMocksAsArray(HandOfCards.MAX_HAND_SIZE);
 
 		hand.addCards(maximumCards);
-		assertTrue(hand.getCards().size() == maximumCards.length, "Adding this many cards shouldn't be a problem.");
+		assertEquals(maximumCards.length, hand.getCards().size(), "Adding this many cards shouldn't be a problem.");
 	}
 
 	/**

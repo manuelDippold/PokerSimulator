@@ -1,5 +1,7 @@
 package com.yotilla.poker.card;
 
+import java.util.Objects;
+
 /**
  * Description: One card of the French deck.
  *
@@ -45,9 +47,13 @@ public class Card implements Comparable<Card>
 	 * -1 if this card is worth less than otherCard <br>
 	 * 0 if this card is of equal value to otherCard <br>
 	 * 1 if this card is worth more than otherCard <br>
+	 * <br>
+	 * The suit does not play a role in the comparison, as it has no bearing on the
+	 * order.
 	 *
 	 * @param otherCard Card to compare this one to
 	 */
+	@Override
 	public int compareTo(Card otherCard)
 	{
 		// Even the smallest card wins when compared to nothing.
@@ -57,6 +63,54 @@ public class Card implements Comparable<Card>
 		}
 
 		return Integer.compare(getCardValue().getNumericalValue(), otherCard.getCardValue().getNumericalValue());
+	}
+
+	@Override
+	public int hashCode()
+	{
+		return Objects.hash(cardSuit, cardValue);
+	}
+
+	/**
+	 * Two cards are equal when they are identical in both suit and value.
+	 */
+	@Override
+	public boolean equals(Object otherObject)
+	{
+		if (!(otherObject instanceof Card))
+		{
+			return false;
+		}
+
+		Card otherCard = (Card) otherObject;
+
+		return otherCard.getCardSuit() == cardSuit && otherCard.getCardValue() == cardValue;
+	}
+
+	@Override
+	public String toString()
+	{
+		StringBuilder sb = new StringBuilder();
+
+		if (cardValue != null)
+		{
+			sb.append(cardValue.name());
+		} else
+		{
+			sb.append("?");
+		}
+
+		sb.append(" of ");
+
+		if (cardSuit != null)
+		{
+			sb.append(cardSuit.name());
+		} else
+		{
+			sb.append("?");
+		}
+
+		return sb.toString();
 	}
 
 }
