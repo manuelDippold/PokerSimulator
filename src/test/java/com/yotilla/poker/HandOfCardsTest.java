@@ -2,7 +2,6 @@ package com.yotilla.poker;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -151,7 +150,7 @@ class HandOfCardsTest
 		HandOfCards hand = new HandOfCards();
 
 		// Assert that this hand is indeed empty.
-		assertNull(hand.getCards(), "New hand, shouldn't hold any cards");
+		assertTrue(hand.getCards().isEmpty(), "New hand, shouldn't hold any cards");
 
 		// Add a card.
 		hand.addCards(getCardMock(CardSuit.SPADES, CardValue.SEVEN));
@@ -186,13 +185,13 @@ class HandOfCardsTest
 	{
 		// Create a new hand and assure it is empty
 		HandOfCards hand = new HandOfCards();
-		assertNull(hand.getCards(), "New hand, shouldn't hold any cards");
+		assertTrue(hand.getCards().isEmpty(), "New hand, shouldn't hold any cards");
 
 		// add nothing
 		hand.addCard(null);
 
 		// assure hand is still empty
-		assertNull(hand.getCards(), "Adding null as a card doesn't make sense, hand ought to ignore that.");
+		assertTrue(hand.getCards().isEmpty(), "Adding null as a card doesn't make sense, hand ought to ignore that.");
 	}
 
 	/**
@@ -225,7 +224,7 @@ class HandOfCardsTest
 		HandOfCards hand = new HandOfCards();
 		hand.addCards((Card[]) null);
 
-		assertNull(hand.getCards(), "Adding null as cards doesn't make sense, hand ought to ignore that.");
+		assertTrue(hand.getCards().isEmpty(), "Adding null as cards doesn't make sense, hand ought to ignore that.");
 	}
 
 	/**
