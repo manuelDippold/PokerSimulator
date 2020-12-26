@@ -95,7 +95,8 @@ public class Card implements Comparable<Card>
 		if (cardValue != null)
 		{
 			sb.append(cardValue.name());
-		} else
+		}
+		else
 		{
 			sb.append("?");
 		}
@@ -105,7 +106,8 @@ public class Card implements Comparable<Card>
 		if (cardSuit != null)
 		{
 			sb.append(cardSuit.name());
-		} else
+		}
+		else
 		{
 			sb.append("?");
 		}
