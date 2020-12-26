@@ -62,7 +62,7 @@ public class DeckOfCards
 	}
 
 	/**
-	 * Recognize the cards by is hash and draw it.
+	 * Recognize the card by is hash and draw it.
 	 *
 	 * @param argSuit  suit desired
 	 * @param argValue value desired

@@ -23,11 +23,39 @@ public class HandOfCards
 	private List<Card> cards;
 
 	/**
+	 * Construct a new hand.
+	 */
+	public HandOfCards()
+	{
+		cards = new ArrayList<>();
+	}
+
+	/**
 	 * @return the cards
 	 */
 	public List<Card> getCards()
 	{
 		return cards;
+	}
+
+	/**
+	 * get the amount of cards in this hand.
+	 *
+	 * @return integer
+	 */
+	public int getAmountOfCards()
+	{
+		return cards != null ? cards.size() : 0;
+	}
+
+	/**
+	 * returns true if there are no cards on this hand.
+	 *
+	 * @return boolean
+	 */
+	public boolean isEmpty()
+	{
+		return cards == null || cards.isEmpty();
 	}
 
 	/**
@@ -92,4 +120,5 @@ public class HandOfCards
 
 		cards.add(toAdd);
 	}
+
 }
