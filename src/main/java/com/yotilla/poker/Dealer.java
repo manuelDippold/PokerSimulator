@@ -8,6 +8,7 @@ import java.util.EnumMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -98,41 +99,7 @@ public class Dealer
 	 */
 	public PokerHand getPair(final HandOfCards hand)
 	{
-		if (hand != null)
-		{
-			// Two cards form a pair when their value is equal to one another
-			Map<CardValue, Card> pairCandidates = new EnumMap<>(CardValue.class);
-			List<Card> pair = new ArrayList<>();
-			CardValue pairValue = null;
-
-			for (Card card : hand.getCards())
-			{
-				CardValue value = card.getCardValue();
-
-				// If this value was already encountered at this point, we have a pair.
-				if (pairCandidates.containsKey(value)) // NOSONAR - computeIf... doesn't serve us here.
-				{
-					pair.add(card);
-					pair.add(pairCandidates.get(value));
-
-					pairValue = value;
-					break;
-				}
-
-				pairCandidates.put(value, card);
-			}
-
-			if (pairValue != null)
-			{
-				// We found a pair and we know its value. Now determine the high cards beside the pair.
-				List<Card> kickerCards = getKickerCards(hand, pair);
-				return new PokerHand(PokerHandRanking.ONE_PAIR, Arrays.asList(pairValue),
-						cardsToSortedCardValues(kickerCards));
-			}
-		}
-
-		// No pair found, return null
-		return null;
+		return getMultipleHand(hand, 2);
 	}
 
 	/**
@@ -184,32 +151,7 @@ public class Dealer
 	 */
 	public PokerHand getThreeOfKind(final HandOfCards hand)
 	{
-		if (hand != null)
-		{
-			CardCollector collector = new CardCollector();
-			CardValue tripleValue = null;
-
-			for (Card card : hand.getCards())
-			{
-				collector.addCard(card);
-
-				CardValue val = card.getCardValue();
-				if (collector.getAmountBehindKey(val) >= 3)
-				{
-					tripleValue = val;
-				}
-			}
-
-			if (tripleValue != null)
-			{
-				// we found a triple. Build a result.
-				List<Card> remainingCards = getKickerCards(hand, collector.get(tripleValue));
-				return new PokerHand(PokerHandRanking.THREE_OF_A_KIND, Arrays.asList(tripleValue),
-						cardsToSortedCardValues(remainingCards));
-			}
-		}
-
-		return null;
+		return getMultipleHand(hand, 3);
 	}
 
 	/**
@@ -320,6 +262,175 @@ public class Dealer
 				return new PokerHand(PokerHandRanking.FLUSH, cardsToSortedCardValues(hand.getCards()),
 						Collections.emptyList());
 			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * Attempts to find a full house in this hand and returns an according result.
+	 *
+	 * @param hand hand to analyze
+	 * @return poker hand or null.
+	 * @throws HandExceededException in case of an error
+	 */
+	public PokerHand getFullHouse(final HandOfCards hand) throws HandExceededException
+	{
+		if (hand != null)
+		{
+			CardCollector collector = new CardCollector();
+			CardValue tripleValue = null;
+			CardValue pairValue = null;
+
+			// load all cards to collector
+			collector.addCards(hand.getCards());
+
+			// Loop over entry set, see if there are both a triple and a pair.
+			for (Entry<CardValue, List<Card>> entry : collector.entrySet())
+			{
+				CardValue value = entry.getKey();
+				int cards = entry.getValue().size();
+
+				if (cards == 3)
+				{
+					tripleValue = value;
+				}
+				if (cards == 2)
+				{
+					pairValue = value;
+				}
+			}
+
+			if (tripleValue != null && pairValue != null)
+			{
+				// we found a triple and a pair => a full house. Build a result.
+				return new PokerHand(PokerHandRanking.FULL_HOUSE, Arrays.asList(tripleValue, pairValue),
+						Collections.emptyList());
+			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * Attempts to find four of a kind in this hand and returns an according result.
+	 *
+	 * @param hand hand to analyze
+	 * @return poker hand or null.
+	 * @throws HandExceededException in case of an error
+	 */
+	public PokerHand getFourOfKind(final HandOfCards hand)
+	{
+		return getMultipleHand(hand, 4);
+	}
+
+	/**
+	 * Attempts to find multiples (pairs, triples, fours) in this hand and returns an according result.
+	 * Does not work for two pairs, though.
+	 *
+	 * @param handOfCards     hand of cards to analyze
+	 * @param desiredMultiple desired multiple we want. 2, 3 or 4
+	 * @return poker hand or null
+	 */
+	private PokerHand getMultipleHand(final HandOfCards hand, final int desiredMultiple)
+	{
+		if (hand != null && desiredMultiple >= 2 && desiredMultiple <= 4)
+		{
+			CardCollector collector = new CardCollector();
+			CardValue multipleCardValue = null;
+
+			for (Card card : hand.getCards())
+			{
+				collector.addCard(card);
+
+				CardValue val = card.getCardValue();
+				if (collector.getAmountBehindKey(val) >= desiredMultiple)
+				{
+					multipleCardValue = val;
+				}
+			}
+
+			if (multipleCardValue != null)
+			{
+				// We found it. Build a result.
+				List<Card> remainingCards = getKickerCards(hand, collector.get(multipleCardValue));
+
+				PokerHandRanking ranking;
+
+				switch (desiredMultiple) {
+				case 2:
+					ranking = PokerHandRanking.ONE_PAIR;
+					break;
+				case 3:
+					ranking = PokerHandRanking.THREE_OF_A_KIND;
+					break;
+				case 4:
+					ranking = PokerHandRanking.FOUR_OF_A_KIND;
+					break;
+				default: // Impossible, but alas...
+					return null;
+
+				}
+
+				return new PokerHand(ranking, Arrays.asList(multipleCardValue),
+						cardsToSortedCardValues(remainingCards));
+			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * Attempts to a straight flush in this hand and returns an according result.
+	 *
+	 * @param hand hand to analyze
+	 * @return poker hand or null.
+	 * @throws HandExceededException in case of an error
+	 */
+	public PokerHand getStraightFlush(final HandOfCards hand) throws HandExceededException
+	{
+		if (hand != null)
+		{
+			// A straight flush is a straight that is also a flush. The straight leading card is the rank card.
+			PokerHand straight = getStraight(hand);
+
+			if (straight != null)
+			{
+				PokerHand flush = getFlush(hand);
+
+				if (flush != null)
+				{
+					// We found a straight flush. Build an according result.
+					return new PokerHand(PokerHandRanking.STRAIGHT_FLUSH, straight.getRankCards(),
+							Collections.emptyList());
+				}
+			}
+
+		}
+
+		return null;
+	}
+
+	/**
+	 * Attempts to a royal flush in this hand and returns an according result.
+	 *
+	 * @param hand hand to analyze
+	 * @return poker hand or null.
+	 * @throws HandExceededException in case of an error
+	 */
+	public PokerHand getRoyalFlush(final HandOfCards hand) throws HandExceededException
+	{
+		if (hand != null)
+		{
+			// A royal flush is a straight flush that leads with an ace.
+			PokerHand straightFlush = getStraightFlush(hand);
+
+			if (straightFlush != null && straightFlush.getRankCards().get(0) == CardValue.ACE)
+			{
+				// A straight flush with an Ace leading it. That's called a royal flush.
+				return new PokerHand(PokerHandRanking.ROYAL_FLUSH, Collections.emptyList(), Collections.emptyList());
+			}
+
 		}
 
 		return null;
