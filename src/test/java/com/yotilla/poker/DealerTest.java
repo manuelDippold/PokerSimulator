@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Test;
 
 import com.yotilla.poker.card.CardSuit;
 import com.yotilla.poker.card.CardValue;
+import com.yotilla.poker.card.DeckOfCards;
+import com.yotilla.poker.card.HandOfCards;
 import com.yotilla.poker.error.DeckException;
 import com.yotilla.poker.error.HandExceededException;
 

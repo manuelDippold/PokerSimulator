@@ -1,11 +1,8 @@
-package com.yotilla.poker;
+package com.yotilla.poker.card;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import com.yotilla.poker.card.Card;
-import com.yotilla.poker.card.CardSuit;
-import com.yotilla.poker.card.CardValue;
 import com.yotilla.poker.error.DeckException;
 import com.yotilla.poker.error.DeckExceptionCause;
 

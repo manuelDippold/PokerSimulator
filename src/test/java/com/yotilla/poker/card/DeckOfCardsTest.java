@@ -1,4 +1,4 @@
-package com.yotilla.poker;
+package com.yotilla.poker.card;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import com.yotilla.poker.card.Card;
 import com.yotilla.poker.card.CardSuit;
 import com.yotilla.poker.card.CardValue;
+import com.yotilla.poker.card.DeckOfCards;
 import com.yotilla.poker.error.DeckException;
 import com.yotilla.poker.error.DeckExceptionCause;
 

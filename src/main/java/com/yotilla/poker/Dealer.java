@@ -11,6 +11,7 @@ import java.util.Set;
 
 import com.yotilla.poker.card.Card;
 import com.yotilla.poker.card.CardValue;
+import com.yotilla.poker.card.HandOfCards;
 import com.yotilla.poker.error.HandExceededException;
 
 /**
@@ -132,7 +133,7 @@ public class Dealer
 	 */
 	public CardValue getTwoPairs(final HandOfCards hand) throws HandExceededException
 	{
-		// TODO: tie breaker info into the result. Two calues maybe?
+		// TODO: tie breaker info into the result. Two values maybe?
 		// TODO: null safety
 		Map<CardValue, Integer> counter = new EnumMap<>(CardValue.class);
 

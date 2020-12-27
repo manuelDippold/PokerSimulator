@@ -1,9 +1,8 @@
-package com.yotilla.poker;
+package com.yotilla.poker.card;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.yotilla.poker.card.Card;
 import com.yotilla.poker.error.HandExceededException;
 
 /**

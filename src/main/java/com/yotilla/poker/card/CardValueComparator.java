@@ -1,6 +1,6 @@
 package com.yotilla.poker.card;
 
-import java.util.Comparator;
+import com.yotilla.poker.util.NullSafeComparator;
 
 /**
  * Description: Comparator for two card values
@@ -11,25 +11,11 @@ import java.util.Comparator;
  * @author Manuel
  *
  */
-public class CardValueComparator implements Comparator<CardValue>
+public class CardValueComparator implements NullSafeComparator<CardValue>
 {
-
 	@Override
-	public int compare(CardValue one, CardValue other)
+	public int compareNonNull(CardValue one, CardValue other)
 	{
-		if (one == null && other == null)
-		{
-			return 0;
-		}
-		else if (one != null && other == null)
-		{
-			return 1;
-		}
-		else if (one == null)
-		{
-			return -1;
-		}
-
 		return Integer.compare(one.getNumericalValue(), other.getNumericalValue());
 	}
 

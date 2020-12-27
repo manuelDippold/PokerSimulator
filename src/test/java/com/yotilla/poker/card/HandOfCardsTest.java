@@ -1,4 +1,4 @@
-package com.yotilla.poker;
+package com.yotilla.poker.card;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -15,6 +15,7 @@ import org.mockito.Mockito;
 import com.yotilla.poker.card.Card;
 import com.yotilla.poker.card.CardSuit;
 import com.yotilla.poker.card.CardValue;
+import com.yotilla.poker.card.HandOfCards;
 import com.yotilla.poker.error.HandExceededException;
 
 /**
