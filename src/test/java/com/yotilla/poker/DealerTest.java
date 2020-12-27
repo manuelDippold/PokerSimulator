@@ -1,18 +1,28 @@
 package com.yotilla.poker;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import com.yotilla.poker.card.Card;
 import com.yotilla.poker.card.CardSuit;
 import com.yotilla.poker.card.CardValue;
 import com.yotilla.poker.card.DeckOfCards;
 import com.yotilla.poker.card.HandOfCards;
 import com.yotilla.poker.error.DeckException;
 import com.yotilla.poker.error.HandExceededException;
+import com.yotilla.poker.result.PokerHand;
+import com.yotilla.poker.result.PokerHandRanking;
 
 /**
  * Description:
@@ -25,15 +35,18 @@ import com.yotilla.poker.error.HandExceededException;
  */
 class DealerTest
 {
+	// sut: subject under test.
+	private Dealer sut;
 	private DeckOfCards deck;
 
 	/**
-	 * Spin up a fresh deck before each test
+	 * Spin up a fresh deck and dealer before each test
 	 */
 	@BeforeEach
 	private void setUp()
 	{
 		deck = new DeckOfCards();
+		sut = new Dealer();
 	}
 
 	/**
@@ -73,9 +86,10 @@ class DealerTest
 		// ...and four random cards
 		fillHandFromDeck(hand);
 
-		CardValue result = new Dealer().getHighCard(hand);
+		PokerHand result = sut.getHighCard(hand);
 
-		assertEquals(CardValue.ACE, result,
+		assertEquals(PokerHandRanking.HIGH_CARD, result.getRanking(), "This is supposed to be a high card ranking.");
+		assertEquals(CardValue.ACE, result.getRankCards().iterator().next(),
 				"There is an ace in this hand, it ought to be the high card, no matter what.");
 	}
 
@@ -86,9 +100,94 @@ class DealerTest
 	void recognizeHighCardIsNullSafe()
 	{
 		HandOfCards hand = new HandOfCards();
-		CardValue result = new Dealer().getHighCard(hand);
+		PokerHand result = sut.getHighCard(hand);
 
 		assertNull(result, "Empty hand, no high card");
+	}
+
+	/**
+	 * getKickerCardsIsNullSafe
+	 *
+	 * @throws HandExceededException error case
+	 * @throws DeckException         error case
+	 */
+	@Test
+	void getKickerCardsIsNullSafe() throws HandExceededException, DeckException
+	{
+		List<Card> kickerCards = sut.getKickerCards(null, null);
+		assertTrue(kickerCards.isEmpty(), "null results in null");
+
+		HandOfCards hand = new HandOfCards();
+		fillHandFromDeck(hand);
+		kickerCards = sut.getKickerCards(hand, null);
+		assertFalse(kickerCards.isEmpty(), "This should result in the full hand being returned.");
+
+		kickerCards = sut.getKickerCards(null, kickerCards);
+		assertTrue(kickerCards.isEmpty(), "A hand of null should always result in null.");
+	}
+
+	/**
+	 *
+	 * getKickerCardsFromPair
+	 *
+	 * @throws HandExceededException error case
+	 * @throws DeckException         error case
+	 */
+	@Test
+	void getKickerCardsFromPair() throws HandExceededException, DeckException
+	{
+		HandOfCards hand = new HandOfCards();
+
+		// add a pair to the hand, then fill it up randomly.
+		Card aceOfHearts = deck.drawCard(CardSuit.HEARTS, CardValue.ACE);
+		Card aceOfDiamonds = deck.drawCard(CardSuit.DIAMONDS, CardValue.ACE);
+
+		hand.addCard(aceOfHearts);
+		hand.addCard(aceOfDiamonds);
+		List<Card> partOfRanking = Arrays.asList(aceOfHearts, aceOfDiamonds);
+
+		// add three other cards. These should come back as kickers,
+		// in descending order.
+		Card fiveOfSpades = deck.drawCard(CardSuit.SPADES, CardValue.FIVE);
+		Card nineOfSpades = deck.drawCard(CardSuit.SPADES, CardValue.NINE);
+		Card kingOfHearts = deck.drawCard(CardSuit.HEARTS, CardValue.KING);
+
+		hand.addCard(fiveOfSpades);
+		hand.addCard(nineOfSpades);
+		hand.addCard(kingOfHearts);
+
+		List<Card> kickerCards = sut.getKickerCards(hand, partOfRanking);
+
+		assertSame(3, kickerCards.size(), "A hand of five and a pair of two should leave three kicker cards.");
+
+		Iterator<Card> iter = kickerCards.iterator();
+
+		assertEquals(kingOfHearts, iter.next(), "First kicker card should be the king of hearts.");
+		assertEquals(nineOfSpades, iter.next(), "Second kicker card should be the nine of spades.");
+		assertEquals(fiveOfSpades, iter.next(), "Third kicker card should be the five of spades.");
+	}
+
+	/**
+	 * getKickerCardsFromStraight
+	 *
+	 * @throws HandExceededException error case
+	 * @throws DeckException         error case
+	 */
+	@Test
+	void getKickerCardsFromStraight() throws HandExceededException, DeckException
+	{
+		HandOfCards hand = new HandOfCards();
+
+		// Draw a straight
+		hand.addCard(deck.drawCard(CardSuit.SPADES, CardValue.ACE));
+		hand.addCard(deck.drawCard(CardSuit.HEARTS, CardValue.KING));
+		hand.addCard(deck.drawCard(CardSuit.SPADES, CardValue.QUEEN));
+		hand.addCard(deck.drawCard(CardSuit.CLUBS, CardValue.JACK));
+		hand.addCard(deck.drawCard(CardSuit.CLUBS, CardValue.TEN));
+
+		// This should leave no kicker cards.
+		List<Card> kickerCards = sut.getKickerCards(hand, hand.getCards());
+		assertTrue(kickerCards.isEmpty(), "Five cards leave no room for kicker cards.");
 	}
 
 	/**
@@ -109,9 +208,14 @@ class DealerTest
 		// and three random cards
 		fillHandFromDeck(hand);
 
-		CardValue result = new Dealer().getPair(hand);
+		PokerHand result = sut.getPair(hand);
 
-		assertEquals(CardValue.ACE, result, "This hand definitely contains a pair of aces.");
+		assertEquals(PokerHandRanking.ONE_PAIR, result.getRanking(), "This hand definitely contains a pair of aces.");
+
+		assertEquals(CardValue.ACE, result.getRankCards().iterator().next(),
+				"This hand definitely contains a pair of aces.");
+
+		assertSame(3, result.getKickerCards().size(), "One Pair should leave three kicker cards.");
 	}
 
 	/**
@@ -132,9 +236,18 @@ class DealerTest
 		hand.addCard(deck.drawCard(CardSuit.DIAMONDS, CardValue.EIGHT));
 		hand.addCard(deck.drawCard(CardSuit.SPADES, CardValue.NINE));
 
-		CardValue result = new Dealer().getPair(hand);
-
+		PokerHand result = new Dealer().getPair(hand);
 		assertNull(result, "This hand does not contain a pair.");
+	}
+
+	/**
+	 * getPairIsNullSafe
+	 */
+	@Test
+	void getPairIsNullSafe()
+	{
+		PokerHand result = new Dealer().getPair(null);
+		assertNull(result, "This hand does not contain a pair. In fact, there isn't even a hand.");
 	}
 
 	/**
@@ -194,9 +307,31 @@ class DealerTest
 		// A filler Card
 		hand.addCard(deck.drawCard(CardSuit.DIAMONDS, CardValue.FOUR));
 
-		CardValue result = new Dealer().getTwoPairs(hand);
+		PokerHand result = sut.getTwoPairs(hand);
 
-		assertEquals(CardValue.ACE, result,
+		assertEquals(PokerHandRanking.TWO_PAIRS, result.getRanking(),
 				"This hand had two pairs, one of them was of aces. This should be the result.");
+
+		assertEquals(CardValue.ACE, result.getRankCards().get(0),
+				"This hand had two pairs, one of them was of aces. This should be the result.");
+
+		assertEquals(CardValue.KING, result.getRankCards().get(1),
+				"This hand had two pairs, the second one was of kings. This should be the result.");
+
+		assertEquals(CardValue.FOUR, result.getKickerCards().get(0),
+				"The high card of the hand was a four. This shoul reflect in the result.");
+	}
+
+	/**
+	 * twoPairsIsNullSafe
+	 *
+	 * @throws HandExceededException error case
+	 * @throws DeckException         error case
+	 */
+	@Test
+	void twoPairsIsNullSafe() throws HandExceededException, DeckException
+	{
+		PokerHand result = sut.getTwoPairs(null);
+		assertNull(result, "This hand does not contain a pair, much less two. In fact, there isn't even a hand.");
 	}
 }

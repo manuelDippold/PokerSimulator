@@ -10,12 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
-import com.yotilla.poker.card.Card;
-import com.yotilla.poker.card.CardSuit;
-import com.yotilla.poker.card.CardValue;
-import com.yotilla.poker.card.HandOfCards;
 import com.yotilla.poker.error.HandExceededException;
 
 /**
@@ -27,66 +22,6 @@ import com.yotilla.poker.error.HandExceededException;
  */
 class HandOfCardsTest
 {
-	/**
-	 * Create and return the mock of a card with the specified suit and value
-	 *
-	 * @param argCardSuit  desired card suit
-	 * @param argCardValue desired card value
-	 * @return a mocked card
-	 */
-	private Card getCardMock(final CardSuit argCardSuit, final CardValue argCardValue)
-	{
-		Card card = Mockito.mock(Card.class);
-		Mockito.when(card.getCardSuit()).thenReturn(argCardSuit);
-		Mockito.when(card.getCardValue()).thenReturn(argCardValue);
-
-		return card;
-	}
-
-	/**
-	 * Creates and returns a pseudo - randomly generated card mock. Does in no way
-	 * guarantee the cards to be unique.
-	 *
-	 * @return a card mock
-	 */
-	private Card getRandomCardMock()
-	{
-		// roll the dice for a card value between 2 and 14.
-		int numericalCardValue = (int) Math.ceil((Math.random()) * 13 + 1);
-
-		// correct for the very unlikely case that random() returned zero.
-		if (numericalCardValue == 1)
-		{
-			numericalCardValue = 2;
-		}
-
-		CardValue cardValue = CardValue.getByNumericalValue(numericalCardValue);
-
-		// roll again for the suit
-		int suitValue = (int) Math.ceil(Math.random() * 4);
-		CardSuit suit;
-
-		switch (suitValue) {
-		case 1:
-			suit = CardSuit.CLUBS;
-			break;
-		case 2:
-			suit = CardSuit.DIAMONDS;
-			break;
-		case 3:
-			suit = CardSuit.HEARTS;
-			break;
-		case 4:
-			suit = CardSuit.SPADES;
-			break;
-		default:
-			suit = null;
-			break;
-		}
-
-		return getCardMock(suit, cardValue);
-	}
-
 	/**
 	 * Create a list filled with randomly - generated cards
 	 *
@@ -107,7 +42,7 @@ class HandOfCardsTest
 
 		for (int i = 0; i < amountOfCards; i++)
 		{
-			mocks.add(getRandomCardMock());
+			mocks.add(TestCardUtils.getRandomCardMock());
 		}
 
 		return mocks;
@@ -133,7 +68,7 @@ class HandOfCardsTest
 
 		for (int i = 0; i < amountOfCards; i++)
 		{
-			mocks[i] = getRandomCardMock();
+			mocks[i] = TestCardUtils.getRandomCardMock();
 		}
 
 		return mocks;
@@ -154,7 +89,7 @@ class HandOfCardsTest
 		assertTrue(hand.getCards().isEmpty(), "New hand, shouldn't hold any cards");
 
 		// Add a card.
-		hand.addCards(getCardMock(CardSuit.SPADES, CardValue.SEVEN));
+		hand.addCards(TestCardUtils.getCardMock(CardSuit.SPADES, CardValue.SEVEN));
 
 		// An internal list has been created to store the cards.
 		assertNotNull(hand.getCards(), "We added a card, there ought to be a collection of cards now.");
@@ -170,7 +105,7 @@ class HandOfCardsTest
 	{
 		HandOfCards hand = new HandOfCards();
 
-		Card aceOfSpades = getCardMock(CardSuit.SPADES, CardValue.ACE);
+		Card aceOfSpades = TestCardUtils.getCardMock(CardSuit.SPADES, CardValue.ACE);
 		hand.addCard(aceOfSpades);
 
 		assertTrue(hand.getCards().contains(aceOfSpades));
@@ -205,8 +140,8 @@ class HandOfCardsTest
 	{
 		HandOfCards hand = new HandOfCards();
 
-		Card aceOfSpades = getCardMock(CardSuit.SPADES, CardValue.ACE);
-		Card aceOfHearts = getCardMock(CardSuit.HEARTS, CardValue.ACE);
+		Card aceOfSpades = TestCardUtils.getCardMock(CardSuit.SPADES, CardValue.ACE);
+		Card aceOfHearts = TestCardUtils.getCardMock(CardSuit.HEARTS, CardValue.ACE);
 
 		hand.addCards(aceOfSpades, aceOfHearts);
 
@@ -304,7 +239,7 @@ class HandOfCardsTest
 		hand.addCards(maximumCards);
 
 		assertThrows(HandExceededException.class, () -> {
-			hand.addCard(getRandomCardMock());
+			hand.addCard(TestCardUtils.getRandomCardMock());
 		}, "Adding a sixth card to this hand should have thrown an exception.");
 	}
 }

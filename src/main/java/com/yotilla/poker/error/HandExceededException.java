@@ -13,10 +13,11 @@ public class HandExceededException extends Exception
 	private static final long serialVersionUID = -7955136988193841987L;
 
 	/**
-	 * @param argString
+	 *
+	 * {@inheritDoc}
 	 */
-	public HandExceededException(String argString)
+	public HandExceededException(String message)
 	{
-		super(argString);
+		super(message);
 	}
 }

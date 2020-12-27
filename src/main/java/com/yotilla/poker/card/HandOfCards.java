@@ -1,6 +1,7 @@
 package com.yotilla.poker.card;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import com.yotilla.poker.error.HandExceededException;
@@ -120,4 +121,49 @@ public class HandOfCards
 		cards.add(toAdd);
 	}
 
+	/**
+	 * return several cards from this hand
+	 *
+	 * @param toRemove cards to remove
+	 * @return true if all stated cards were successfully removed
+	 * @throws HandExceededException if the hand was already empty.
+	 */
+	public boolean removeCards(final Collection<Card> toRemove) throws HandExceededException
+	{
+		if (toRemove == null)
+		{
+			return false;
+		}
+
+		boolean success = true;
+
+		for (Card cardToRemove : toRemove)
+		{
+			success &= removeCard(cardToRemove);
+		}
+
+		return success;
+	}
+
+	/**
+	 * remove the specified card from the hand.
+	 *
+	 * @param toRemove card you wish removed
+	 * @return success boolean
+	 * @throws HandExceededException if the hand was already empty.
+	 */
+	public boolean removeCard(final Card toRemove) throws HandExceededException
+	{
+		if (cards == null || cards.isEmpty())
+		{
+			throw new HandExceededException("removeCard: Hand was already empty.");
+		}
+
+		if (toRemove == null || !cards.contains(toRemove))
+		{
+			return false;
+		}
+
+		return cards.remove(toRemove);
+	}
 }
