@@ -202,6 +202,116 @@ public class Dealer
 	}
 
 	/**
+	 * Attempts to find three of a kind in this hand and returns an according result.
+	 *
+	 * @param hand hand to analyze
+	 * @return poker hand
+	 */
+	public PokerHand getThreeOfKind(final HandOfCards hand)
+	{
+		if (hand != null)
+		{
+			CardCollector collector = new CardCollector();
+			CardValue tripleValue = null;
+
+			for (Card card : hand.getCards())
+			{
+				collector.addCard(card);
+
+				CardValue val = card.getCardValue();
+				if (collector.getAmountBehindKey(val) >= 3)
+				{
+					tripleValue = val;
+				}
+			}
+
+			if (tripleValue != null)
+			{
+				// we found a triple. Build a result.
+				List<Card> remainingCards = getKickerCards(hand, collector.get(tripleValue));
+				return new PokerHand(PokerHandRanking.THREE_OF_A_KIND, Arrays.asList(tripleValue),
+						cardsToSortedCardValues(remainingCards));
+			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * Attempts to find a straight in this hand and returns an according result.
+	 *
+	 * @param hand hand to analyze
+	 * @return poker hand or null.
+	 * @throws HandExceededException in case of an error
+	 */
+	public PokerHand getStraight(final HandOfCards hand) throws HandExceededException
+	{
+		if (hand != null)
+		{
+			// make a working copy of the hand and order it
+			List<Card> workingCopy = copyHandOfCards(hand).getCards();
+			workingCopy.sort(null);
+
+			// special case: If the hand contains an ace, it can be the starting or the ending card.
+			boolean containsAce = workingCopy.stream().anyMatch(c -> c.getCardValue() == CardValue.ACE);
+			boolean containsKing = workingCopy.stream().anyMatch(c -> c.getCardValue() == CardValue.KING);
+			boolean containsTwo = workingCopy.stream().anyMatch(c -> c.getCardValue() == CardValue.TWO);
+
+			// if this hand contains an ace, check if there is also a kind or a two, so it can form a straight.
+			if (containsAce)
+			{
+				// If this is not the case, there cannot be a straight here.
+				if (!containsKing && !containsTwo)
+				{
+					return null;
+				}
+
+				// If there is a two, remove the ace and continue. This way, the logic below will ensure four
+				// conscutive cards.
+				if (containsTwo)
+				{
+					workingCopy.removeIf(c -> c.getCardValue() == CardValue.ACE);
+				}
+			}
+
+			boolean skipped = false;
+			int highestvalue = 0;
+			int runningCardValue = 0;
+
+			// See if we can step trough the ordered cards without skipping one.
+			for (Card card : workingCopy)
+			{
+				int thisCardValue = card.getCardValue().getNumericalValue();
+
+				if (runningCardValue > 0 && Math.abs(thisCardValue - runningCardValue) > 1)
+				{
+					// we skipped a card. Break here.
+					skipped = true;
+					break;
+				}
+				else
+				{
+					runningCardValue = thisCardValue;
+
+					if (thisCardValue > highestvalue)
+					{
+						highestvalue = thisCardValue;
+					}
+				}
+			}
+
+			if (!skipped)
+			{
+				// We found the straight, construct a result. The ranking card is the highest card of the straight.
+				return new PokerHand(PokerHandRanking.STRAIGHT,
+						Arrays.asList(CardValue.getByNumericalValue(highestvalue)), Collections.emptyList());
+			}
+		}
+
+		return null;
+	}
+
+	/**
 	 * Get the cards of this hand that can serve as kickers, i.e. that are not part
 	 * of the ranking.<br>
 	 * For example, in a hand with one pair, the three remaining cards will be
@@ -252,7 +362,7 @@ public class Dealer
 	}
 
 	/**
-	 * transform a list of cards to their values. Sorts them descending, i.e. hoghest first.
+	 * transform a list of cards to their values. Sorts them descending, i.e. highest first.
 	 *
 	 * @param cards cards of interest
 	 * @return List of card values. Sorted in descending order.
