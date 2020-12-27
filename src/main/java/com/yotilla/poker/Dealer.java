@@ -32,6 +32,7 @@ import com.yotilla.poker.result.PokerHandRanking;
 public class Dealer
 {
 	private static final Logger LOG = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME);
+
 	private CardValueComparator cardValueComparatorDescending = new CardValueComparator()
 			.setOrder(SortOrder.DESCENDING);
 
@@ -282,7 +283,7 @@ public class Dealer
 	{
 		List<CardValue> valueList = cardsToSortedCardValues(cards);
 
-		// Linked hash set to remeber the order.
+		// Linked hash set to remember the order.
 		Set<CardValue> cardValues = new LinkedHashSet<>(valueList);
 
 		List<CardValue> ret = new ArrayList<>();
