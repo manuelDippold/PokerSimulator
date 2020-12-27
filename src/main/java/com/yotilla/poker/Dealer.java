@@ -253,26 +253,7 @@ public class Dealer
 			workingCopy.sort(null);
 
 			// special case: If the hand contains an ace, it can be the starting or the ending card.
-			boolean containsAce = workingCopy.stream().anyMatch(c -> c.getCardValue() == CardValue.ACE);
-			boolean containsKing = workingCopy.stream().anyMatch(c -> c.getCardValue() == CardValue.KING);
-			boolean containsTwo = workingCopy.stream().anyMatch(c -> c.getCardValue() == CardValue.TWO);
-
-			// if this hand contains an ace, check if there is also a kind or a two, so it can form a straight.
-			if (containsAce)
-			{
-				// If this is not the case, there cannot be a straight here.
-				if (!containsKing && !containsTwo)
-				{
-					return null;
-				}
-
-				// If there is a two, remove the ace and continue. This way, the logic below will ensure four
-				// conscutive cards.
-				if (containsTwo)
-				{
-					workingCopy.removeIf(c -> c.getCardValue() == CardValue.ACE);
-				}
-			}
+			accountForAceBeginningAStraight(workingCopy);
 
 			boolean skipped = false;
 			int highestvalue = 0;
@@ -309,6 +290,25 @@ public class Dealer
 		}
 
 		return null;
+	}
+
+	/**
+	 * account for the fact that an ace can lead a straight.
+	 *
+	 * @param workingCopy copy of cards to work with
+	 */
+	private void accountForAceBeginningAStraight(final List<Card> workingCopy)
+	{
+		boolean containsAce = workingCopy.stream().anyMatch(c -> c.getCardValue() == CardValue.ACE);
+		boolean containsTwo = workingCopy.stream().anyMatch(c -> c.getCardValue() == CardValue.TWO);
+
+		// if this hand contains an ace, check if there is also a kind or a two, so it can form a straight.
+		if (containsAce && containsTwo)
+		{
+			// If there are an ace and a two, remove the ace and continue.
+			// The ace must begin the the straight this way, there is not other possibility.
+			workingCopy.removeIf(c -> c.getCardValue() == CardValue.ACE);
+		}
 	}
 
 	/**
