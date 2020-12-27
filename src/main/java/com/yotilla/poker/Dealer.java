@@ -15,6 +15,7 @@ import java.util.logging.Logger;
 import javax.swing.SortOrder;
 
 import com.yotilla.poker.card.Card;
+import com.yotilla.poker.card.CardSuit;
 import com.yotilla.poker.card.CardValue;
 import com.yotilla.poker.card.CardValueComparator;
 import com.yotilla.poker.card.HandOfCards;
@@ -79,39 +80,13 @@ public class Dealer
 	 */
 	public PokerHand getHighCard(final HandOfCards hand)
 	{
-		CardValue highCard = hand == null ? null : getHighCard(hand.getCards());
-
-		if (highCard != null)
-		{
-			return new PokerHand(PokerHandRanking.HIGH_CARD, Arrays.asList(highCard), null);
-		}
-		else
+		if (hand == null)
 		{
 			return null;
 		}
-	}
 
-	/**
-	 * Get the high card from an arbitrary Collection of Cards
-	 *
-	 * @param hand cards to search in
-	 * @return highest card of this hand. Null if the hand is empty or null.
-	 */
-	public CardValue getHighCard(final Collection<Card> hand)
-	{
-		Card highCard = null;
-
-		if (hand != null)
-		{
-			for (Card card : hand)
-			{
-				if (card.compareTo(highCard) > 0)
-				{
-					highCard = card;
-				}
-			}
-		}
-		return highCard != null ? highCard.getCardValue() : null;
+		return new PokerHand(PokerHandRanking.HIGH_CARD, cardsToSortedCardValues(hand.getCards()),
+				Collections.emptyList());
 	}
 
 	/**
@@ -253,7 +228,7 @@ public class Dealer
 			workingCopy.sort(null);
 
 			// special case: If the hand contains an ace, it can be the starting or the ending card.
-			accountForAceBeginningAStraight(workingCopy);
+			accountForAceBeginningStraight(workingCopy);
 
 			boolean skipped = false;
 			int highestvalue = 0;
@@ -294,10 +269,11 @@ public class Dealer
 
 	/**
 	 * account for the fact that an ace can lead a straight.
+	 * Do so by removing it if there is a two.
 	 *
 	 * @param workingCopy copy of cards to work with
 	 */
-	private void accountForAceBeginningAStraight(final List<Card> workingCopy)
+	private void accountForAceBeginningStraight(final List<Card> workingCopy)
 	{
 		boolean containsAce = workingCopy.stream().anyMatch(c -> c.getCardValue() == CardValue.ACE);
 		boolean containsTwo = workingCopy.stream().anyMatch(c -> c.getCardValue() == CardValue.TWO);
@@ -309,6 +285,44 @@ public class Dealer
 			// The ace must begin the the straight this way, there is not other possibility.
 			workingCopy.removeIf(c -> c.getCardValue() == CardValue.ACE);
 		}
+	}
+
+	/**
+	 * Attempts to find a flush in this hand and returns an according result.
+	 *
+	 * @param hand hand to analyze
+	 * @return poker hand or null.
+	 * @throws HandExceededException in case of an error
+	 */
+	public PokerHand getFlush(final HandOfCards hand) throws HandExceededException
+	{
+		if (hand != null)
+		{
+			boolean flush = true;
+			CardSuit runningSuit = null;
+			for (Card card : hand.getCards())
+			{
+				CardSuit thisSuit = card.getCardSuit();
+
+				if (runningSuit != null && runningSuit != thisSuit)
+				{
+					// there are differing suits in this hand. This is not a flush.
+					flush = false;
+					break;
+				}
+				runningSuit = thisSuit;
+			}
+
+			if (flush)
+			{
+				// We found a flush, construct an according result.
+				// All flush cards serve as rank cards
+				return new PokerHand(PokerHandRanking.FLUSH, cardsToSortedCardValues(hand.getCards()),
+						Collections.emptyList());
+			}
+		}
+
+		return null;
 	}
 
 	/**

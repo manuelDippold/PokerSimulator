@@ -83,14 +83,21 @@ class DealerTest
 		// An Ace...
 		hand.addCard(deck.drawCard(CardSuit.DIAMONDS, CardValue.ACE));
 
-		// ...and four random cards
-		fillHandFromDeck(hand);
+		// ...and four furhter cards
+		hand.addCard(deck.drawCard(CardSuit.DIAMONDS, CardValue.THREE));
+		hand.addCard(deck.drawCard(CardSuit.SPADES, CardValue.FIVE));
+		hand.addCard(deck.drawCard(CardSuit.CLUBS, CardValue.EIGHT));
+		hand.addCard(deck.drawCard(CardSuit.DIAMONDS, CardValue.JACK));
 
 		PokerHand result = sut.getHighCard(hand);
 
 		assertEquals(PokerHandRanking.HIGH_CARD, result.getRanking(), "This is supposed to be a high card ranking.");
-		assertEquals(CardValue.ACE, result.getRankCards().iterator().next(),
+		assertEquals(CardValue.ACE, result.getRankCards().get(0),
 				"There is an ace in this hand, it ought to be the high card, no matter what.");
+		assertEquals(CardValue.JACK, result.getRankCards().get(1), "Second card: Jack.");
+		assertEquals(CardValue.EIGHT, result.getRankCards().get(2), "Third card: Eight.");
+		assertEquals(CardValue.FIVE, result.getRankCards().get(3), "Fourth card: Five.");
+		assertEquals(CardValue.THREE, result.getRankCards().get(4), "Fifth card: Three.");
 	}
 
 	/**
@@ -99,8 +106,7 @@ class DealerTest
 	@Test
 	void recognizeHighCardIsNullSafe()
 	{
-		HandOfCards hand = new HandOfCards();
-		PokerHand result = sut.getHighCard(hand);
+		PokerHand result = sut.getHighCard(null);
 
 		assertNull(result, "Empty hand, no high card");
 	}
@@ -488,6 +494,28 @@ class DealerTest
 	}
 
 	/**
+	 * straightIsNotRecognizedWhenThereIsNone
+	 *
+	 * @throws HandExceededException error
+	 * @throws DeckException         error
+	 */
+	@Test
+	void straightIsNotRecognizedWhenThereIsNone() throws HandExceededException, DeckException
+	{
+		HandOfCards hand = new HandOfCards();
+
+		// Not a straight
+		hand.addCard(deck.drawCard(CardSuit.DIAMONDS, CardValue.FIVE));
+		hand.addCard(deck.drawCard(CardSuit.CLUBS, CardValue.KING));
+		hand.addCard(deck.drawCard(CardSuit.SPADES, CardValue.THREE));
+		hand.addCard(deck.drawCard(CardSuit.DIAMONDS, CardValue.JACK));
+		hand.addCard(deck.drawCard(CardSuit.CLUBS, CardValue.TEN));
+
+		PokerHand result = sut.getStraight(hand);
+		assertNull(result, "Without a straight, result should be null.");
+	}
+
+	/**
 	 * StraightStartingWithAnAceIsRecognized
 	 *
 	 * @throws HandExceededException error case
@@ -512,4 +540,73 @@ class DealerTest
 				" Straight contains an Ace, but this in this special case, the ace acts as 'one', so the ranking card is the five. The result should reflect that.");
 		assertTrue(result.getKickerCards().isEmpty(), "A Straight does not leave room for kicker cards.");
 	}
+
+	/**
+	 * getFlushIsNullSafe
+	 *
+	 * @throws HandExceededException error case
+	 */
+	@Test
+	void getFlushIsNullSafe() throws HandExceededException
+	{
+		PokerHand result = sut.getFlush(null);
+		assertNull(result, "When analyzing null, result should be null");
+	}
+
+	/**
+	 * flushIsRecognized
+	 *
+	 * @throws HandExceededException error
+	 * @throws DeckException         error
+	 */
+	@Test
+	void flushIsRecognized() throws HandExceededException, DeckException
+	{
+		HandOfCards hand = new HandOfCards();
+
+		// Flush, lead by a King
+		hand.addCard(deck.drawCard(CardSuit.DIAMONDS, CardValue.KING));
+		hand.addCard(deck.drawCard(CardSuit.DIAMONDS, CardValue.THREE));
+		hand.addCard(deck.drawCard(CardSuit.DIAMONDS, CardValue.NINE));
+		hand.addCard(deck.drawCard(CardSuit.DIAMONDS, CardValue.FOUR));
+		hand.addCard(deck.drawCard(CardSuit.DIAMONDS, CardValue.EIGHT));
+
+		PokerHand result = sut.getFlush(hand);
+
+		assertEquals(PokerHandRanking.FLUSH, result.getRanking(), "This should result in a flush");
+		assertEquals(CardValue.KING, result.getRankCards().get(0),
+				" Highest card in this flush is a king. The result should reflect that.");
+		assertTrue(result.getKickerCards().isEmpty(), "A Straight does not leave room for kicker cards.");
+	}
+
+	/**
+	 * flushIsNotRecognizedWhenThereIsNone
+	 *
+	 * @throws HandExceededException error
+	 * @throws DeckException         error
+	 */
+	@Test
+	void flushIsNotRecognizedWhenThereIsNone() throws HandExceededException, DeckException
+	{
+		HandOfCards hand = new HandOfCards();
+
+		// Not a flush.
+		hand.addCard(deck.drawCard(CardSuit.DIAMONDS, CardValue.KING));
+		hand.addCard(deck.drawCard(CardSuit.SPADES, CardValue.THREE));
+		hand.addCard(deck.drawCard(CardSuit.DIAMONDS, CardValue.NINE));
+		hand.addCard(deck.drawCard(CardSuit.CLUBS, CardValue.FOUR));
+		hand.addCard(deck.drawCard(CardSuit.DIAMONDS, CardValue.EIGHT));
+
+		PokerHand result = sut.getFlush(hand);
+		assertNull(result, "Without a flush, result should be null.");
+	}
+
+	// TODO: full house
+	// TODO: no full house
+	// TODO: Four
+	// TODO: Not Four
+	// TODO: straight flush
+	// TODO: not straight flush
+	// TODO: royal flush
+	// TODO: not royal flush
 }

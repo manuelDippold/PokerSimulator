@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -206,5 +207,38 @@ class PokerHandComparatorTest
 
 		int result = comp.compare(fourTensAndOneAce, fourKingsAndOneThree);
 		assertTrue(result < 0, "The four kings beat the four tens, the ace does not matter here.");
+	}
+
+	/**
+	 * flushTieCanBeBrokenByFirstCard
+	 */
+	@Test
+	void flushTieCanBeBrokenByFirstCard()
+	{
+		PokerHand flushWithKing = getHand(PokerHandRanking.FLUSH, Arrays.asList(CardValue.KING, CardValue.TEN),
+				Collections.emptyList());
+		PokerHand flushWithQueen = getHand(PokerHandRanking.FLUSH, Arrays.asList(CardValue.QUEEN, CardValue.TEN),
+				Collections.emptyList());
+
+		int result = comp.compare(flushWithKing, flushWithQueen);
+		assertTrue(result > 0, "The king should rank higher than the queen here.");
+	}
+
+	/**
+	 * flushTieCanBeBrokenByFifthCard
+	 */
+	@Test
+	void flushTieCanBeBrokenByFifthCard()
+	{
+		PokerHand minorFlush = getHand(PokerHandRanking.FLUSH,
+				Arrays.asList(CardValue.TWO, CardValue.TEN, CardValue.FIVE, CardValue.SIX, CardValue.TEN),
+				Collections.emptyList());
+
+		PokerHand majorFlush = getHand(PokerHandRanking.FLUSH,
+				Arrays.asList(CardValue.THREE, CardValue.TEN, CardValue.FIVE, CardValue.SIX, CardValue.TEN),
+				Collections.emptyList());
+
+		int result = comp.compare(minorFlush, majorFlush);
+		assertTrue(result < 0, "Fifth card: Three trumps two.");
 	}
 }
