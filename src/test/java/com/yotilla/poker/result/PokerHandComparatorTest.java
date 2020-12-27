@@ -149,4 +149,62 @@ class PokerHandComparatorTest
 
 		assertTrue(result < 0, "The minor two pair combo should lose by its high card.");
 	}
+
+	/**
+	 * voidOfAnyRankingsHighCardWins
+	 */
+	@Test
+	void voidOfAnyRankingsHighCardWins()
+	{
+		PokerHand justQueenHighCard = getHand(null, null, Arrays.asList(CardValue.QUEEN));
+		PokerHand justNineHighCard = getHand(null, null, Arrays.asList(CardValue.NINE));
+
+		int result = comp.compare(justQueenHighCard, justNineHighCard);
+		assertTrue(result > 0, "High cards only, queen should beat nine.");
+	}
+
+	/**
+	 * straightTieCanBeBrokenByTopCard
+	 */
+	@Test
+	void straightTieCanBeBrokenByTopCard()
+	{
+		PokerHand kingStraight = getHand(PokerHandRanking.STRAIGHT, Arrays.asList(CardValue.KING), null);
+		PokerHand nineStraight = getHand(PokerHandRanking.STRAIGHT, Arrays.asList(CardValue.NINE), null);
+
+		int result = comp.compare(nineStraight, kingStraight);
+		assertTrue(result < 0, "A straight lead by a nine should lose to a straight lead by a King.");
+	}
+
+	/**
+	 * fullHouseTieCanBeBrokenBySeconRankCard
+	 */
+	@Test
+	void fullHouseTieCanBeBrokenBySeconRankCard()
+	{
+		// This combination is currently impossible to happen at this feature status,
+		// but if we ever play, say, Texas hold'em, this can be the case.
+		PokerHand fullHouseQueensAndNines = getHand(PokerHandRanking.FULL_HOUSE,
+				Arrays.asList(CardValue.QUEEN, CardValue.NINE), null);
+		PokerHand fullHouseQueensAndFours = getHand(PokerHandRanking.FULL_HOUSE,
+				Arrays.asList(CardValue.QUEEN, CardValue.FOUR), null);
+
+		int result = comp.compare(fullHouseQueensAndNines, fullHouseQueensAndFours);
+		assertTrue(result > 0, "The queens in the upper pair match, but the nines beat the fours.");
+	}
+
+	/**
+	 * fourTieIsBrokenByRankCardBeforeKickerCard
+	 */
+	@Test
+	void fourTieIsBrokenByRankCardBeforeKickerCard()
+	{
+		PokerHand fourKingsAndOneThree = getHand(PokerHandRanking.FOUR_OF_A_KIND, Arrays.asList(CardValue.KING),
+				Arrays.asList(CardValue.THREE));
+		PokerHand fourTensAndOneAce = getHand(PokerHandRanking.FOUR_OF_A_KIND, Arrays.asList(CardValue.TEN),
+				Arrays.asList(CardValue.ACE));
+
+		int result = comp.compare(fourTensAndOneAce, fourKingsAndOneThree);
+		assertTrue(result < 0, "The four kings beat the four tens, the ace does not matter here.");
+	}
 }
