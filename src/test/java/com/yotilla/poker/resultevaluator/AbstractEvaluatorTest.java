@@ -1,4 +1,4 @@
-package com.yotilla.poker;
+package com.yotilla.poker.resultevaluator;
 
 import org.junit.jupiter.api.BeforeEach;
 
@@ -6,27 +6,23 @@ import com.yotilla.poker.card.DeckOfCards;
 
 /**
  * Description:
- *
+ * Abstract test class providing the fresh decks for each evaluator below
  * <br>
- * Date: 26.12.2020
+ * Date: 28.12.2020
  *
  * @author Manuel
  *
  */
-class DealerTest
+abstract class AbstractEvaluatorTest
 {
-	// sut: subject under test.
-	private Dealer sut;
-	private DeckOfCards deck;
+	protected DeckOfCards deck;
 
 	/**
 	 * Spin up a fresh deck and dealer before each test
 	 */
 	@BeforeEach
-	private void setUp()
+	protected void setUp()
 	{
 		deck = new DeckOfCards();
-		sut = new Dealer();
 	}
-
 }
