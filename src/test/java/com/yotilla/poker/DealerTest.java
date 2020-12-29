@@ -28,6 +28,8 @@ import com.yotilla.poker.error.PokerParseException;
  */
 class DealerTest
 {
+	private static final String PLAYER_NAME = "John Doe";
+
 	// sut: subject under test.
 	private Dealer sut;
 	private DeckOfCards deckSpy;
@@ -161,7 +163,7 @@ class DealerTest
 		Card jackOfSpades = new Card(CardSuit.SPADES, CardValue.JACK);
 		Card aceOfClubs = new Card(CardSuit.CLUBS, CardValue.ACE);
 
-		Player player = new Player();
+		Player player = new Player(PLAYER_NAME);
 		sut.parseInputAndDealHand(input, player);
 
 		HandOfCards playerHand = player.getHand();
@@ -198,7 +200,7 @@ class DealerTest
 	{
 		// Input hand: two of diamonds, two of diamonds, Queen of hearts, Jack of Spades, Ace of Clubs
 		String input = "2D 2D QH JS AC";
-		Player player = new Player();
+		Player player = new Player(PLAYER_NAME);
 
 		assertThrows(DeckException.class, () -> {
 			sut.parseInputAndDealHand(input, player);
@@ -217,7 +219,7 @@ class DealerTest
 	{
 		// Input hand: two of diamonds, three of clubs, Queen of hearts, two cards missing
 		String input = "2D 3C QH";
-		Player player = new Player();
+		Player player = new Player(PLAYER_NAME);
 
 		// reference
 		Card twoOfDiamonds = new Card(CardSuit.DIAMONDS, CardValue.TWO);
