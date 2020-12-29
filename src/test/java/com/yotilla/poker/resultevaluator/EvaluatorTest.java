@@ -69,7 +69,7 @@ class EvaluatorTest extends AbstractEvaluatorTest
 			return;
 		}
 
-		while (hand.getAmountOfCards() < HandOfCards.MAX_HAND_SIZE)
+		while (hand.getAmountOfCards() < HandOfCards.HAND_SIZE)
 		{
 			hand.addCard(deck.drawNextCard());
 		}

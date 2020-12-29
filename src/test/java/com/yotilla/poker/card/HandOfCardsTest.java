@@ -171,7 +171,7 @@ class HandOfCardsTest
 	{
 		HandOfCards hand = new HandOfCards();
 
-		List<Card> tooManyCards = getRandomCardMocksAsList(HandOfCards.MAX_HAND_SIZE + 1);
+		List<Card> tooManyCards = getRandomCardMocksAsList(HandOfCards.HAND_SIZE + 1);
 
 		assertThrows(HandExceededException.class, () -> {
 			hand.setCards(tooManyCards);
@@ -187,7 +187,7 @@ class HandOfCardsTest
 	void settingFiveCardsWorksFine() throws HandExceededException
 	{
 		HandOfCards hand = new HandOfCards();
-		List<Card> maximumCards = getRandomCardMocksAsList(HandOfCards.MAX_HAND_SIZE);
+		List<Card> maximumCards = getRandomCardMocksAsList(HandOfCards.HAND_SIZE);
 
 		hand.setCards(maximumCards);
 
@@ -202,7 +202,7 @@ class HandOfCardsTest
 	{
 		HandOfCards hand = new HandOfCards();
 
-		Card[] tooManyCards = getRandomCardMocksAsArray(HandOfCards.MAX_HAND_SIZE + 1);
+		Card[] tooManyCards = getRandomCardMocksAsArray(HandOfCards.HAND_SIZE + 1);
 
 		assertThrows(HandExceededException.class, () -> {
 			hand.addCards(tooManyCards);
@@ -218,7 +218,7 @@ class HandOfCardsTest
 	void addingFiveCardsAtOnceIsFine() throws HandExceededException
 	{
 		HandOfCards hand = new HandOfCards();
-		Card[] maximumCards = getRandomCardMocksAsArray(HandOfCards.MAX_HAND_SIZE);
+		Card[] maximumCards = getRandomCardMocksAsArray(HandOfCards.HAND_SIZE);
 
 		hand.addCards(maximumCards);
 		assertEquals(maximumCards.length, hand.getCards().size(), "Adding this many cards shouldn't be a problem.");
@@ -234,7 +234,7 @@ class HandOfCardsTest
 	{
 		// Create a hand and add five cards
 		HandOfCards hand = new HandOfCards();
-		Card[] maximumCards = getRandomCardMocksAsArray(HandOfCards.MAX_HAND_SIZE);
+		Card[] maximumCards = getRandomCardMocksAsArray(HandOfCards.HAND_SIZE);
 
 		hand.addCards(maximumCards);
 

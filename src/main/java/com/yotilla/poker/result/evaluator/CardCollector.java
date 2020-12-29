@@ -1,4 +1,4 @@
-package com.yotilla.poker;
+package com.yotilla.poker.result.evaluator;
 
 import java.util.ArrayList;
 import java.util.Collection;

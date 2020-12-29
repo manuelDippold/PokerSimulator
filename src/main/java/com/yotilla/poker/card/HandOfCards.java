@@ -18,7 +18,7 @@ public class HandOfCards
 	/**
 	 * How many cards a hand is allowed to hold
 	 */
-	public static final int MAX_HAND_SIZE = 5;
+	public static final int HAND_SIZE = 5;
 
 	private List<Card> cards;
 
@@ -64,10 +64,10 @@ public class HandOfCards
 	 */
 	public void setCards(List<Card> argCards) throws HandExceededException
 	{
-		if (argCards != null && argCards.size() > MAX_HAND_SIZE)
+		if (argCards != null && argCards.size() > HAND_SIZE)
 		{
 			throw new HandExceededException(
-					String.format("A hand of cards must not hold more than %d cards.", MAX_HAND_SIZE));
+					String.format("A hand of cards must not hold more than %d cards.", HAND_SIZE));
 		}
 
 		cards = argCards;
@@ -109,13 +109,13 @@ public class HandOfCards
 
 		if (cards == null)
 		{
-			cards = new ArrayList<>(MAX_HAND_SIZE);
+			cards = new ArrayList<>(HAND_SIZE);
 		}
 
-		if (cards.size() == MAX_HAND_SIZE)
+		if (cards.size() == HAND_SIZE)
 		{
 			throw new HandExceededException(
-					String.format("A hand of cards must not hold more than %d cards.", MAX_HAND_SIZE));
+					String.format("A hand of cards must not hold more than %d cards.", HAND_SIZE));
 		}
 
 		cards.add(toAdd);

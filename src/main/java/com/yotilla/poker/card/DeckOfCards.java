@@ -1,6 +1,9 @@
 package com.yotilla.poker.card;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.yotilla.poker.error.DeckException;
@@ -102,5 +105,22 @@ public class DeckOfCards
 		}
 
 		return cards.remove(ret.hashCode());
+	}
+
+	/**
+	 * shuffle the deck, randomizing the order.
+	 */
+	public void shuffleDeck()
+	{
+		// get a working copy list of the remaining cards in this deck.
+		List<Card> cardList = new ArrayList<>();
+		cardList.addAll(cards.values());
+
+		// shuffle the list
+		Collections.shuffle(cardList);
+
+		// clear the deck itself and re-add all cards from the shuffled list.
+		cards.clear();
+		cardList.stream().forEach(c -> cards.put(c.hashCode(), c));
 	}
 }

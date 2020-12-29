@@ -3,7 +3,6 @@ package com.yotilla.poker.result.evaluator;
 import java.util.Arrays;
 import java.util.List;
 
-import com.yotilla.poker.CardCollector;
 import com.yotilla.poker.card.Card;
 import com.yotilla.poker.card.CardValue;
 import com.yotilla.poker.card.HandOfCards;

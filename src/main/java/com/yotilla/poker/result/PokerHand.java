@@ -1,5 +1,6 @@
 package com.yotilla.poker.result;
 
+import java.util.Iterator;
 import java.util.List;
 
 import com.yotilla.poker.card.CardValue;
@@ -61,4 +62,47 @@ public class PokerHand
 		return kickerCards;
 	}
 
+	@Override
+	public String toString()
+	{
+		StringBuilder sb = new StringBuilder(ranking.name());
+
+		if (rankCards != null)
+		{
+			sb.append(", ");
+
+			Iterator<CardValue> rankIterator = rankCards.iterator();
+
+			while (rankIterator.hasNext())
+			{
+				sb.append(rankIterator.next());
+
+				if (rankIterator.hasNext())
+				{
+					sb.append(", ");
+				}
+			}
+		}
+
+		sb.append(". ");
+
+		if (kickerCards != null && !kickerCards.isEmpty())
+		{
+			sb.append("Kickers: ");
+
+			Iterator<CardValue> kickerIterator = kickerCards.iterator();
+
+			while (kickerIterator.hasNext())
+			{
+				sb.append(kickerIterator.next());
+
+				if (kickerIterator.hasNext())
+				{
+					sb.append(", ");
+				}
+			}
+		}
+
+		return sb.toString();
+	}
 }

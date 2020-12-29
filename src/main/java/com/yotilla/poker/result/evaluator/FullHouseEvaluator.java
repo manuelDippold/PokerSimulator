@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map.Entry;
 
-import com.yotilla.poker.CardCollector;
 import com.yotilla.poker.card.Card;
 import com.yotilla.poker.card.CardValue;
 import com.yotilla.poker.card.HandOfCards;
