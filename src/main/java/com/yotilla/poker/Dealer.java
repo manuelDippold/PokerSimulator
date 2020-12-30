@@ -3,7 +3,9 @@ package com.yotilla.poker;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.yotilla.poker.card.Card;
 import com.yotilla.poker.card.CardSuit;
@@ -245,6 +247,9 @@ public class Dealer
 		PokerHand winningHand = null;
 		List<Player> equites = Collections.emptyList();
 
+		// Lists of PLayers, mapped by the place they scored.
+		Map<Integer, List<Player>> ranking = new LinkedHashMap<>();
+
 		for (Player player : players)
 		{
 			if (player.getPokerHand() == null)
@@ -253,13 +258,18 @@ public class Dealer
 			}
 
 			// No winner, no tie so far, take the throne.
-			if (winner == null && equites.isEmpty())
+			if (winner == null && equites.isEmpty()) // TODO: winner is rank 1. ggf. result refactoren.
 			{
 				winner = player;
 				winningHand = player.getPokerHand();
 			}
 			else
 			{
+				// TODO: loop downwards through existing ranking.
+				// TODO: create method in GameResult to add to ranking or switch into it.
+				// TODO: create method in GameResult to determine winner and pot split after the fact.
+				// TODO: GameResult should be able to sort their ranking. Tree Map?
+
 				int comparisonAgainstWinningHand = pokerHandComparator.compare(player.getPokerHand(), winningHand);
 
 				// new winner

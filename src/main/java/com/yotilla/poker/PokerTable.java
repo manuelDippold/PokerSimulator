@@ -11,6 +11,7 @@ import com.yotilla.poker.card.DeckOfCards;
 import com.yotilla.poker.error.DeckException;
 import com.yotilla.poker.error.HandExceededException;
 import com.yotilla.poker.error.PokerParseException;
+import com.yotilla.poker.result.GameResult;
 import com.yotilla.poker.util.PureLogFormatter;
 
 /**
@@ -70,9 +71,10 @@ public class PokerTable
 			try
 			{
 				dealer.parseInputAndDealHand(handInput, player);
-
 				// Evaluate each player's hand, tell them what they hold.
 				dealer.evaluatePlayerHand(player);
+
+				// Print player to console
 			}
 			catch (PokerParseException | HandExceededException | DeckException e)
 			{
@@ -81,6 +83,19 @@ public class PokerTable
 								e.getMessage())));
 				return;
 			}
+		}
+
+		// Compare hands and determine winner
+		try
+		{
+			GameResult result = dealer.determineGameResult(players);
+			print(result.toString());
+		}
+		catch (PokerParseException e)
+		{
+			LOG.log(Level.SEVERE,
+					(String.format("Something went wrong while determin the winner(s): %s", e.getMessage())));
+			return;
 		}
 
 		// TODO: Rank hands. Beware of ties. Determine winner

@@ -2,6 +2,7 @@ package com.yotilla.poker.result;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import com.yotilla.poker.Player;
 
@@ -18,6 +19,7 @@ public class GameResult
 {
 	private Player winner;
 	private List<Player> potSplit;
+	private Map<Integer, List<Player>> ranking;
 
 	/**
 	 * the sole winner
@@ -57,6 +59,22 @@ public class GameResult
 	public void setPotSplit(List<Player> argPotSplit)
 	{
 		potSplit = argPotSplit;
+	}
+
+	/**
+	 * @return the ranking
+	 */
+	public Map<Integer, List<Player>> getRanking()
+	{
+		return ranking;
+	}
+
+	/**
+	 * @param argRanking the ranking to set
+	 */
+	public void setRanking(Map<Integer, List<Player>> argRanking)
+	{
+		ranking = argRanking;
 	}
 
 	@Override
