@@ -1,6 +1,5 @@
 package com.yotilla.poker;
 
-import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.ConsoleHandler;
@@ -9,6 +8,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.yotilla.poker.card.DeckOfCards;
+import com.yotilla.poker.error.DeckException;
+import com.yotilla.poker.error.HandExceededException;
+import com.yotilla.poker.error.PokerParseException;
 import com.yotilla.poker.util.PureLogFormatter;
 
 /**
@@ -26,14 +28,12 @@ public class PokerTable
 
 	static
 	{
-		// Use direct print to the console, no heads or tails.
+		// Use direct print to the console, no heads or tails, except warning or higher.
 		Handler consoleHandler = new ConsoleHandler();
 		consoleHandler.setFormatter(new PureLogFormatter());
 		LOG.addHandler(consoleHandler);
 		LOG.setUseParentHandlers(false);
 	}
-
-	private static PrintStream out = System.out; // NOSONAR - we want to print directyl to the console
 
 	/**
 	 * Starting point of this poker simulator.
@@ -43,33 +43,52 @@ public class PokerTable
 	 */
 	public static void main(String[] hands)
 	{
+		// TODO: At least one integration test.
+
 		if (hands == null)
 		{
-			print("No hands have been dealt. Quittin.");
+			print("No hands have been dealt. Quitting.");
+			return;
 		}
 
 		int amountOfPlayers = hands.length;
 
-		print(amountOfPlayers + " Players at at the table.");
+		// Seat the players at the table.
 		List<Player> players = createPlayers(amountOfPlayers);
+		print(amountOfPlayers + " Players at at the table.");
 
 		// Summon a dealer and prepare a deck of cards.
 		DeckOfCards deck = new DeckOfCards();
 		Dealer dealer = new Dealer(deck);
 
-		// TODO: remove this fromt the table. the table must hold the players. We need a new main class.
+		// Deal the cards to the players
+		for (int i = 0; i < hands.length; i++)
+		{
+			String handInput = hands[i];
+			Player player = players.get(i);
 
-		// TODO: Parse each String
-		// TODO create players
-		// TODO: Create hands
+			try
+			{
+				dealer.parseInputAndDealHand(handInput, player);
+			}
+			catch (PokerParseException | HandExceededException | DeckException e)
+			{
+				LOG.log(Level.SEVERE,
+						(String.format("Something went wrong while dealing the cards: %s", e.getMessage())));
+			}
+		}
+
+		// Evaluate each player's hand
+
 		// TODO: evaluate hands
+		// TODO Give poker hands to players
 		// TODO: print players and their hands.
 		// TODO: Rank hands. Beware of ties. Determine winner
 		// TODO: print winner
 	}
 
 	/**
-	 * Log something
+	 * Log something to the console as info. Info and below are not written with heads or tails.
 	 *
 	 * @param logMessage
 	 */

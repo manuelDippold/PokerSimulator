@@ -1,6 +1,7 @@
 package com.yotilla.poker;
 
 import com.yotilla.poker.card.HandOfCards;
+import com.yotilla.poker.result.PokerHand;
 
 /**
  * Description:
@@ -14,6 +15,7 @@ import com.yotilla.poker.card.HandOfCards;
 public class Player
 {
 	private HandOfCards hand;
+	private PokerHand pokerHand;
 	private final String name;
 
 	private int wins;
@@ -50,6 +52,22 @@ public class Player
 	public HandOfCards getHand()
 	{
 		return hand;
+	}
+
+	/**
+	 * @return the pokerHand
+	 */
+	public PokerHand getPokerHand()
+	{
+		return pokerHand;
+	}
+
+	/**
+	 * @param argPokerHand the pokerHand to set
+	 */
+	public void setPokerHand(PokerHand argPokerHand)
+	{
+		pokerHand = argPokerHand;
 	}
 
 	/**
@@ -106,5 +124,11 @@ public class Player
 	public void increaseLossCount()
 	{
 		losses++;
+	}
+
+	@Override
+	public String toString()
+	{
+		return name;
 	}
 }

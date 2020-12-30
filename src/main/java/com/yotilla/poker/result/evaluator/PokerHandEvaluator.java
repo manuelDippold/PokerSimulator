@@ -160,15 +160,10 @@ public interface PokerHandEvaluator
 		}
 
 		// The remaining cards are the Kicker cards. Sort and return.
-		if (workingCopy != null)
-		{
-			// Cards implement comparable, so we don't need a comparator here.
-			// Use reverse order so the highest Card comes first.
-			List<Card> kickerCards = workingCopy.getCards();
-			kickerCards.sort(Collections.reverseOrder());
-			return workingCopy.getCards();
-		}
-
-		return Collections.emptyList();
+		// Cards implement comparable, so we don't need a comparator here.
+		// Use reverse order so the highest Card comes first.
+		List<Card> kickerCards = workingCopy.getCards();
+		kickerCards.sort(Collections.reverseOrder());
+		return workingCopy.getCards();
 	}
 }

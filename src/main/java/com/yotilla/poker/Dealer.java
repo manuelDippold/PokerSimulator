@@ -1,5 +1,9 @@
 package com.yotilla.poker;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import com.yotilla.poker.card.Card;
 import com.yotilla.poker.card.CardSuit;
 import com.yotilla.poker.card.CardValue;
@@ -8,9 +12,22 @@ import com.yotilla.poker.card.HandOfCards;
 import com.yotilla.poker.error.DeckException;
 import com.yotilla.poker.error.HandExceededException;
 import com.yotilla.poker.error.PokerParseException;
+import com.yotilla.poker.result.PokerHand;
+import com.yotilla.poker.result.evaluator.FlushEvaluator;
+import com.yotilla.poker.result.evaluator.FourOfKindEvaluator;
+import com.yotilla.poker.result.evaluator.FullHouseEvaluator;
+import com.yotilla.poker.result.evaluator.HighCardEvaluator;
+import com.yotilla.poker.result.evaluator.PairEvaluator;
+import com.yotilla.poker.result.evaluator.PokerHandEvaluator;
+import com.yotilla.poker.result.evaluator.RoyalFlushEvaluator;
+import com.yotilla.poker.result.evaluator.StraightEvaluator;
+import com.yotilla.poker.result.evaluator.StraightFlushEvaluator;
+import com.yotilla.poker.result.evaluator.TripleEvaluator;
+import com.yotilla.poker.result.evaluator.TwoPairsEvaluator;
 
 /**
  * Description: Core service class in a game of Poker. <br>
+ * Deals the cards and is the central authority of what's going on.
  * Date: 26.12.2020
  *
  * @author Manuel
@@ -19,6 +36,7 @@ import com.yotilla.poker.error.PokerParseException;
 public class Dealer
 {
 	private final DeckOfCards deck;
+	private final List<PokerHandEvaluator> evaluators;
 
 	/**
 	 * Summon a new Dealer. A dealer always holds a freshly - shuffled deck.
@@ -27,6 +45,20 @@ public class Dealer
 	{
 		deck = argDeck;
 		shuffleDeck();
+
+		evaluators = new ArrayList<>();
+
+		// Place the evaluators in the correct order, top - down.
+		evaluators.add(new RoyalFlushEvaluator());
+		evaluators.add(new StraightFlushEvaluator());
+		evaluators.add(new FourOfKindEvaluator());
+		evaluators.add(new FullHouseEvaluator());
+		evaluators.add(new FlushEvaluator());
+		evaluators.add(new StraightEvaluator());
+		evaluators.add(new TripleEvaluator());
+		evaluators.add(new TwoPairsEvaluator());
+		evaluators.add(new PairEvaluator());
+		evaluators.add(new HighCardEvaluator());
 	}
 
 	/**
@@ -103,7 +135,7 @@ public class Dealer
 	 *
 	 * @param input input string, must be valid
 	 * @return Card object
-	 * @throws PokerParseException when the card cannot be regognized
+	 * @throws PokerParseException when the card cannot be recognized
 	 */
 	Card parseCard(final String input) throws PokerParseException
 	{
@@ -122,5 +154,54 @@ public class Dealer
 		}
 
 		return new Card(suit, value);
+	}
+
+	/**
+	 * Take a look at a players hand and tell them what they hold.
+	 *
+	 * @param player player holding a hand
+	 * @throws PokerParseException in case of invalid input
+	 */
+	public void evaluatePlayerHand(final Player player) throws PokerParseException
+	{
+		if (player == null || player.getHand() == null || player.getHand().isEmpty())
+		{
+			throw new PokerParseException(
+					String.format("Hand recognition error: Player is either null or doesn't hold a hand: %s", player));
+		}
+
+		HandOfCards playerHand = player.getHand();
+
+		// Go though the possible hands top - down until we hit something valid.
+		PokerHand result = null;
+		Iterator<PokerHandEvaluator> evaluatorIterator = evaluators.iterator();
+
+		while (result == null && evaluatorIterator.hasNext())
+		{
+			result = evaluatorIterator.next().evaluate(playerHand);
+		}
+
+		// assign result to player
+		player.setPokerHand(result);
+
+		// This is virtually impossible in Poker, but let's be careful.
+		if (player.getPokerHand() == null)
+		{
+			throw new PokerParseException("Error while parsing poker hand: No combination recognized.");
+		}
+	}
+
+	/**
+	 * Print a players result that game:<br>
+	 * rank Name Hand PokerHand
+	 *
+	 * @param rank   rank the player scored. One is highest
+	 * @param player player to be printed
+	 * @return String
+	 */
+	public String printPlayerAndHAnd(final int rank, final Player player)
+	{
+		// TODO
+		return null;
 	}
 }
