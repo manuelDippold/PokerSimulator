@@ -345,7 +345,21 @@ class DealerTest
 	@Test
 	void evaluateHandRecognizesFullHouse() throws HandExceededException, PokerParseException
 	{
+		// Full House
+		List<CardValue> values = Arrays.asList(CardValue.TEN, CardValue.TEN, CardValue.FIVE, CardValue.FIVE,
+				CardValue.FIVE);
+		List<CardSuit> suits = Arrays.asList(CardSuit.HEARTS, CardSuit.SPADES, CardSuit.SPADES, CardSuit.DIAMONDS,
+				CardSuit.DIAMONDS);
 
+		HandOfCards hand = getHand(suits, values);
+		Mockito.when(playerSpy.getHand()).thenReturn(hand);
+
+		sut.evaluatePlayerHand(playerSpy);
+		PokerHand result = playerSpy.getPokerHand();
+
+		assertEquals(PokerHandRanking.FULL_HOUSE, result.getRanking(), "Result Full house expected");
+		assertEquals(CardValue.FIVE, result.getRankCards().get(0), "First Rank card is the triple, five.");
+		assertEquals(CardValue.TEN, result.getRankCards().get(1), "First Rank card is the pair, ten.");
 	}
 
 	/**
@@ -357,7 +371,20 @@ class DealerTest
 	@Test
 	void evaluateHandRecognizesStraight() throws HandExceededException, PokerParseException
 	{
+		// Straight
+		List<CardValue> values = Arrays.asList(CardValue.EIGHT, CardValue.NINE, CardValue.TEN, CardValue.JACK,
+				CardValue.QUEEN);
+		List<CardSuit> suits = Arrays.asList(CardSuit.HEARTS, CardSuit.SPADES, CardSuit.SPADES, CardSuit.DIAMONDS,
+				CardSuit.DIAMONDS);
 
+		HandOfCards hand = getHand(suits, values);
+		Mockito.when(playerSpy.getHand()).thenReturn(hand);
+
+		sut.evaluatePlayerHand(playerSpy);
+		PokerHand result = playerSpy.getPokerHand();
+
+		assertEquals(PokerHandRanking.STRAIGHT, result.getRanking(), "Result straight expected");
+		assertEquals(CardValue.QUEEN, result.getRankCards().get(0), "Queen is the rank card.");
 	}
 
 	/**
@@ -369,6 +396,23 @@ class DealerTest
 	@Test
 	void evaluateHandRecognizesHighCard() throws HandExceededException, PokerParseException
 	{
+		// Noting.
+		List<CardValue> values = Arrays.asList(CardValue.TWO, CardValue.FOUR, CardValue.TEN, CardValue.FIVE,
+				CardValue.JACK);
+		List<CardSuit> suits = Arrays.asList(CardSuit.HEARTS, CardSuit.SPADES, CardSuit.SPADES, CardSuit.DIAMONDS,
+				CardSuit.DIAMONDS);
 
+		HandOfCards hand = getHand(suits, values);
+		Mockito.when(playerSpy.getHand()).thenReturn(hand);
+
+		sut.evaluatePlayerHand(playerSpy);
+		PokerHand result = playerSpy.getPokerHand();
+
+		assertEquals(PokerHandRanking.HIGH_CARD, result.getRanking(), "Result high card expected");
+		assertEquals(CardValue.JACK, result.getRankCards().get(0), "Rank card 1, jack.");
+		assertEquals(CardValue.TEN, result.getRankCards().get(1), "Rank card 2, ten.");
+		assertEquals(CardValue.FIVE, result.getRankCards().get(2), "Rank card 3, five.");
+		assertEquals(CardValue.FOUR, result.getRankCards().get(3), "Rank card 4, four.");
+		assertEquals(CardValue.TWO, result.getRankCards().get(4), "Rank card 5, two.");
 	}
 }
