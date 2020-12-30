@@ -1,6 +1,14 @@
-package com.yotilla.poker.card;
+package com.yotilla.poker;
+
+import java.util.List;
 
 import org.mockito.Mockito;
+
+import com.yotilla.poker.card.Card;
+import com.yotilla.poker.card.CardSuit;
+import com.yotilla.poker.card.CardValue;
+import com.yotilla.poker.result.PokerHand;
+import com.yotilla.poker.result.PokerHandRanking;
 
 /**
  * Description: service class for testing convenience
@@ -11,7 +19,7 @@ import org.mockito.Mockito;
  * @author Manuel
  *
  */
-public class TestCardUtils
+public class TestUtils
 {
 	/**
 	 * Create and return the mock of a card with the specified suit and value
@@ -71,5 +79,25 @@ public class TestCardUtils
 		}
 
 		return getCardMock(suit, cardValue);
+	}
+
+	/**
+	 * mock a poker hand for test purposes
+	 *
+	 * @param ranking     card ranking
+	 * @param rankCards   rank cards, if necessary
+	 * @param kickerCards kicker cards, if necessary
+	 * @return Poker hand mock
+	 */
+	public static PokerHand getPokerHandMock(final PokerHandRanking ranking, final List<CardValue> rankCards,
+			final List<CardValue> kickerCards)
+	{
+		PokerHand hand = Mockito.mock(PokerHand.class);
+
+		Mockito.when(hand.getRanking()).thenReturn(ranking);
+		Mockito.when(hand.getRankCards()).thenReturn(rankCards);
+		Mockito.when(hand.getKickerCards()).thenReturn(kickerCards);
+
+		return hand;
 	}
 }

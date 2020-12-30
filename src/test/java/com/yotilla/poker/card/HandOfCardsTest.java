@@ -11,6 +11,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+import com.yotilla.poker.TestUtils;
 import com.yotilla.poker.error.HandExceededException;
 
 /**
@@ -42,7 +43,7 @@ class HandOfCardsTest
 
 		for (int i = 0; i < amountOfCards; i++)
 		{
-			mocks.add(TestCardUtils.getRandomCardMock());
+			mocks.add(TestUtils.getRandomCardMock());
 		}
 
 		return mocks;
@@ -68,7 +69,7 @@ class HandOfCardsTest
 
 		for (int i = 0; i < amountOfCards; i++)
 		{
-			mocks[i] = TestCardUtils.getRandomCardMock();
+			mocks[i] = TestUtils.getRandomCardMock();
 		}
 
 		return mocks;
@@ -89,7 +90,7 @@ class HandOfCardsTest
 		assertTrue(hand.getCards().isEmpty(), "New hand, shouldn't hold any cards");
 
 		// Add a card.
-		hand.addCards(TestCardUtils.getCardMock(CardSuit.SPADES, CardValue.SEVEN));
+		hand.addCards(TestUtils.getCardMock(CardSuit.SPADES, CardValue.SEVEN));
 
 		// An internal list has been created to store the cards.
 		assertNotNull(hand.getCards(), "We added a card, there ought to be a collection of cards now.");
@@ -105,7 +106,7 @@ class HandOfCardsTest
 	{
 		HandOfCards hand = new HandOfCards();
 
-		Card aceOfSpades = TestCardUtils.getCardMock(CardSuit.SPADES, CardValue.ACE);
+		Card aceOfSpades = TestUtils.getCardMock(CardSuit.SPADES, CardValue.ACE);
 		hand.addCard(aceOfSpades);
 
 		assertTrue(hand.getCards().contains(aceOfSpades));
@@ -140,8 +141,8 @@ class HandOfCardsTest
 	{
 		HandOfCards hand = new HandOfCards();
 
-		Card aceOfSpades = TestCardUtils.getCardMock(CardSuit.SPADES, CardValue.ACE);
-		Card aceOfHearts = TestCardUtils.getCardMock(CardSuit.HEARTS, CardValue.ACE);
+		Card aceOfSpades = TestUtils.getCardMock(CardSuit.SPADES, CardValue.ACE);
+		Card aceOfHearts = TestUtils.getCardMock(CardSuit.HEARTS, CardValue.ACE);
 
 		hand.addCards(aceOfSpades, aceOfHearts);
 
@@ -239,7 +240,7 @@ class HandOfCardsTest
 		hand.addCards(maximumCards);
 
 		assertThrows(HandExceededException.class, () -> {
-			hand.addCard(TestCardUtils.getRandomCardMock());
+			hand.addCard(TestUtils.getRandomCardMock());
 		}, "Adding a sixth card to this hand should have thrown an exception.");
 	}
 }

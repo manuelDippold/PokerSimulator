@@ -22,11 +22,31 @@ public class GameResult
 	/**
 	 * the sole winner
 	 *
+	 * @return the winner
+	 */
+	public Player getWinner()
+	{
+		return winner;
+	}
+
+	/**
+	 * the sole winner
+	 *
 	 * @param argWinner the winner to set
 	 */
 	public void setWinner(Player argWinner)
 	{
 		winner = argWinner;
+	}
+
+	/**
+	 * Players who split the pot among them
+	 *
+	 * @return the potSplit
+	 */
+	public List<Player> getPotSplit()
+	{
+		return potSplit;
 	}
 
 	/**

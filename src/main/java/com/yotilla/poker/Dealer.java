@@ -1,6 +1,7 @@
 package com.yotilla.poker;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -12,7 +13,9 @@ import com.yotilla.poker.card.HandOfCards;
 import com.yotilla.poker.error.DeckException;
 import com.yotilla.poker.error.HandExceededException;
 import com.yotilla.poker.error.PokerParseException;
+import com.yotilla.poker.result.GameResult;
 import com.yotilla.poker.result.PokerHand;
+import com.yotilla.poker.result.PokerHandComparator;
 import com.yotilla.poker.result.evaluator.FlushEvaluator;
 import com.yotilla.poker.result.evaluator.FourOfKindEvaluator;
 import com.yotilla.poker.result.evaluator.FullHouseEvaluator;
@@ -37,6 +40,7 @@ public class Dealer
 {
 	private final DeckOfCards deck;
 	private final List<PokerHandEvaluator> evaluators;
+	private final PokerHandComparator pokerHandComparator;
 
 	/**
 	 * Summon a new Dealer. A dealer always holds a freshly - shuffled deck.
@@ -45,6 +49,8 @@ public class Dealer
 	{
 		deck = argDeck;
 		deck.shuffleDeck();
+
+		pokerHandComparator = new PokerHandComparator();
 
 		evaluators = new ArrayList<>();
 
@@ -111,9 +117,7 @@ public class Dealer
 
 		for (int i = 0; i < cardStrings.length; i++)
 		{
-			Card toDraw = parseCard(cardStrings[i]);
-
-			hand.addCard(deck.drawCard(toDraw.getCardSuit(), toDraw.getCardValue()));
+			hand.addCard(deck.drawCard(parseCard(cardStrings[i])));
 		}
 
 		return hand;
@@ -126,10 +130,10 @@ public class Dealer
 	 * etc.
 	 *
 	 * @param input input string, must be valid
-	 * @return Card object
+	 * @return Card hash code
 	 * @throws PokerParseException when the card cannot be recognized
 	 */
-	Card parseCard(final String input) throws PokerParseException
+	int parseCard(final String input) throws PokerParseException
 	{
 		if (input == null || input.length() != 2)
 		{
@@ -145,7 +149,7 @@ public class Dealer
 			throw new PokerParseException(String.format("Parse error: Card not recognized: %s", input));
 		}
 
-		return new Card(suit, value);
+		return new Card(suit, value).hashCode();
 	}
 
 	/**
@@ -219,5 +223,76 @@ public class Dealer
 		builder.append("\t" + playerHand.toString());
 
 		return builder.toString();
+	}
+
+	/**
+	 * Determine the result of the game.
+	 *
+	 * @param players players with a poker Hand (a result) assigned each.
+	 * @return Game result object.
+	 * @throws PokerParseException when at least one player has no poker hand
+	 */
+	public GameResult determineGameResult(final List<Player> players) throws PokerParseException
+	{
+		if (players == null)
+		{
+			return null;
+		}
+
+		// There are many sort algorithms that are fast, battle-proven, reliable - and of no use to us here.
+		// As all of them can perfectly determine an order of sorts, but never a tie.
+		Player winner = null;
+		PokerHand winningHand = null;
+		List<Player> equites = Collections.emptyList();
+
+		for (Player player : players)
+		{
+			if (player.getPokerHand() == null)
+			{
+				throw new PokerParseException(String.format("Player %s does not hold a poker hand.", player));
+			}
+
+			// No winner, no tie so far, take the throne.
+			if (winner == null && equites.isEmpty())
+			{
+				winner = player;
+				winningHand = player.getPokerHand();
+			}
+			else
+			{
+				int comparisonAgainstWinningHand = pokerHandComparator.compare(player.getPokerHand(), winningHand);
+
+				// new winner
+				if (comparisonAgainstWinningHand > 0)
+				{
+					winner = player;
+					winningHand = player.getPokerHand();
+					equites = Collections.emptyList();
+				}
+				// we have a tie.
+				else if (comparisonAgainstWinningHand == 0)
+				{
+					// There was no draw so far.
+					if (equites.isEmpty())
+					{
+						equites = new ArrayList<>();
+						equites.add(winner);
+						equites.add(player);
+					}
+					// There already is a draw, and we matched it.
+					else
+					{
+						equites.add(player);
+					}
+					winner = null;
+				}
+			}
+		}
+
+		GameResult result = new GameResult();
+		result.setWinner(winner);
+		result.setPotSplit(equites);
+
+		return result;
 	}
 }

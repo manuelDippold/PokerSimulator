@@ -62,7 +62,7 @@ public class DeckOfCards
 	}
 
 	/**
-	 * Recognize the card by is hash and draw it.
+	 * Recognize the card by its hash and draw it.
 	 *
 	 * @param argSuit  suit desired
 	 * @param argValue value desired
@@ -73,20 +73,31 @@ public class DeckOfCards
 	 */
 	public Card drawCard(final CardSuit argSuit, final CardValue argValue) throws DeckException
 	{
+		Card referenceCard = new Card(argSuit, argValue);
+		return drawCard(referenceCard.hashCode());
+	}
+
+	/**
+	 * Draw the card by its hash.
+	 *
+	 * @param cardHash card hash to draw
+	 * @return Card, if it is in the deck.
+	 * @throws DeckException if the card in question was already drawn or if the
+	 *                       deck is empty.
+	 */
+	public Card drawCard(final int cardHash) throws DeckException
+	{
 		if (isEmpty())
 		{
 			throw new DeckException(DeckExceptionCause.DECK_IS_EMPTY);
 		}
 
-		Card referenceCard = new Card(argSuit, argValue);
-		int hash = referenceCard.hashCode();
-
-		if (!cards.containsKey(hash))
+		if (!cards.containsKey(cardHash))
 		{
 			throw new DeckException(DeckExceptionCause.CARD_ALREADY_DRAWN);
 		}
 
-		return cards.remove(hash);
+		return cards.remove(cardHash);
 	}
 
 	/**

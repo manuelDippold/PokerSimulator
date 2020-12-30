@@ -20,7 +20,7 @@ import com.yotilla.poker.Player;
  * @author Manuel
  *
  */
-public class GameResultTest
+class GameResultTest
 {
 	private static final String PLAYER_JANE_NAME = "Jane Doe";
 	private static final String PLAYER_JOHN_NAME = "John Doe";
