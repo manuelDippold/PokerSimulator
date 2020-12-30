@@ -17,7 +17,6 @@ import com.yotilla.poker.card.CardSuit;
 import com.yotilla.poker.card.CardValue;
 import com.yotilla.poker.card.DeckOfCards;
 import com.yotilla.poker.card.HandOfCards;
-import com.yotilla.poker.card.TestCardUtils;
 import com.yotilla.poker.error.DeckException;
 import com.yotilla.poker.error.HandExceededException;
 import com.yotilla.poker.error.PokerParseException;
@@ -62,7 +61,7 @@ class DealerTest
 	 *
 	 * @param suits  suits for the cards
 	 * @param values values for the cards in order with the suits.
-	 * @return hand of cards mock returning the card mocks collection when asked.
+	 * @return hand of cards mock returning the cards collection when asked.
 	 * @throws HandExceededException error case
 	 */
 	private HandOfCards getHand(final List<CardSuit> suits, final List<CardValue> values) throws HandExceededException
@@ -71,8 +70,8 @@ class DealerTest
 
 		for (int i = 0; i < suits.size(); i++)
 		{
-			Card cardMock = TestCardUtils.getCardMock(suits.get(i), values.get(i));
-			hand.addCard(cardMock);
+			Card card = new Card(suits.get(i), values.get(i));
+			hand.addCard(card);
 		}
 
 		return hand;
@@ -349,7 +348,7 @@ class DealerTest
 		List<CardValue> values = Arrays.asList(CardValue.TEN, CardValue.TEN, CardValue.FIVE, CardValue.FIVE,
 				CardValue.FIVE);
 		List<CardSuit> suits = Arrays.asList(CardSuit.HEARTS, CardSuit.SPADES, CardSuit.SPADES, CardSuit.DIAMONDS,
-				CardSuit.DIAMONDS);
+				CardSuit.HEARTS);
 
 		HandOfCards hand = getHand(suits, values);
 		Mockito.when(playerSpy.getHand()).thenReturn(hand);
@@ -414,5 +413,122 @@ class DealerTest
 		assertEquals(CardValue.FIVE, result.getRankCards().get(2), "Rank card 3, five.");
 		assertEquals(CardValue.FOUR, result.getRankCards().get(3), "Rank card 4, four.");
 		assertEquals(CardValue.TWO, result.getRankCards().get(4), "Rank card 5, two.");
+	}
+
+	/**
+	 * printPlayerIsNullSafe
+	 */
+	@Test
+	void printPlayerIsNullSafe()
+	{
+		String empty = "";
+
+		String result = sut.printPlayerAndHand(-1, null);
+		assertEquals(empty, result, "No player ought to return an empty String.");
+
+		Mockito.when(playerSpy.getPokerHand()).thenReturn(null);
+		result = sut.printPlayerAndHand(-1, null);
+		assertEquals(empty, result, "No hand ought to return an empty String.");
+
+		Mockito.when(playerSpy.getPokerHand()).thenReturn(null);
+		result = sut.printPlayerAndHand(-1, null);
+		assertEquals(empty, result, "No hand ought to return an empty String.");
+
+		PokerHand handResult = Mockito.mock(PokerHand.class);
+		result = sut.printPlayerAndHand(-1, null);
+		Mockito.when(playerSpy.getPokerHand()).thenReturn(handResult);
+
+		Mockito.when(playerSpy.getPokerHand()).thenReturn(null);
+		result = sut.printPlayerAndHand(-1, null);
+		assertEquals(empty, result, "Hand with no rank hand ought to return an empty String.");
+
+		PokerHand pokerHandMock = Mockito.mock(PokerHand.class);
+		Mockito.when(playerSpy.getPokerHand()).thenReturn(pokerHandMock);
+		Mockito.when(playerSpy.getHand()).thenReturn(null);
+		result = sut.printPlayerAndHand(-1, null);
+		assertEquals(empty, result, "No Hand of cards ought to return an empty String.");
+
+		HandOfCards handOfCardsMock = Mockito.mock(HandOfCards.class);
+		Mockito.when(playerSpy.getHand()).thenReturn(handOfCardsMock);
+		result = sut.printPlayerAndHand(-1, null);
+		assertEquals(empty, result, "A Hand of cards with no content ought to return an empty String.");
+	}
+
+	/**
+	 * printPlayerHappyPath
+	 *
+	 * @throws HandExceededException error
+	 * @throws PokerParseException   error
+	 */
+	@Test
+	void printPlayerHandStraight() throws HandExceededException, PokerParseException
+	{
+		// Straight
+		List<CardValue> values = Arrays.asList(CardValue.EIGHT, CardValue.NINE, CardValue.TEN, CardValue.JACK,
+				CardValue.QUEEN);
+		List<CardSuit> suits = Arrays.asList(CardSuit.HEARTS, CardSuit.SPADES, CardSuit.SPADES, CardSuit.DIAMONDS,
+				CardSuit.DIAMONDS);
+
+		HandOfCards hand = getHand(suits, values);
+		Mockito.when(playerSpy.getHand()).thenReturn(hand);
+		sut.evaluatePlayerHand(playerSpy);
+		String result = sut.printPlayerAndHand(2, playerSpy);
+
+		// Expected result:
+		// place <tab> name <tab> hand <tab> rank, rank card.
+		// so:
+		String expected = "2\tJohn Doe\t8H 9S TS JD QD\tSTRAIGHT, QUEEN.";
+
+		assertEquals(expected, result, "Printed result does not match.");
+	}
+
+	/**
+	 * printPlayerFullHouse
+	 *
+	 * @throws HandExceededException error
+	 * @throws PokerParseException   error
+	 */
+	@Test
+	void printPlayerFullHouse() throws HandExceededException, PokerParseException
+	{
+		// Full House
+		List<CardValue> values = Arrays.asList(CardValue.TEN, CardValue.TEN, CardValue.FIVE, CardValue.FIVE,
+				CardValue.FIVE);
+		List<CardSuit> suits = Arrays.asList(CardSuit.HEARTS, CardSuit.SPADES, CardSuit.SPADES, CardSuit.DIAMONDS,
+				CardSuit.HEARTS);
+
+		HandOfCards hand = getHand(suits, values);
+		Mockito.when(playerSpy.getHand()).thenReturn(hand);
+
+		sut.evaluatePlayerHand(playerSpy);
+		String result = sut.printPlayerAndHand(3, playerSpy);
+		String expected = "3\tJohn Doe\tTH TS 5S 5D 5H\tFULL_HOUSE, FIVE, TEN.";
+
+		assertEquals(expected, result, "Printed result does not match.");
+	}
+
+	/**
+	 * printPlayerFullHouse
+	 *
+	 * @throws HandExceededException error
+	 * @throws PokerParseException   error
+	 */
+	@Test
+	void printPlayerOnePair() throws HandExceededException, PokerParseException
+	{
+		// One Pair
+		List<CardValue> values = Arrays.asList(CardValue.TEN, CardValue.TEN, CardValue.THREE, CardValue.FIVE,
+				CardValue.QUEEN);
+		List<CardSuit> suits = Arrays.asList(CardSuit.HEARTS, CardSuit.SPADES, CardSuit.SPADES, CardSuit.DIAMONDS,
+				CardSuit.HEARTS);
+
+		HandOfCards hand = getHand(suits, values);
+		Mockito.when(playerSpy.getHand()).thenReturn(hand);
+
+		sut.evaluatePlayerHand(playerSpy);
+		String result = sut.printPlayerAndHand(4, playerSpy);
+		String expected = "4\tJohn Doe\tTH TS 3S 5D QH\tONE_PAIR, TEN. Kickers: QUEEN, FIVE, THREE.";
+
+		assertEquals(expected, result, "Printed result does not match.");
 	}
 }

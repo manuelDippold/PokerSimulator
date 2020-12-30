@@ -65,7 +65,7 @@ public class PokerHand
 	@Override
 	public String toString()
 	{
-		StringBuilder sb = new StringBuilder(ranking.name());
+		StringBuilder sb = new StringBuilder(getRanking().name());
 
 		if (rankCards != null)
 		{
@@ -84,11 +84,11 @@ public class PokerHand
 			}
 		}
 
-		sb.append(". ");
+		sb.append(".");
 
 		if (kickerCards != null && !kickerCards.isEmpty())
 		{
-			sb.append("Kickers: ");
+			sb.append(" Kickers: ");
 
 			Iterator<CardValue> kickerIterator = kickerCards.iterator();
 
@@ -101,6 +101,7 @@ public class PokerHand
 					sb.append(", ");
 				}
 			}
+			sb.append(".");
 		}
 
 		return sb.toString();

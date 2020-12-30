@@ -38,5 +38,4 @@ public enum PokerHandRanking
 	{
 		return score;
 	}
-
 }

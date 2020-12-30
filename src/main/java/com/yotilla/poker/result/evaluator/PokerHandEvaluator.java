@@ -150,7 +150,11 @@ public interface PokerHandEvaluator
 		try
 		{
 			workingCopy = copyHandOfCards(hand);
-			workingCopy.removeCards(partOfRanking);
+
+			if (!workingCopy.removeCards(partOfRanking))
+			{
+				throw new HandExceededException(String.format("Failed to remove cards from hand: %s", partOfRanking));
+			}
 		}
 		catch (HandExceededException e)
 		{

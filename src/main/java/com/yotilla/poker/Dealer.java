@@ -44,7 +44,7 @@ public class Dealer
 	public Dealer(final DeckOfCards argDeck)
 	{
 		deck = argDeck;
-		shuffleDeck();
+		deck.shuffleDeck();
 
 		evaluators = new ArrayList<>();
 
@@ -62,15 +62,7 @@ public class Dealer
 	}
 
 	/**
-	 * Shuffle this dealer's deck.
-	 */
-	public void shuffleDeck()
-	{
-		deck.shuffleDeck();
-	}
-
-	/**
-	 * Analyse a hand of cards, draw it from the deck, and deal it to a player
+	 * Analyze a hand of cards, draw it from the deck, and deal it to a player
 	 *
 	 * @param handInput input to parse
 	 * @param player    player who shall receive the hand.
@@ -199,9 +191,33 @@ public class Dealer
 	 * @param player player to be printed
 	 * @return String
 	 */
-	public String printPlayerAndHAnd(final int rank, final Player player)
+	public String printPlayerAndHand(final int rank, final Player player)
 	{
-		// TODO
-		return null;
+		if (player == null || player.getPokerHand() == null || player.getPokerHand().getRanking() == null
+				|| player.getHand() == null || player.getHand().getCards() == null)
+		{
+			return "";
+		}
+
+		PokerHand playerHand = player.getPokerHand();
+
+		StringBuilder builder = new StringBuilder(rank + "\t" + player.getName() + "\t");
+
+		Iterator<Card> cardIterator = player.getHand().getCards().iterator();
+
+		while (cardIterator.hasNext())
+		{
+			Card card = cardIterator.next();
+			builder.append(card.getCardValue().getCode() + card.getCardSuit().getCode());
+
+			if (cardIterator.hasNext())
+			{
+				builder.append(" ");
+			}
+		}
+
+		builder.append("\t" + playerHand.toString());
+
+		return builder.toString();
 	}
 }
