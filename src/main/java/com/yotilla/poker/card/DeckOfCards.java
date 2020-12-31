@@ -64,29 +64,16 @@ public class DeckOfCards
 	/**
 	 * Recognize the card by its hash and draw it.
 	 *
-	 * @param argSuit  suit desired
-	 * @param argValue value desired
+	 * @param toDraw card desired
 	 * @return Card, if it is in the deck.
 	 *
 	 * @throws DeckException if the card in question was already drawn or if the
 	 *                       deck is empty.
 	 */
-	public Card drawCard(final CardSuit argSuit, final CardValue argValue) throws DeckException
+	public Card drawCard(final Card toDraw) throws DeckException
 	{
-		Card referenceCard = new Card(argSuit, argValue);
-		return drawCard(referenceCard.hashCode());
-	}
+		int cardHash = toDraw.hashCode();
 
-	/**
-	 * Draw the card by its hash.
-	 *
-	 * @param cardHash card hash to draw
-	 * @return Card, if it is in the deck.
-	 * @throws DeckException if the card in question was already drawn or if the
-	 *                       deck is empty.
-	 */
-	public Card drawCard(final int cardHash) throws DeckException
-	{
 		if (isEmpty())
 		{
 			throw new DeckException(DeckExceptionCause.DECK_IS_EMPTY);
@@ -94,10 +81,26 @@ public class DeckOfCards
 
 		if (!cards.containsKey(cardHash))
 		{
-			throw new DeckException(DeckExceptionCause.CARD_ALREADY_DRAWN);
+			throw new DeckException(DeckExceptionCause.CARD_ALREADY_DRAWN, toDraw);
 		}
 
 		return cards.remove(cardHash);
+	}
+
+	/**
+	 * Recognize the card by its hash and draw it.
+	 *
+	 * @param argSuit  suit desired
+	 * @param argValue value desired
+	 *
+	 * @return Card, if it is in the deck.
+	 *
+	 * @throws DeckException if the card in question was already drawn or if the
+	 *                       deck is empty.
+	 */
+	public Card drawCard(CardSuit argSuit, CardValue argValue) throws DeckException
+	{
+		return drawCard(new Card(argSuit, argValue));
 	}
 
 	/**

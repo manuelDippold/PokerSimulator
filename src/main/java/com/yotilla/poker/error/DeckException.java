@@ -1,5 +1,7 @@
 package com.yotilla.poker.error;
 
+import com.yotilla.poker.card.Card;
+
 /**
  * Description:
  *
@@ -20,7 +22,13 @@ public class DeckException extends Exception
 	 */
 	public DeckException(DeckExceptionCause argDeckExceptionCause)
 	{
-		super();
+		super(argDeckExceptionCause.getErrorMessage());
+		deckExceptionCause = argDeckExceptionCause;
+	}
+
+	public DeckException(final DeckExceptionCause argDeckExceptionCause, final Card culprit)
+	{
+		super(argDeckExceptionCause.getErrorMessage() + ": " + culprit);
 		deckExceptionCause = argDeckExceptionCause;
 	}
 

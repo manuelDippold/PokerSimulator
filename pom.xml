@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>YotillaPoker</groupId>
 	<artifactId>poker</artifactId>
-	<version>0.99</version>
+	<version>1.0</version>
 
 	<properties>
 		<maven.compiler.source>11</maven.compiler.source>

@@ -112,7 +112,8 @@ public class Dealer
 
 		for (int i = 0; i < cardStrings.length; i++)
 		{
-			hand.addCard(deck.drawCard(parseCard(cardStrings[i])));
+			Card card = parseCard(cardStrings[i]);
+			hand.addCard(deck.drawCard(card));
 		}
 
 		return hand;
@@ -125,10 +126,10 @@ public class Dealer
 	 * etc.
 	 *
 	 * @param input input string, must be valid
-	 * @return Card hash code
+	 * @return Card
 	 * @throws PokerParseException when the card cannot be recognized
 	 */
-	int parseCard(final String input) throws PokerParseException
+	Card parseCard(final String input) throws PokerParseException
 	{
 		if (input == null || input.length() != 2)
 		{
@@ -144,7 +145,7 @@ public class Dealer
 			throw new PokerParseException(String.format("Parse error: Card not recognized: %s", input));
 		}
 
-		return new Card(suit, value).hashCode();
+		return new Card(suit, value);
 	}
 
 	/**
@@ -195,6 +196,7 @@ public class Dealer
 		if (result != null)
 		{
 			builder.append(result.printRanks());
+			builder.append("\n");
 			builder.append(result.printFinalResult());
 			builder.append("\n");
 		}

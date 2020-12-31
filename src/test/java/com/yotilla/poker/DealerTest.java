@@ -86,9 +86,9 @@ class DealerTest
 	@Test
 	void recognizeAceOfSpades() throws PokerParseException
 	{
-		int aceOfSpadesHash = sut.parseCard("AS");
-		int aceOfSpadesReferenceHash = new Card(CardSuit.SPADES, CardValue.ACE).hashCode();
-		assertEquals(aceOfSpadesReferenceHash, aceOfSpadesHash, "AS should match the ace of spades.");
+		Card aceOfSpades = sut.parseCard("AS");
+		Card aceOfSpadesReference = new Card(CardSuit.SPADES, CardValue.ACE);
+		assertEquals(aceOfSpades, aceOfSpadesReference, "AS should match the ace of spades.");
 	}
 
 	/**

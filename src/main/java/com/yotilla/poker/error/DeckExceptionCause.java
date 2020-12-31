@@ -11,8 +11,8 @@ package com.yotilla.poker.error;
  */
 public enum DeckExceptionCause
 {
-	CARD_ALREADY_DRAWN("This card was already drawn from the deck."),
-	DECK_IS_EMPTY("The deck is empty, no more cards can be drawn.");
+	CARD_ALREADY_DRAWN("A card was already drawn from the deck"),
+	DECK_IS_EMPTY("The deck is empty, no more cards can be drawn");
 
 	private final String errorMessage;
 
