@@ -71,38 +71,22 @@ public class PokerTable
 			try
 			{
 				dealer.parseInputAndDealHand(handInput, player);
+
 				// Evaluate each player's hand, tell them what they hold.
 				dealer.evaluatePlayerHand(player);
 
-				// Print player to console
+				// Compare hands and determine winner
+				GameResult result = dealer.determineGameResult(players);
+
+				// print result
+				dealer.printResult(result);
 			}
 			catch (PokerParseException | HandExceededException | DeckException e)
 			{
-				LOG.log(Level.SEVERE,
-						(String.format("Something went wrong while dealing the cards and evaluating the hands: %s",
-								e.getMessage())));
-				return;
+				LOG.log(Level.SEVERE, (String.format(
+						"Something went wrong: %s", e.getMessage())));
 			}
 		}
-
-		// Compare hands and determine winner
-		try
-		{
-			GameResult result = dealer.determineGameResult(players);
-			print(result.toString());
-		}
-		catch (PokerParseException e)
-		{
-			LOG.log(Level.SEVERE,
-					(String.format("Something went wrong while determin the winner(s): %s", e.getMessage())));
-			return;
-		}
-
-		// TODO: Rank hands. Beware of ties. Determine winner
-
-		// TODO: print players and their hands.
-
-		// TODO: print winner
 	}
 
 	/**

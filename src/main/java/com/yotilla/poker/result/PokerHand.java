@@ -67,11 +67,11 @@ public class PokerHand
 	{
 		StringBuilder sb = new StringBuilder(getRanking().name());
 
-		if (rankCards != null)
+		if (getRankCards() != null)
 		{
 			sb.append(", ");
 
-			Iterator<CardValue> rankIterator = rankCards.iterator();
+			Iterator<CardValue> rankIterator = getRankCards().iterator();
 
 			while (rankIterator.hasNext())
 			{
@@ -86,11 +86,11 @@ public class PokerHand
 
 		sb.append(".");
 
-		if (kickerCards != null && !kickerCards.isEmpty())
+		if (getKickerCards() != null && !getKickerCards().isEmpty())
 		{
 			sb.append(" Kickers: ");
 
-			Iterator<CardValue> kickerIterator = kickerCards.iterator();
+			Iterator<CardValue> kickerIterator = getKickerCards().iterator();
 
 			while (kickerIterator.hasNext())
 			{

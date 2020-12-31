@@ -1,11 +1,8 @@
 package com.yotilla.poker;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.yotilla.poker.card.Card;
 import com.yotilla.poker.card.CardSuit;
@@ -17,7 +14,6 @@ import com.yotilla.poker.error.HandExceededException;
 import com.yotilla.poker.error.PokerParseException;
 import com.yotilla.poker.result.GameResult;
 import com.yotilla.poker.result.PokerHand;
-import com.yotilla.poker.result.PokerHandComparator;
 import com.yotilla.poker.result.evaluator.FlushEvaluator;
 import com.yotilla.poker.result.evaluator.FourOfKindEvaluator;
 import com.yotilla.poker.result.evaluator.FullHouseEvaluator;
@@ -42,7 +38,6 @@ public class Dealer
 {
 	private final DeckOfCards deck;
 	private final List<PokerHandEvaluator> evaluators;
-	private final PokerHandComparator pokerHandComparator;
 
 	/**
 	 * Summon a new Dealer. A dealer always holds a freshly - shuffled deck.
@@ -51,8 +46,6 @@ public class Dealer
 	{
 		deck = argDeck;
 		deck.shuffleDeck();
-
-		pokerHandComparator = new PokerHandComparator();
 
 		evaluators = new ArrayList<>();
 
@@ -190,39 +183,21 @@ public class Dealer
 	}
 
 	/**
-	 * Print a players result that game:<br>
-	 * rank Name Hand PokerHand
+	 * return a printale String representation of the game result.
 	 *
-	 * @param rank   rank the player scored. One is highest
-	 * @param player player to be printed
+	 * @param result result of the game
 	 * @return String
 	 */
-	public String printPlayerAndHand(final int rank, final Player player)
+	public String printResult(final GameResult result)
 	{
-		if (player == null || player.getPokerHand() == null || player.getPokerHand().getRanking() == null
-				|| player.getHand() == null || player.getHand().getCards() == null)
+		StringBuilder builder = new StringBuilder("Ranking:\n");
+
+		if (result != null)
 		{
-			return "";
+			builder.append(result.printRanks());
+			builder.append(result.printFinalResult());
+			builder.append("\n");
 		}
-
-		PokerHand playerHand = player.getPokerHand();
-
-		StringBuilder builder = new StringBuilder(rank + "\t" + player.getName() + "\t");
-
-		Iterator<Card> cardIterator = player.getHand().getCards().iterator();
-
-		while (cardIterator.hasNext())
-		{
-			Card card = cardIterator.next();
-			builder.append(card.getCardValue().getCode() + card.getCardSuit().getCode());
-
-			if (cardIterator.hasNext())
-			{
-				builder.append(" ");
-			}
-		}
-
-		builder.append("\t" + playerHand.toString());
 
 		return builder.toString();
 	}
@@ -232,76 +207,20 @@ public class Dealer
 	 *
 	 * @param players players with a poker Hand (a result) assigned each.
 	 * @return Game result object.
-	 * @throws PokerParseException when at least one player has no poker hand
 	 */
-	public GameResult determineGameResult(final List<Player> players) throws PokerParseException
+	public GameResult determineGameResult(final List<Player> players)
 	{
 		if (players == null)
 		{
 			return null;
 		}
 
-		// There are many sort algorithms that are fast, battle-proven, reliable - and of no use to us here.
-		// As all of them can perfectly determine an order of sorts, but never a tie.
-		Player winner = null;
-		PokerHand winningHand = null;
-		List<Player> equites = Collections.emptyList();
-
-		// Lists of PLayers, mapped by the place they scored.
-		Map<Integer, List<Player>> ranking = new LinkedHashMap<>();
-
-		for (Player player : players)
-		{
-			if (player.getPokerHand() == null)
-			{
-				throw new PokerParseException(String.format("Player %s does not hold a poker hand.", player));
-			}
-
-			// No winner, no tie so far, take the throne.
-			if (winner == null && equites.isEmpty()) // TODO: winner is rank 1. ggf. result refactoren.
-			{
-				winner = player;
-				winningHand = player.getPokerHand();
-			}
-			else
-			{
-				// TODO: loop downwards through existing ranking.
-				// TODO: create method in GameResult to add to ranking or switch into it.
-				// TODO: create method in GameResult to determine winner and pot split after the fact.
-				// TODO: GameResult should be able to sort their ranking. Tree Map?
-
-				int comparisonAgainstWinningHand = pokerHandComparator.compare(player.getPokerHand(), winningHand);
-
-				// new winner
-				if (comparisonAgainstWinningHand > 0)
-				{
-					winner = player;
-					winningHand = player.getPokerHand();
-					equites = Collections.emptyList();
-				}
-				// we have a tie.
-				else if (comparisonAgainstWinningHand == 0)
-				{
-					// There was no draw so far.
-					if (equites.isEmpty())
-					{
-						equites = new ArrayList<>();
-						equites.add(winner);
-						equites.add(player);
-					}
-					// There already is a draw, and we matched it.
-					else
-					{
-						equites.add(player);
-					}
-					winner = null;
-				}
-			}
-		}
-
+		// Create a game result and add the players. They are sorted into the ranks automatically.
 		GameResult result = new GameResult();
-		result.setWinner(winner);
-		result.setPotSplit(equites);
+		players.stream().forEach(result::addToRanks);
+
+		// Compute winner or split pot
+		result.determineWinners();
 
 		return result;
 	}

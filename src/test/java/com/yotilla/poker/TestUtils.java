@@ -7,6 +7,8 @@ import org.mockito.Mockito;
 import com.yotilla.poker.card.Card;
 import com.yotilla.poker.card.CardSuit;
 import com.yotilla.poker.card.CardValue;
+import com.yotilla.poker.card.HandOfCards;
+import com.yotilla.poker.error.HandExceededException;
 import com.yotilla.poker.result.PokerHand;
 import com.yotilla.poker.result.PokerHandRanking;
 
@@ -82,21 +84,39 @@ public class TestUtils
 	}
 
 	/**
-	 * mock a poker hand for test purposes
+	 * Spy a poker hand for test purposes
 	 *
 	 * @param ranking     card ranking
 	 * @param rankCards   rank cards, if necessary
 	 * @param kickerCards kicker cards, if necessary
 	 * @return Poker hand mock
 	 */
-	public static PokerHand getPokerHandMock(final PokerHandRanking ranking, final List<CardValue> rankCards,
+	public static PokerHand getPokerHandSpy(final PokerHandRanking ranking, final List<CardValue> rankCards,
 			final List<CardValue> kickerCards)
 	{
-		PokerHand hand = Mockito.mock(PokerHand.class);
+		return Mockito.spy(new PokerHand(ranking, rankCards, kickerCards));
+	}
 
-		Mockito.when(hand.getRanking()).thenReturn(ranking);
-		Mockito.when(hand.getRankCards()).thenReturn(rankCards);
-		Mockito.when(hand.getKickerCards()).thenReturn(kickerCards);
+	/**
+	 * Get a hand of cards spy with card mocks in it.
+	 * suits and values must be of the same size.
+	 * suits.get(0) and values.get(0) will make up the first card.
+	 *
+	 * @param suits  suits for the cards
+	 * @param values values for the cards in order with the suits.
+	 * @return hand of cards mock returning the cards collection when asked.
+	 * @throws HandExceededException error case
+	 */
+	public static HandOfCards getHandSpy(final List<CardSuit> suits, final List<CardValue> values)
+			throws HandExceededException
+	{
+		HandOfCards hand = Mockito.spy(new HandOfCards());
+
+		for (int i = 0; i < suits.size(); i++)
+		{
+			Card card = new Card(suits.get(i), values.get(i));
+			hand.addCard(card);
+		}
 
 		return hand;
 	}
