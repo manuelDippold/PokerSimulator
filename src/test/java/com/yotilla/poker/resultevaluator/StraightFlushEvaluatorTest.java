@@ -25,7 +25,7 @@ import com.yotilla.poker.result.evaluator.StraightFlushEvaluator;
  * @author Manuel
  *
  */
-public class StraightFlushEvaluatorTest extends AbstractEvaluatorTest
+class StraightFlushEvaluatorTest extends AbstractEvaluatorTest
 {
 	/**
 	 * getStraighFlushIsNullSafe
