@@ -1,7 +1,7 @@
 package com.yotilla.poker.result;
 
-import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.yotilla.poker.card.CardValue;
 
@@ -71,17 +71,8 @@ public class PokerHand
 		{
 			sb.append(", ");
 
-			Iterator<CardValue> rankIterator = getRankCards().iterator();
-
-			while (rankIterator.hasNext())
-			{
-				sb.append(rankIterator.next());
-
-				if (rankIterator.hasNext())
-				{
-					sb.append(", ");
-				}
-			}
+			List<String> rankCardNames = getRankCards().stream().map(CardValue::name).collect(Collectors.toList());
+			sb.append(String.join(", ", rankCardNames));
 		}
 
 		sb.append(".");
@@ -90,17 +81,8 @@ public class PokerHand
 		{
 			sb.append(" Kickers: ");
 
-			Iterator<CardValue> kickerIterator = getKickerCards().iterator();
-
-			while (kickerIterator.hasNext())
-			{
-				sb.append(kickerIterator.next());
-
-				if (kickerIterator.hasNext())
-				{
-					sb.append(", ");
-				}
-			}
+			List<String> kickerCardNames = getKickerCards().stream().map(CardValue::name).collect(Collectors.toList());
+			sb.append(String.join(", ", kickerCardNames));
 			sb.append(".");
 		}
 

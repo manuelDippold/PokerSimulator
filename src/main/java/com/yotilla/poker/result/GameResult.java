@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 import com.yotilla.poker.Player;
 import com.yotilla.poker.card.Card;
@@ -21,8 +22,7 @@ import com.yotilla.poker.card.Card;
  */
 public class GameResult
 {
-	private Player winner;
-	private List<Player> potSplit;
+	private List<Player> winners;
 
 	private final PokerHandComparator pokerHandComparator;
 	private final SortedMap<PokerHand, List<Player>> ranking;
@@ -39,13 +39,18 @@ public class GameResult
 	}
 
 	/**
-	 * the sole winner
+	 * the sole winner, if there is one.
 	 *
 	 * @return the winner
 	 */
 	public Player getWinner()
 	{
-		return winner;
+		if (winners == null || winners.isEmpty() || winners.size() > 1)
+		{
+			return null;
+		}
+
+		return winners.stream().findFirst().orElse(null);
 	}
 
 	/**
@@ -55,7 +60,12 @@ public class GameResult
 	 */
 	public List<Player> getPotSplit()
 	{
-		return potSplit;
+		if (winners == null || winners.size() <= 1)
+		{
+			return Collections.emptyList();
+		}
+
+		return winners;
 	}
 
 	/**
@@ -91,24 +101,14 @@ public class GameResult
 	 */
 	public void determineWinners()
 	{
-		if (ranking.isEmpty())
+		List<Player> winningPlayers = ranking.values().stream().findFirst().orElse(null);
+
+		if (winningPlayers == null)
 		{
 			return;
 		}
 
-		List<Player> winners = ranking.values().iterator().next();
-
-		if (winners.size() == 1)
-		{
-			winner = winners.get(0);
-			potSplit = Collections.emptyList();
-		}
-		else
-		{
-			winner = null;
-			potSplit = Collections.unmodifiableList(winners);
-		}
-
+		winners = Collections.unmodifiableList(winningPlayers);
 	}
 
 	/**
@@ -183,27 +183,19 @@ public class GameResult
 	 */
 	public String printFinalResult()
 	{
-		if (winner != null)
+		if (winners != null && !winners.isEmpty())
 		{
-			return winner.getName() + " wins.";
-		}
+			Player soleWinner = getWinner();
 
-		if (potSplit != null && !potSplit.isEmpty())
-		{
-			Iterator<Player> playerIterator = potSplit.iterator();
-
-			StringBuilder sb = new StringBuilder("Players ");
-
-			while (playerIterator.hasNext())
+			if (soleWinner != null)
 			{
-				sb.append(playerIterator.next().getName());
-
-				if (playerIterator.hasNext())
-				{
-					sb.append(", ");
-				}
+				return soleWinner.getName() + " wins.";
 			}
 
+			List<String> names = winners.stream().map(Player::getName).collect(Collectors.toList());
+
+			StringBuilder sb = new StringBuilder("Players ");
+			sb.append(String.join(", ", names));
 			sb.append(" split the pot.");
 
 			return sb.toString();

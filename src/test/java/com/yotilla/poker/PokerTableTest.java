@@ -22,14 +22,14 @@ import com.yotilla.poker.error.PokerParseException;
  */
 class PokerTableTest
 {
-	private Logger logMock;
 	private Dealer dealerMock;
+	private Logger loggerMock;
 
 	@BeforeEach
 	void setUp()
 	{
-		logMock = Mockito.mock(Logger.class);
 		dealerMock = Mockito.mock(Dealer.class);
+		loggerMock = Mockito.mock(Logger.class);
 	}
 
 	/**
@@ -44,7 +44,7 @@ class PokerTableTest
 	{
 		String[] hands = new String[] { "2D 9C AS AH AC", "3D 6D 7D TD QD", "2C 5C 7C 8S QH" };
 
-		PokerTable sut = new PokerTable(logMock, dealerMock);
+		PokerTable sut = new PokerTable(loggerMock, dealerMock);
 
 		InOrder order = Mockito.inOrder(dealerMock);
 
