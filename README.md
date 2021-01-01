@@ -2,9 +2,9 @@
 A simple poker simulator. It is able to analyze hands of cards and determine the winners of a game. The "game" consists purely of dealing the hands and comparing them, actual gambling is not involved yet.
 
 # Usage
-Call the jar with poker hands as arguments, whereas each card is represented as a two - character - String <value><suit>.
-Valid inputs for <value> are: { 2, 3, 4, 5, 6, 7, 8, 9, 10, J, Q, K, A } representing the values from two to ace in the French Deck.
-Valid inputs for <suit> are: { C, D, H, S } representing Clubs, Diamonds, Hearts, and Spades.
+Call the jar with poker hands as arguments, whereas each card is represented as a two - character - String of value and suit.  
+Valid inputs for value are: { 2, 3, 4, 5, 6, 7, 8, 9, 10, J, Q, K, A } representing the values from two to ace in the French Deck.
+Valid inputs for suit are: { C, D, H, S } representing Clubs, Diamonds, Hearts, and Spades.  
 
 Cards are separated with a space. Each String represents a hand of five cards.
 The software analyzes the hand and prints the winner(s). It follows the poker rules as the game is decided by the ranking of the hand. Tie breakers are the rank cards, then the kicker cards.
