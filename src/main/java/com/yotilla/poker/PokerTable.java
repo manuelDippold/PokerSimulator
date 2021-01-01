@@ -28,6 +28,12 @@ public class PokerTable
 	private final Logger log;
 	private final Dealer dealer;
 
+	/**
+	 * Constructor. Binds a logger and a dealer.
+	 *
+	 * @param argLog    Logger to use. Will print to console only, without head nor tail.
+	 * @param argDealer dealer to use.
+	 */
 	public PokerTable(final Logger argLog, Dealer argDealer)
 	{
 		log = argLog;

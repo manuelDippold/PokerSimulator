@@ -13,6 +13,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+import com.yotilla.poker.Dealer;
 import com.yotilla.poker.Player;
 import com.yotilla.poker.TestUtils;
 import com.yotilla.poker.card.CardSuit;
@@ -44,9 +45,11 @@ class GameResultTest
 	private Player playerJohnMock;
 	private Player playerPeteMock;
 	private Player playerOlafMock;
+	
+	private Dealer dealer;
 
 	/**
-	 * create new players for each test
+	 * Create new players and a dealer for each test.
 	 */
 	@BeforeEach
 	void setUp()
@@ -88,8 +91,6 @@ class GameResultTest
 
 		Mockito.when(playerJaneMock.getPokerHand()).thenReturn(null);
 		sut.addToRanks(playerJaneMock);
-
-		sut.determineWinners();
 
 		assertTrue(sut.getRanking().isEmpty(), "Arrive at this point without exception.");
 	}
