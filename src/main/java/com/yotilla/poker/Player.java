@@ -18,10 +18,6 @@ public class Player
 	private PokerHand pokerHand;
 	private final String name;
 
-	private int wins;
-	private int splitPots;
-	private int losses;
-
 	/**
 	 * @param argName
 	 */
@@ -74,60 +70,6 @@ public class Player
 	 * @return the name
 	 */
 	public String getName()
-	{
-		return name;
-	}
-
-	/**
-	 * @return the wins
-	 */
-	public int getWins()
-	{
-		return wins;
-	}
-
-	/**
-	 * Increase player win count by one.
-	 */
-	public void increaseWinCount()
-	{
-		wins++;
-	}
-
-	/**
-	 * @return the splitPots
-	 */
-	public int getSplitPots()
-	{
-		return splitPots;
-	}
-
-	/**
-	 * Increase player "split pots" count by one.
-	 */
-	public void increaseSplitPotsCount()
-	{
-		splitPots++;
-	}
-
-	/**
-	 * @return the losses
-	 */
-	public int getLosses()
-	{
-		return losses;
-	}
-
-	/**
-	 * Increase player loss count by one.
-	 */
-	public void increaseLossCount()
-	{
-		losses++;
-	}
-
-	@Override
-	public String toString()
 	{
 		return name;
 	}
