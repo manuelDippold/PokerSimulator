@@ -9,8 +9,6 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.SortOrder;
-
 import com.yotilla.poker.card.Card;
 import com.yotilla.poker.card.CardValue;
 import com.yotilla.poker.card.CardValueComparator;
@@ -29,8 +27,6 @@ import com.yotilla.poker.result.PokerHand;
  */
 public interface PokerHandEvaluator
 {
-	CardValueComparator cardValueComparatorDescending = new CardValueComparator().setOrder(SortOrder.DESCENDING);
-
 	/**
 	 * Attempt to find a PokerHand in this HandOfCards and return the according result.<br>
 	 * If the hand we're looking for is not present, return null.
@@ -57,7 +53,7 @@ public interface PokerHandEvaluator
 		cards.stream().forEach(c -> values.add(c.getCardValue()));
 
 		// sort, highest first
-		values.sort(cardValueComparatorDescending);
+		values.sort(new CardValueComparator().reversed());
 
 		return values;
 	}

@@ -79,7 +79,17 @@ public class Dealer
 			throw new PokerParseException("Cannot deal a hand to a null player.");
 		}
 
-		HandOfCards hand = parseHandOfCards(handInput);
+		HandOfCards hand;
+
+		// No input? Just fill hand randomly from the deck.
+		if (handInput == null || handInput.isEmpty())
+		{
+			hand = new HandOfCards();
+		}
+		else
+		{
+			hand = parseHandOfCards(handInput);
+		}
 
 		// If there is space left in this hand, fill up.
 		while (hand.getAmountOfCards() < HandOfCards.HAND_SIZE)
