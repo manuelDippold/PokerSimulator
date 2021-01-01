@@ -136,6 +136,6 @@ public class DeckOfCards
 
 		// clear the deck itself and re-add all cards from the shuffled list.
 		cards.clear();
-		cardList.stream().forEach(cards::push);
+		cards.addAll(cardList);
 	}
 }
