@@ -3,7 +3,7 @@ A simple poker simulator. It is able to analyze hands of cards and determine the
 
 # Usage
 Call the jar with poker hands as arguments, whereas each card is represented as a two - character - String of value and suit.  
-Valid inputs for value are: { 2, 3, 4, 5, 6, 7, 8, 9, 10, J, Q, K, A } representing the values from two to ace in the French Deck.
+Valid inputs for value are: { 2, 3, 4, 5, 6, 7, 8, 9, 10, J, Q, K, A } representing the values from two to ace in the French Deck.  
 Valid inputs for suit are: { C, D, H, S } representing Clubs, Diamonds, Hearts, and Spades.  
 
 Cards are separated with a space. Each String represents a hand of five cards.
