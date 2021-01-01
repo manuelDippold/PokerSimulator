@@ -231,9 +231,6 @@ public class Dealer
 		GameResult result = new GameResult();
 		players.stream().forEach(result::addToRanks);
 
-		// Compute winner or split pot
-		result.determineWinners();
-
 		return result;
 	}
 }

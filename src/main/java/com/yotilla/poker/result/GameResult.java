@@ -77,7 +77,8 @@ public class GameResult
 	}
 
 	/**
-	 * Add player to the ranks of the result.
+	 * Add player to the ranks of the result.<br>
+	 * Winner(s) are determined automatically.
 	 *
 	 * @param player player to add
 	 */
@@ -93,22 +94,16 @@ public class GameResult
 			}
 
 			ranking.get(playerHand).add(player);
+
+			List<Player> winningPlayers = ranking.values().stream().findFirst().orElse(null);
+
+			if (winningPlayers == null)
+			{
+				return;
+			}
+
+			winners = Collections.unmodifiableList(winningPlayers);
 		}
-	}
-
-	/**
-	 * Determine the winner(s) from the ranks.
-	 */
-	public void determineWinners()
-	{
-		List<Player> winningPlayers = ranking.values().stream().findFirst().orElse(null);
-
-		if (winningPlayers == null)
-		{
-			return;
-		}
-
-		winners = Collections.unmodifiableList(winningPlayers);
 	}
 
 	/**

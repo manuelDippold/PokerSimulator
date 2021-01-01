@@ -106,7 +106,6 @@ class GameResultTest
 
 		assertEquals(playerJaneMock, sut.getRanking().get(janesHand).get(0), "Jane should be in the ranks now.");
 
-		sut.determineWinners();
 		assertEquals(PLAYER_JANE_NAME, sut.getWinner().getName(), "Playing on her own, Jane should have won");
 
 		String printResult = sut.printFinalResult();
@@ -132,7 +131,6 @@ class GameResultTest
 		assertEquals(playerJohnMock, sut.getRanking().get(janesHand).get(1),
 				"John should be in the ranks now, equal to Jane.");
 
-		sut.determineWinners();
 		assertNull(sut.getWinner(), "Split pot. No sole winner.");
 		assertTrue(sut.getPotSplit().contains(playerJaneMock), "Jane and John split the pot.");
 		assertTrue(sut.getPotSplit().contains(playerJohnMock), "Jane and John split the pot.");
@@ -176,7 +174,6 @@ class GameResultTest
 		assertEquals(PLAYER_JANE_NAME, resultIterator.next().get(0).getName(), "Jane should come out third.");
 		assertEquals(PLAYER_OLAF_NAME, resultIterator.next().get(0).getName(), "Olaf should come out fourth.");
 
-		sut.determineWinners();
 		assertEquals(PLAYER_PETE_NAME, sut.getWinner().getName(), "Pete should have won this round.");
 	}
 
