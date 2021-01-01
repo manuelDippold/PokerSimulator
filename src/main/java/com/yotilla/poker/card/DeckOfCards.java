@@ -1,10 +1,10 @@
 package com.yotilla.poker.card;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedHashMap;
+import java.util.Deque;
 import java.util.List;
-import java.util.Map;
 
 import com.yotilla.poker.error.DeckException;
 import com.yotilla.poker.error.DeckExceptionCause;
@@ -22,21 +22,21 @@ public class DeckOfCards
 	static final int DECK_SIZE = 52;
 
 	// Collection of cards, mapped by their hash code
-	private final Map<Integer, Card> cards;
+	private final Deque<Card> cards;
 
 	/**
 	 * Create a new deck of 52 unique cards.
 	 */
 	public DeckOfCards()
 	{
-		cards = new LinkedHashMap<>();
+		cards = new ArrayDeque<>(DECK_SIZE);
 
 		for (CardSuit suit : CardSuit.values())
 		{
 			for (CardValue value : CardValue.values())
 			{
 				Card card = new Card(suit, value);
-				cards.put(card.hashCode(), card);
+				cards.push(card);
 			}
 		}
 	}
@@ -72,19 +72,22 @@ public class DeckOfCards
 	 */
 	public Card drawCard(final Card toDraw) throws DeckException
 	{
-		int cardHash = toDraw.hashCode();
-
 		if (isEmpty())
 		{
 			throw new DeckException(DeckExceptionCause.DECK_IS_EMPTY);
 		}
 
-		if (!cards.containsKey(cardHash))
+		// Find the card, remove it and return it.
+		Card ret = cards.stream().filter(c -> c.equals(toDraw)).findFirst().orElse(null);
+
+		if (ret == null)
 		{
 			throw new DeckException(DeckExceptionCause.CARD_ALREADY_DRAWN, toDraw);
 		}
 
-		return cards.remove(cardHash);
+		cards.remove(ret);
+
+		return ret;
 	}
 
 	/**
@@ -111,14 +114,12 @@ public class DeckOfCards
 	 */
 	public Card drawNextCard() throws DeckException
 	{
-		Card ret = cards.values().stream().findFirst().orElse(null);
-
-		if (ret == null)
+		if (isEmpty())
 		{
 			throw new DeckException(DeckExceptionCause.DECK_IS_EMPTY);
 		}
 
-		return cards.remove(ret.hashCode());
+		return cards.pop();
 	}
 
 	/**
@@ -128,13 +129,13 @@ public class DeckOfCards
 	{
 		// get a working copy list of the remaining cards in this deck.
 		List<Card> cardList = new ArrayList<>();
-		cardList.addAll(cards.values());
+		cardList.addAll(cards);
 
 		// shuffle the list
 		Collections.shuffle(cardList);
 
 		// clear the deck itself and re-add all cards from the shuffled list.
 		cards.clear();
-		cardList.stream().forEach(c -> cards.put(c.hashCode(), c));
+		cardList.stream().forEach(cards::push);
 	}
 }
