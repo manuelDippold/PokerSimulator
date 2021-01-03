@@ -108,7 +108,7 @@ Utility classes.
 
 # Flow of logic
 
-- The game starts at the **PokerTable** where the **Dealer** and the **Players** come come together.
+- The game starts at the **PokerTable** where the **Dealer** and the **Players** come together.
 - The **Dealer** parses the input deals the **Cards** to the **Players**
 - Lacking the necessary resources, each **Player** leaves it to the **Dealer** to analyze their **HandOfCards** with the right **PokerHandEvaluators**. This results in each Player being told their **PokerHand**.
 - With this information, the **Dealer** is able to sort the **Players** into a **GameResult** and determine the winners of the game.
