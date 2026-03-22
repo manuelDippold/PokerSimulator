@@ -193,7 +193,7 @@ public class Dealer {
 
         // Create a game result and add the players. They are sorted into the ranks automatically.
         GameResult result = new GameResult();
-        players.stream().forEach(result::addToRanks);
+        players.forEach(result::addToRanks);
 
         return result;
     }

@@ -4,7 +4,6 @@ import com.yotilla.poker.Player;
 import com.yotilla.poker.card.Card;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Description:
@@ -72,12 +71,8 @@ public class GameResult {
     public void addToRanks(final Player player) {
         if (player != null && player.getPokerHand() != null) {
             PokerHand playerHand = player.getPokerHand();
-
-            if (!ranking.containsKey(playerHand)) {
-                ranking.put(playerHand, new ArrayList<>());
-            }
-
-            ranking.get(playerHand).add(player);
+            
+            ranking.computeIfAbsent(playerHand, hand -> new ArrayList<>()).add(player);
 
             List<Player> winningPlayers = ranking.values().stream().findFirst().orElse(null);
 
@@ -161,7 +156,7 @@ public class GameResult {
                 return soleWinner.getName() + " wins.";
             }
 
-            List<String> names = winners.stream().map(Player::getName).collect(Collectors.toList());
+            List<String> names = winners.stream().map(Player::getName).toList();
 
             return "Players " + String.join(", ", names) + " split the pot.";
         }
