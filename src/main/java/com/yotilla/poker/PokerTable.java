@@ -72,7 +72,7 @@ public class PokerTable {
 
         // Seat the players at the table.
         List<Player> players = createPlayers(amountOfPlayers);
-        print(amountOfPlayers + " Players at at the table.\n");
+        print(amountOfPlayers + " Players at the table.\n");
 
         // Deal the cards to the players
         for (int i = 0; i < hands.length; i++) {

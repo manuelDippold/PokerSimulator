@@ -20,7 +20,7 @@ public class StraightFlushEvaluator implements PokerHandEvaluator {
     FlushEvaluator flushEvaluator = new FlushEvaluator();
 
     /**
-     * Attempts to a straight flush in this hand and returns an according result.
+     * Attempts to find a straight flush in this hand and returns an according result.
      *
      * @param hand hand to analyze
      * @return poker hand or null.

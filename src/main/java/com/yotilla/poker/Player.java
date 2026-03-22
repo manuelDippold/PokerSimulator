@@ -5,7 +5,7 @@ import com.yotilla.poker.result.PokerHand;
 
 /**
  * Description:
- * A poker playder
+ * A poker player
  * <br>
  * Date: 29.12.2020
  *

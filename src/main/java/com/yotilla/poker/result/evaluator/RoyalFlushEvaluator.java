@@ -19,7 +19,7 @@ import java.util.Collections;
  */
 public class RoyalFlushEvaluator extends StraightFlushEvaluator {
     /**
-     * Attempts to a royal flush in this hand and returns an according result.
+     * Attempts to find a royal flush in this hand and returns an according result.
      *
      * @param hand hand to analyze
      * @return poker hand or null.

@@ -13,7 +13,7 @@ import com.yotilla.poker.util.NullSafeComparator;
  */
 public class PokerHandRankingComparator implements NullSafeComparator<PokerHandRanking> {
     @Override
-    public int compareNonNull(PokerHandRanking oneRaking, PokerHandRanking otherRanking) {
-        return Integer.compare(oneRaking.getScore(), otherRanking.getScore());
+    public int compareNonNull(PokerHandRanking oneRanking, PokerHandRanking otherRanking) {
+        return Integer.compare(oneRanking.getScore(), otherRanking.getScore());
     }
 }

@@ -77,10 +77,10 @@ public class StraightEvaluator implements PokerHandEvaluator {
         boolean containsAce = workingCopy.stream().anyMatch(c -> c.getCardValue() == CardValue.ACE);
         boolean containsTwo = workingCopy.stream().anyMatch(c -> c.getCardValue() == CardValue.TWO);
 
-        // if this hand contains an ace, check if there is also a kind or a two, so it can form a straight.
+        // if this hand contains an ace, check if there is also a king or a two, so it can form a straight.
         if (containsAce && containsTwo) {
             // If there are an ace and a two, remove the ace and continue.
-            // The ace must begin the the straight this way, there is not other possibility.
+            // The ace must begin the straight this way, there is no other possibility.
             workingCopy.removeIf(c -> c.getCardValue() == CardValue.ACE);
         }
     }
