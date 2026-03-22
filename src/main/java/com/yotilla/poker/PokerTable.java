@@ -96,7 +96,9 @@ public class PokerTable {
 
         // determine and print result
         GameResult result = dealer.determineGameResult(players);
-        print(dealer.printResult(result));
+        if (result != null) {
+            print("Ranking:\n" + result.printRanks() + "\n" + result.printFinalResult() + "\n");
+        }
     }
 
     /**

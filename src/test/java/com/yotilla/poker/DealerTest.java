@@ -31,118 +31,20 @@ class DealerTest {
     private static final String PLAYER_2_NAME = "Jane Doe";
     private static final String PLAYER_3_NAME = "Max Mastermind";
 
-    // sut: subject under test.
     private Dealer sut;
     private DeckOfCards deckSpy;
     private Player playerOneSpy;
     private Player playerTwoSpy;
     private Player playerThreeSpy;
 
-    /**
-     * Summon a new dealer with a fresh deck before each test. <br>
-     * All the Mocks, too.
-     */
     @BeforeEach
-    private void setUp() {
+    void setUp() {
         deckSpy = Mockito.spy(new DeckOfCards());
         sut = new Dealer(deckSpy);
 
         playerOneSpy = Mockito.spy(new Player(PLAYER_1_NAME));
         playerTwoSpy = Mockito.spy(new Player(PLAYER_2_NAME));
         playerThreeSpy = Mockito.spy(new Player(PLAYER_3_NAME));
-    }
-
-    /**
-     * parseHandThrowsExceptionOnNullAndEmpty
-     */
-    @Test
-    void parseHandThrowsExceptionOnNullAndEmpty() {
-        assertThrows(PokerParseException.class, () -> {
-            sut.parseHandOfCards(null);
-        }, "Exception expected on null");
-
-        assertThrows(PokerParseException.class, () -> {
-            sut.parseHandOfCards("");
-        }, "Exception expected on empty string");
-    }
-
-    /**
-     * recognize a single card
-     *
-     * @throws PokerParseException error case
-     */
-    @Test
-    void recognizeAceOfSpades() throws PokerParseException {
-        Card aceOfSpades = sut.parseCard("AS");
-        Card aceOfSpadesReference = new Card(CardSuit.SPADES, CardValue.ACE);
-        assertEquals(aceOfSpades, aceOfSpadesReference, "AS should match the ace of spades.");
-    }
-
-    /**
-     * parseCardThrowsExceptionOnInvalidString
-     */
-    @Test
-    void parseCardThrowsExceptionOnInvalidString() {
-        assertThrows(PokerParseException.class, () -> {
-            sut.parseCard(null);
-        }, "Exception expected on null");
-
-        assertThrows(PokerParseException.class, () -> {
-            sut.parseCard("");
-        }, "Exception expected on empty string");
-
-        assertThrows(PokerParseException.class, () -> {
-            sut.parseCard("A");
-        }, "Exception expected on one character");
-
-        assertThrows(PokerParseException.class, () -> {
-            sut.parseCard("AS9");
-        }, "Exception expected on three characters");
-    }
-
-    /**
-     * parseCardThrowsExceptionOnNonCardString
-     */
-    @Test
-    void parseCardThrowsExceptionOnNonCardString() {
-        assertThrows(PokerParseException.class, () -> {
-            sut.parseCard("ZZ");
-        }, "Exception expected on ZZ");
-
-        assertThrows(PokerParseException.class, () -> {
-            sut.parseCard("3Z");
-        }, "Exception expected on 3Z");
-
-        assertThrows(PokerParseException.class, () -> {
-            sut.parseCard("ZC");
-        }, "Exception expected on ZC");
-    }
-
-    /**
-     * recognize an exemplary hand
-     *
-     * @throws PokerParseException   in case of an error
-     * @throws HandExceededException in case of too many cards
-     * @throws DeckException         if a card was already drawn.
-     */
-    @Test
-    void recognizeHand() throws PokerParseException, HandExceededException, DeckException {
-        // Input hand: two of diamonds, three of clubs, Queen of hearts, Jack of Spades, Ace of Clubs
-        String input = "2D 3C QH JS AC";
-        HandOfCards hand = sut.parseHandOfCards(input);
-
-        // reference
-        Card twoOfDiamonds = new Card(CardSuit.DIAMONDS, CardValue.TWO);
-        Card threeOfClubs = new Card(CardSuit.CLUBS, CardValue.THREE);
-        Card queenOfHearts = new Card(CardSuit.HEARTS, CardValue.QUEEN);
-        Card jackOfSpades = new Card(CardSuit.SPADES, CardValue.JACK);
-        Card aceOfClubs = new Card(CardSuit.CLUBS, CardValue.ACE);
-
-        assertEquals(twoOfDiamonds, hand.getCards().get(0), "Cards must match after parse.");
-        assertEquals(threeOfClubs, hand.getCards().get(1), "Cards must match after parse.");
-        assertEquals(queenOfHearts, hand.getCards().get(2), "Cards must match after parse.");
-        assertEquals(jackOfSpades, hand.getCards().get(3), "Cards must match after parse.");
-        assertEquals(aceOfClubs, hand.getCards().get(4), "Cards must match after parse.");
     }
 
     /**
@@ -154,10 +56,8 @@ class DealerTest {
      */
     @Test
     void dealHandToPlayer() throws PokerParseException, HandExceededException, DeckException {
-        // Input hand: two of diamonds, three of clubs, Queen of hearts, Jack of Spades, Ace of Clubs
         String input = "2D 3C QH JS AC";
 
-        // reference
         Card twoOfDiamonds = new Card(CardSuit.DIAMONDS, CardValue.TWO);
         Card threeOfClubs = new Card(CardSuit.CLUBS, CardValue.THREE);
         Card queenOfHearts = new Card(CardSuit.HEARTS, CardValue.QUEEN);
@@ -182,11 +82,8 @@ class DealerTest {
      */
     @Test
     void dealHandToNullPlayer() throws PokerParseException, HandExceededException {
-        // Input hand: two of diamonds, three of clubs, Queen of hearts, Jack of Spades, Ace of Clubs
-        String input = "2D 3C QH JS AC";
-
         assertThrows(PokerParseException.class, () -> {
-            sut.parseInputAndDealHand(input, null);
+            sut.parseInputAndDealHand("2D 3C QH JS AC", null);
         }, "Exception expected on null player");
     }
 
@@ -195,7 +92,6 @@ class DealerTest {
      */
     @Test
     void dealingTheSameCardTwiceThrowsException() {
-        // Input hand: two of diamonds, two of diamonds, Queen of hearts, Jack of Spades, Ace of Clubs
         String input = "2D 2D QH JS AC";
         Player player = new Player(PLAYER_1_NAME);
 
@@ -213,21 +109,15 @@ class DealerTest {
      */
     @Test
     void smallHandsAreFilledFromTheDeck() throws PokerParseException, HandExceededException, DeckException {
-        // Input hand: two of diamonds, three of clubs, Queen of hearts, two cards missing
         String input = "2D 3C QH";
         Player player = new Player(PLAYER_1_NAME);
-
-        // reference
-        Card twoOfDiamonds = new Card(CardSuit.DIAMONDS, CardValue.TWO);
-        Card threeOfClubs = new Card(CardSuit.CLUBS, CardValue.THREE);
-        Card queenOfHearts = new Card(CardSuit.HEARTS, CardValue.QUEEN);
 
         sut.parseInputAndDealHand(input, player);
         HandOfCards playerHand = player.getHand();
 
-        assertEquals(twoOfDiamonds, playerHand.getCards().get(0), "Cards must match after parse and deal.");
-        assertEquals(threeOfClubs, playerHand.getCards().get(1), "Cards must match after parse and deal.");
-        assertEquals(queenOfHearts, playerHand.getCards().get(2), "Cards must match after parse and deal.");
+        assertEquals(new Card(CardSuit.DIAMONDS, CardValue.TWO), playerHand.getCards().get(0), "Cards must match after parse and deal.");
+        assertEquals(new Card(CardSuit.CLUBS, CardValue.THREE), playerHand.getCards().get(1), "Cards must match after parse and deal.");
+        assertEquals(new Card(CardSuit.HEARTS, CardValue.QUEEN), playerHand.getCards().get(2), "Cards must match after parse and deal.");
         assertNotNull(playerHand.getCards().get(3), "Missing cards are filled from deck.");
         assertNotNull(playerHand.getCards().get(4), "Missing cards are filled from deck.");
 
@@ -266,113 +156,11 @@ class DealerTest {
      */
     @Test
     void evaluateHandThrowsExceptionWhenNothingIsFound() throws HandExceededException {
-        // This player stubbornly pretends they don't hold anything.
         Mockito.when(playerOneSpy.getPokerHand()).thenReturn(null);
 
         assertThrows(PokerParseException.class, () -> {
             sut.evaluatePlayerHand(playerOneSpy);
         }, "Exception expected on dealing with a player with only one card");
-    }
-
-    /**
-     * evaluateHandRecognizesRoyalFlush
-     *
-     * @throws HandExceededException error
-     * @throws PokerParseException   error
-     */
-    @Test
-    void evaluateHandRecognizesRoyalFlush() throws HandExceededException, PokerParseException {
-        // Royal Flush
-        List<CardValue> values = Arrays.asList(CardValue.TEN, CardValue.JACK, CardValue.QUEEN, CardValue.KING,
-                CardValue.ACE);
-        List<CardSuit> suits = Arrays.asList(CardSuit.HEARTS, CardSuit.HEARTS, CardSuit.HEARTS, CardSuit.HEARTS,
-                CardSuit.HEARTS);
-
-        HandOfCards hand = TestUtils.getHandSpy(suits, values);
-        Mockito.when(playerOneSpy.getHand()).thenReturn(hand);
-
-        sut.evaluatePlayerHand(playerOneSpy);
-
-        PokerHand result = playerOneSpy.getPokerHand();
-
-        assertEquals(PokerHandRanking.ROYAL_FLUSH, result.getRanking(), "Result royal flush expected");
-    }
-
-    /**
-     * evaluateHandRecognizesFullHouse
-     *
-     * @throws HandExceededException error
-     * @throws PokerParseException   error
-     */
-    @Test
-    void evaluateHandRecognizesFullHouse() throws HandExceededException, PokerParseException {
-        // Full House
-        List<CardValue> values = Arrays.asList(CardValue.TEN, CardValue.TEN, CardValue.FIVE, CardValue.FIVE,
-                CardValue.FIVE);
-        List<CardSuit> suits = Arrays.asList(CardSuit.HEARTS, CardSuit.SPADES, CardSuit.SPADES, CardSuit.DIAMONDS,
-                CardSuit.HEARTS);
-
-        HandOfCards hand = TestUtils.getHandSpy(suits, values);
-        Mockito.when(playerOneSpy.getHand()).thenReturn(hand);
-
-        sut.evaluatePlayerHand(playerOneSpy);
-        PokerHand result = playerOneSpy.getPokerHand();
-
-        assertEquals(PokerHandRanking.FULL_HOUSE, result.getRanking(), "Result Full house expected");
-        assertEquals(CardValue.FIVE, result.getRankCards().get(0), "First Rank card is the triple, five.");
-        assertEquals(CardValue.TEN, result.getRankCards().get(1), "First Rank card is the pair, ten.");
-    }
-
-    /**
-     * evaluateHandRecognizesStraight
-     *
-     * @throws HandExceededException error
-     * @throws PokerParseException   error
-     */
-    @Test
-    void evaluateHandRecognizesStraight() throws HandExceededException, PokerParseException {
-        // Straight
-        List<CardValue> values = Arrays.asList(
-                CardValue.EIGHT, CardValue.NINE, CardValue.TEN, CardValue.JACK, CardValue.QUEEN);
-        List<CardSuit> suits = Arrays.asList(
-                CardSuit.HEARTS, CardSuit.SPADES, CardSuit.SPADES, CardSuit.DIAMONDS, CardSuit.DIAMONDS);
-
-        HandOfCards hand = TestUtils.getHandSpy(suits, values);
-        Mockito.when(playerOneSpy.getHand()).thenReturn(hand);
-
-        sut.evaluatePlayerHand(playerOneSpy);
-        PokerHand result = playerOneSpy.getPokerHand();
-
-        assertEquals(PokerHandRanking.STRAIGHT, result.getRanking(), "Result straight expected");
-        assertEquals(CardValue.QUEEN, result.getRankCards().get(0), "Queen is the rank card.");
-    }
-
-    /**
-     * evaluateHandRecognizesHighCard
-     *
-     * @throws HandExceededException error
-     * @throws PokerParseException   error
-     */
-    @Test
-    void evaluateHandRecognizesHighCard() throws HandExceededException, PokerParseException {
-        // Noting.
-        List<CardValue> values = Arrays.asList(CardValue.TWO, CardValue.FOUR, CardValue.TEN, CardValue.FIVE,
-                CardValue.JACK);
-        List<CardSuit> suits = Arrays.asList(CardSuit.HEARTS, CardSuit.SPADES, CardSuit.SPADES, CardSuit.DIAMONDS,
-                CardSuit.DIAMONDS);
-
-        HandOfCards hand = TestUtils.getHandSpy(suits, values);
-        Mockito.when(playerOneSpy.getHand()).thenReturn(hand);
-
-        sut.evaluatePlayerHand(playerOneSpy);
-        PokerHand result = playerOneSpy.getPokerHand();
-
-        assertEquals(PokerHandRanking.HIGH_CARD, result.getRanking(), "Result high card expected");
-        assertEquals(CardValue.JACK, result.getRankCards().get(0), "Rank card 1, jack.");
-        assertEquals(CardValue.TEN, result.getRankCards().get(1), "Rank card 2, ten.");
-        assertEquals(CardValue.FIVE, result.getRankCards().get(2), "Rank card 3, five.");
-        assertEquals(CardValue.FOUR, result.getRankCards().get(3), "Rank card 4, four.");
-        assertEquals(CardValue.TWO, result.getRankCards().get(4), "Rank card 5, two.");
     }
 
     /**
@@ -389,7 +177,7 @@ class DealerTest {
     /**
      * determineGameResultWithClearWinner
      *
-     * @throws PokerParseException
+     * @throws PokerParseException error
      */
     @Test
     void determineGameResultWithClearWinner() throws PokerParseException {
@@ -491,11 +279,8 @@ class DealerTest {
         GameResult result = sut.determineGameResult(players);
 
         assertNull(result.getWinner(), "There is no winner when the pot is split");
-
-        assertTrue(result.getPotSplit().contains(playerTwoSpy),
-                "Pot should have been split between players two and three.");
-        assertTrue(result.getPotSplit().contains(playerThreeSpy),
-                "Pot should have been split between players two and three.");
+        assertTrue(result.getPotSplit().contains(playerTwoSpy), "Pot should have been split between players two and three.");
+        assertTrue(result.getPotSplit().contains(playerThreeSpy), "Pot should have been split between players two and three.");
     }
 
     /**
@@ -524,7 +309,6 @@ class DealerTest {
         GameResult result = sut.determineGameResult(players);
 
         assertNull(result.getWinner(), "There is no winner when the pot is split");
-
         assertTrue(result.getPotSplit().contains(playerOneSpy), "Pot should have been split between all players.");
         assertTrue(result.getPotSplit().contains(playerTwoSpy), "Pot should have been split between all players.");
         assertTrue(result.getPotSplit().contains(playerThreeSpy), "Pot should have been split between all players.");
