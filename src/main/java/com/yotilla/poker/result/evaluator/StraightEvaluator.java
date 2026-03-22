@@ -43,7 +43,7 @@ public class StraightEvaluator implements PokerHandEvaluator {
 
             // See if we can step through the ordered cards without skipping one.
             for (Card card : workingCopy) {
-                int thisCardValue = card.getCardValue().getNumericalValue();
+                int thisCardValue = card.cardValue().getNumericalValue();
 
                 if (runningCardValue > 0 && Math.abs(thisCardValue - runningCardValue) > 1) {
                     // we skipped a card. Break here.
@@ -75,14 +75,14 @@ public class StraightEvaluator implements PokerHandEvaluator {
      * @param workingCopy copy of cards to work with
      */
     private void accountForAceBeginningStraight(final List<Card> workingCopy) {
-        boolean containsAce = workingCopy.stream().anyMatch(c -> c.getCardValue() == CardValue.ACE);
-        boolean containsTwo = workingCopy.stream().anyMatch(c -> c.getCardValue() == CardValue.TWO);
+        boolean containsAce = workingCopy.stream().anyMatch(c -> c.cardValue() == CardValue.ACE);
+        boolean containsTwo = workingCopy.stream().anyMatch(c -> c.cardValue() == CardValue.TWO);
 
         // if this hand contains an ace, check if there is also a king or a two, so it can form a straight.
         if (containsAce && containsTwo) {
             // If there are an ace and a two, remove the ace and continue.
             // The ace must begin the straight this way, there is no other possibility.
-            workingCopy.removeIf(c -> c.getCardValue() == CardValue.ACE);
+            workingCopy.removeIf(c -> c.cardValue() == CardValue.ACE);
         }
     }
 

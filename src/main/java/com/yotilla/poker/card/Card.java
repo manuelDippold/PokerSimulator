@@ -11,92 +11,24 @@ import java.util.Objects;
  * @author Manuel
  *
  */
-public class Card implements Comparable<Card> {
-    private final CardSuit cardSuit;
-    private final CardValue cardValue;
+public record Card(CardSuit cardSuit, CardValue cardValue) implements Comparable<Card> {
 
     /**
-     * @param cardSuit  card suit, or color.
-     * @param cardValue card value
-     */
-    public Card(CardSuit cardSuit, CardValue cardValue) {
-        this.cardSuit = cardSuit;
-        this.cardValue = cardValue;
-    }
-
-    /**
-     * @return the cardSuit
-     */
-    public CardSuit getCardSuit() {
-        return cardSuit;
-    }
-
-    /**
-     * @return the cardValue
-     */
-    public CardValue getCardValue() {
-        return cardValue;
-    }
-
-    /**
-     * Compares two cards based on their value. Returns: <br>
-     * -1 if this card is worth less than otherCard <br>
-     * 0 if this card is of equal value to otherCard <br>
-     * 1 if this card is worth more than otherCard <br>
-     * <br>
-     * The suit does not play a role in the comparison, as it has no bearing on the
-     * order.
+     * Compares two cards by numerical value. Suit is irrelevant for ordering.
      *
      * @param otherCard Card to compare this one to
+     * @throws NullPointerException if otherCard is null
      */
     @Override
     public int compareTo(Card otherCard) {
-        // Even the smallest card wins when compared to nothing.
-        if (otherCard == null || otherCard.getCardValue() == null) {
-            return 1;
-        }
-
-        return Integer.compare(getCardValue().getNumericalValue(), otherCard.getCardValue().getNumericalValue());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(cardSuit, cardValue);
-    }
-
-    /**
-     * Two cards are equal when they are identical in both suit and value.
-     */
-    @Override
-    public boolean equals(Object otherObject) {
-        if (!(otherObject instanceof Card)) {
-            return false;
-        }
-
-        Card otherCard = (Card) otherObject;
-
-        return otherCard.getCardSuit() == cardSuit && otherCard.getCardValue() == cardValue;
+        Objects.requireNonNull(otherCard, "Cannot compare a card to null.");
+        return Integer.compare(cardValue.getNumericalValue(), otherCard.cardValue().getNumericalValue());
     }
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-
-        if (cardValue != null) {
-            sb.append(cardValue.name());
-        } else {
-            sb.append("?");
-        }
-
-        sb.append(" of ");
-
-        if (cardSuit != null) {
-            sb.append(cardSuit.name());
-        } else {
-            sb.append("?");
-        }
-
-        return sb.toString();
+        String value = cardValue != null ? cardValue.name() : "?";
+        String suit = cardSuit != null ? cardSuit.name() : "?";
+        return value + " of " + suit;
     }
-
 }

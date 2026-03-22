@@ -114,26 +114,4 @@ class EvaluatorTest extends AbstractEvaluatorTest {
         HandOfCards result = new PairEvaluator().copyHandOfCards(null);
         assertNull(result, "A copy of null should be null.");
     }
-
-    /**
-     * copyDuplicatesObjects
-     *
-     * @throws DeckException         error case
-     * @throws HandExceededException error case
-     */
-    @Test
-    void copyDuplicatesObjects() throws HandExceededException, DeckException {
-        HandOfCards hand = new HandOfCards();
-        hand.addCard(deck.drawCard(CardSuit.SPADES, CardValue.TWO));
-        hand.addCard(deck.drawCard(CardSuit.SPADES, CardValue.THREE));
-        hand.addCard(deck.drawCard(CardSuit.HEARTS, CardValue.SIX));
-
-        HandOfCards copy = new PairEvaluator().copyHandOfCards(hand);
-
-        for (int i = 0; i < 3; i++) {
-            assertEquals(hand.getCards().get(i), copy.getCards().get(i), "These two cards should be equal.");
-            assertNotSame(hand.getCards().get(i), copy.getCards().get(i),
-                    "These two cards should be equal, but not identical.");
-        }
-    }
 }

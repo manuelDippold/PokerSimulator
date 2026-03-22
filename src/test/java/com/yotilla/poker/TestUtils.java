@@ -32,11 +32,7 @@ public class TestUtils {
      * @return a mocked card
      */
     public static Card getCardMock(final CardSuit cardSuit, final CardValue cardValue) {
-        Card card = Mockito.mock(Card.class);
-        Mockito.when(card.getCardSuit()).thenReturn(cardSuit);
-        Mockito.when(card.getCardValue()).thenReturn(cardValue);
-
-        return card;
+        return new Card(cardSuit, cardValue);
     }
 
     /**

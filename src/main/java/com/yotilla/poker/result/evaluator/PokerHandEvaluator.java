@@ -42,7 +42,7 @@ public interface PokerHandEvaluator {
         }
 
         List<CardValue> values = new ArrayList<>();
-        cards.stream().forEach(c -> values.add(c.getCardValue()));
+        cards.stream().forEach(c -> values.add(c.cardValue()));
 
         // sort, highest first
         values.sort(new CardValueComparator().reversed());
@@ -90,7 +90,7 @@ public interface PokerHandEvaluator {
             }
 
             for (Card existing : toCopy.getCards()) {
-                copy.addCard(new Card(existing.getCardSuit(), existing.getCardValue()));
+                copy.addCard(existing);
             }
         } catch (HandExceededException e) {
             Logger.getGlobal().log(Level.SEVERE,

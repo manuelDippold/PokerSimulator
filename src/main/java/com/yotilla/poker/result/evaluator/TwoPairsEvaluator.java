@@ -35,7 +35,7 @@ public class TwoPairsEvaluator implements PokerHandEvaluator {
             List<Card> pairs = new ArrayList<>();
 
             for (Card card : hand.getCards()) {
-                CardValue value = card.getCardValue();
+                CardValue value = card.cardValue();
 
                 // If we encountered this value before, this is at least a pair.
                 if (pairCandidates.containsKey(value)) {

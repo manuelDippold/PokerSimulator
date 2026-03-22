@@ -36,7 +36,7 @@ public abstract class MultiplesEvaluator implements PokerHandEvaluator {
             for (Card card : hand.getCards()) {
                 collector.addCard(card);
 
-                CardValue val = card.getCardValue();
+                CardValue val = card.cardValue();
                 if (collector.getAmountBehindKey(val) >= desiredMultiple) {
                     multipleCardValue = val;
                 }

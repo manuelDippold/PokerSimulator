@@ -31,7 +31,7 @@ public class CardCollector extends EnumMap<CardValue, List<Card>> {
      * @param card card to add.
      */
     public void addCard(final Card card) {
-        CardValue value = card.getCardValue();
+        CardValue value = card.cardValue();
 
         if (!containsKey(value)) {
             put(value, new ArrayList<>());

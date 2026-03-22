@@ -1,7 +1,6 @@
 package com.yotilla.poker.card;
 
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -29,18 +28,11 @@ class CardTest {
      * cardCompareIsNullSafe
      */
     @Test
-    void cardCompareIsNullSafe() {
-        Card twoOfSpades = new Card(CardSuit.SPADES, CardValue.TWO);
+    void cardCompareThrowsOnNull() {
+        Card ace = new Card(CardSuit.HEARTS, CardValue.ACE);
 
-        assertTrue(twoOfSpades.compareTo(null) > 0,
-                "Any card ought to rank higher than no card. And compare shouldn't throw a NPE.");
+        assertThrows(NullPointerException.class, () -> ace.compareTo(null));
 
-        // Mock a card that has a suit, but null as a value.
-        Card nothingOfSpades = Mockito.mock(Card.class);
-        Mockito.when(nothingOfSpades.getCardSuit()).thenReturn(CardSuit.SPADES);
-
-        assertTrue(twoOfSpades.compareTo(nothingOfSpades) > 0,
-                "Any card ought to rank higher than a card withour a value set. And compare shouldn't throw a NPE.");
     }
 
     /**

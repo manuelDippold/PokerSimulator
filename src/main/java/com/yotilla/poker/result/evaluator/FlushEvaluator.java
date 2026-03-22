@@ -33,7 +33,7 @@ public class FlushEvaluator implements PokerHandEvaluator {
             boolean flush = true;
             CardSuit runningSuit = null;
             for (Card card : hand.getCards()) {
-                CardSuit thisSuit = card.getCardSuit();
+                CardSuit thisSuit = card.cardSuit();
 
                 if (runningSuit != null && runningSuit != thisSuit) {
                     // there are differing suits in this hand. This is not a flush.

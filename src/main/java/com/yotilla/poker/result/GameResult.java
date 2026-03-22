@@ -129,8 +129,8 @@ public class GameResult {
 
         while (cardIterator.hasNext()) {
             Card card = cardIterator.next();
-            builder.append(card.getCardValue().getCode())
-                    .append(card.getCardSuit().getCode());
+            builder.append(card.cardValue().getCode())
+                    .append(card.cardSuit().getCode());
 
             if (cardIterator.hasNext()) {
                 builder.append(" ");
