@@ -64,6 +64,10 @@ com.yotilla.poker
 4. Populate `GameResult` (sorted `TreeMap`) with all players
 5. Winner is the first entry; tied first entries = split pot
 
+## Issue Tracking
+
+`claude_issues.txt` (next to this file) is the perpetually updated list of known code quality issues. Update it whenever an issue is fixed or a new one is discovered.
+
 ## Clean Code Philosophy
 
 Prefer self-documenting code over comments. Variable and method names should express intent clearly enough that inline comments become unnecessary. A comment explaining *what* the code does is a signal to rename or extract — only use comments to explain *why* when the reasoning is non-obvious from the code itself.
