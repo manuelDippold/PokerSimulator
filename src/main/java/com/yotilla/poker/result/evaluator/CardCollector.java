@@ -18,9 +18,6 @@ import java.util.List;
  *
  */
 public class CardCollector extends EnumMap<CardValue, List<Card>> {
-    /**
-     * @param argKeyType
-     */
     public CardCollector() {
         super(CardValue.class);
     }

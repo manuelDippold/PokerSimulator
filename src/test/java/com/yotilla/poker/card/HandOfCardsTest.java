@@ -26,15 +26,13 @@ class HandOfCardsTest
 	/**
 	 * Create a list filled with randomly - generated cards
 	 *
-	 * @param argAmountOfCards amount of cards to be added to the list. Positive
-	 *                         integer expected, negatives will be assumed zero.
+	 * @param amountOfCards amount of cards to be added to the list. Positive
+	 *                      integer expected, negatives will be assumed zero.
 	 * @return list of card mocks
 	 */
-	private List<Card> getRandomCardMocksAsList(final int argAmountOfCards)
+	private List<Card> getRandomCardMocksAsList(int amountOfCards)
 	{
 		List<Card> mocks = new LinkedList<>();
-
-		int amountOfCards = argAmountOfCards;
 
 		if (amountOfCards < 0)
 		{
@@ -52,14 +50,12 @@ class HandOfCardsTest
 	/**
 	 * Create an array filled with randomly - generated cards
 	 *
-	 * @param argAmountOfCards amount of cards to be added to the array. Positive
-	 *                         integer expected, negatives will be assumed zero.
+	 * @param amountOfCards amount of cards to be added to the array. Positive
+	 *                      integer expected, negatives will be assumed zero.
 	 * @return array of card mocks
 	 */
-	private Card[] getRandomCardMocksAsArray(final int argAmountOfCards)
+	private Card[] getRandomCardMocksAsArray(int amountOfCards)
 	{
-		int amountOfCards = argAmountOfCards;
-
 		if (amountOfCards < 0)
 		{
 			amountOfCards = 0;

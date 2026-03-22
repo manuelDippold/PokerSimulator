@@ -79,14 +79,14 @@ public class DeckOfCards {
     /**
      * Recognize the card by its hash and draw it.
      *
-     * @param argSuit  suit desired
-     * @param argValue value desired
+     * @param suit  suit desired
+     * @param value value desired
      * @return Card, if it is in the deck.
      * @throws DeckException if the card in question was already drawn or if the
      *                       deck is empty.
      */
-    public Card drawCard(CardSuit argSuit, CardValue argValue) throws DeckException {
-        return drawCard(new Card(argSuit, argValue));
+    public Card drawCard(CardSuit suit, CardValue value) throws DeckException {
+        return drawCard(new Card(suit, value));
     }
 
     /**

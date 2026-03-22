@@ -16,14 +16,14 @@ public class DeckException extends Exception {
 
     private final DeckExceptionCause deckExceptionCause;
 
-    public DeckException(DeckExceptionCause argDeckExceptionCause) {
-        super(argDeckExceptionCause.getErrorMessage());
-        deckExceptionCause = argDeckExceptionCause;
+    public DeckException(DeckExceptionCause deckExceptionCause) {
+        super(deckExceptionCause.getErrorMessage());
+        this.deckExceptionCause = deckExceptionCause;
     }
 
-    public DeckException(final DeckExceptionCause argDeckExceptionCause, final Card culprit) {
-        super(argDeckExceptionCause.getErrorMessage() + ": " + culprit);
-        deckExceptionCause = argDeckExceptionCause;
+    public DeckException(final DeckExceptionCause deckExceptionCause, final Card culprit) {
+        super(deckExceptionCause.getErrorMessage() + ": " + culprit);
+        this.deckExceptionCause = deckExceptionCause;
     }
 
     /**

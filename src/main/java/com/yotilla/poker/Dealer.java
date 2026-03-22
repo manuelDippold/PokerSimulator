@@ -27,8 +27,8 @@ public class Dealer {
     /**
      * Summon a new Dealer. A dealer always holds a freshly - shuffled deck.
      */
-    public Dealer(final DeckOfCards argDeck) {
-        deck = argDeck;
+    public Dealer(final DeckOfCards deck) {
+        this.deck = deck;
         deck.shuffleDeck();
 
         evaluators = new ArrayList<>();

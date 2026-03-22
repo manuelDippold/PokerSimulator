@@ -25,15 +25,15 @@ public class PokerHand {
     private final List<CardValue> kickerCards;
 
     /**
-     * @param argRanking     The overall ranking of the result: Pair, Straight etc.
-     * @param argRankCards   The rank cards of the result in descending order.
-     * @param argKickerCards Kicker cards in descending order. A
+     * @param ranking     The overall ranking of the result: Pair, Straight etc.
+     * @param rankCards   The rank cards of the result in descending order.
+     * @param kickerCards Kicker cards in descending order. A
      */
-    public PokerHand(PokerHandRanking argRanking, List<CardValue> argRankCards, List<CardValue> argKickerCards) {
+    public PokerHand(PokerHandRanking ranking, List<CardValue> rankCards, List<CardValue> kickerCards) {
         super();
-        ranking = argRanking;
-        rankCards = argRankCards;
-        kickerCards = argKickerCards;
+        this.ranking = ranking;
+        this.rankCards = rankCards;
+        this.kickerCards = kickerCards;
     }
 
     /**

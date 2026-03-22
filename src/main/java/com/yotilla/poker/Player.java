@@ -18,24 +18,24 @@ public class Player {
     private final String name;
 
     /**
-     * @param argName
+     * @param name
      */
-    public Player(String argName) {
+    public Player(String name) {
         super();
-        name = argName;
+        this.name = name;
     }
 
     /**
      * Deal the player a hand of cards.
      *
-     * @param argHand hand player will hold
+     * @param hand hand player will hold
      */
-    public void dealHand(final HandOfCards argHand) {
-        if (hand != null) {
+    public void dealHand(final HandOfCards hand) {
+        if (this.hand != null) {
             throw new IllegalArgumentException("Player " + name + " already holds a hand!");
         }
 
-        hand = argHand;
+        this.hand = hand;
     }
 
     /**
@@ -53,10 +53,10 @@ public class Player {
     }
 
     /**
-     * @param argPokerHand the pokerHand to set
+     * @param pokerHand the pokerHand to set
      */
-    public void setPokerHand(PokerHand argPokerHand) {
-        pokerHand = argPokerHand;
+    public void setPokerHand(PokerHand pokerHand) {
+        this.pokerHand = pokerHand;
     }
 
     /**

@@ -18,9 +18,9 @@ public class PokerParseException extends Exception {
     /**
      * Constructor
      *
-     * @param argMessage error message
+     * @param message error message
      */
-    public PokerParseException(final String argMessage) {
-        super(argMessage);
+    public PokerParseException(final String message) {
+        super(message);
     }
 }

@@ -30,12 +30,12 @@ public class PokerTable {
     /**
      * Constructor. Binds a logger and a dealer.
      *
-     * @param argLog    Logger to use. Will print to console only, without head nor tail.
-     * @param argDealer dealer to use.
+     * @param log    Logger to use. Will print to console only, without head nor tail.
+     * @param dealer dealer to use.
      */
-    public PokerTable(final Logger argLog, Dealer argDealer) {
-        log = argLog;
-        dealer = argDealer;
+    public PokerTable(final Logger log, Dealer dealer) {
+        this.log = log;
+        this.dealer = dealer;
 
         // Use direct print to the console, no heads or tails, except warning or higher.
         Handler consoleHandler = new ConsoleHandler();

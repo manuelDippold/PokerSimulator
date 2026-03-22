@@ -16,12 +16,12 @@ public class Card implements Comparable<Card> {
     private final CardValue cardValue;
 
     /**
-     * @param argCardSuit  card suit, or color.
-     * @param argCardValue card value
+     * @param cardSuit  card suit, or color.
+     * @param cardValue card value
      */
-    public Card(CardSuit argCardSuit, CardValue argCardValue) {
-        cardSuit = argCardSuit;
-        cardValue = argCardValue;
+    public Card(CardSuit cardSuit, CardValue cardValue) {
+        this.cardSuit = cardSuit;
+        this.cardValue = cardValue;
     }
 
     /**

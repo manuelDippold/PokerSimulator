@@ -26,12 +26,12 @@ public enum CardValue {
     private int numericalValue;
 
     /**
-     * @param argCode           code to set
-     * @param argNumericalValue value to set
+     * @param code           code to set
+     * @param numericalValue value to set
      */
-    private CardValue(String argCode, int argNumericalValue) {
-        code = argCode;
-        numericalValue = argNumericalValue;
+    private CardValue(String code, int numericalValue) {
+        this.code = code;
+        this.numericalValue = numericalValue;
     }
 
     /**

@@ -54,16 +54,16 @@ public class HandOfCards {
     }
 
     /**
-     * @param argCards the cards to set
-     * @throws HandExceededException if argCards contains more elements than allowed
+     * @param cards the cards to set
+     * @throws HandExceededException if cards contains more elements than allowed
      */
-    public void setCards(List<Card> argCards) throws HandExceededException {
-        if (argCards != null && argCards.size() > HAND_SIZE) {
+    public void setCards(List<Card> cards) throws HandExceededException {
+        if (cards != null && cards.size() > HAND_SIZE) {
             throw new HandExceededException(
                     String.format("A hand of cards must not hold more than %d cards.", HAND_SIZE));
         }
 
-        cards = argCards;
+        this.cards = cards;
     }
 
     /**

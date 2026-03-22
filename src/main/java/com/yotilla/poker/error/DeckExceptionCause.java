@@ -16,8 +16,8 @@ public enum DeckExceptionCause {
     private final String errorMessage;
 
 
-    private DeckExceptionCause(String argErrorMessage) {
-        errorMessage = argErrorMessage;
+    private DeckExceptionCause(String errorMessage) {
+        this.errorMessage = errorMessage;
     }
 
     public String getErrorMessage() {

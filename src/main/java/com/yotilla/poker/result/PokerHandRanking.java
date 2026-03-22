@@ -23,10 +23,10 @@ public enum PokerHandRanking {
     private final int score;
 
     /**
-     * @param argScore
+     * @param score
      */
-    private PokerHandRanking(int argScore) {
-        score = argScore;
+    private PokerHandRanking(int score) {
+        this.score = score;
     }
 
     /**

@@ -26,15 +26,15 @@ public class TestUtils
 	/**
 	 * Create and return the mock of a card with the specified suit and value
 	 *
-	 * @param argCardSuit  desired card suit
-	 * @param argCardValue desired card value
+	 * @param cardSuit  desired card suit
+	 * @param cardValue desired card value
 	 * @return a mocked card
 	 */
-	public static Card getCardMock(final CardSuit argCardSuit, final CardValue argCardValue)
+	public static Card getCardMock(final CardSuit cardSuit, final CardValue cardValue)
 	{
 		Card card = Mockito.mock(Card.class);
-		Mockito.when(card.getCardSuit()).thenReturn(argCardSuit);
-		Mockito.when(card.getCardValue()).thenReturn(argCardValue);
+		Mockito.when(card.getCardSuit()).thenReturn(cardSuit);
+		Mockito.when(card.getCardValue()).thenReturn(cardValue);
 
 		return card;
 	}
