@@ -17,3 +17,4 @@ Issue list - perpetually updated during code quality improvements.
 13 | Smell    | CardValue, CardSuit             | Lookup methods use manual for loops instead of streams                          |
 14 | Minor    | PokerHand                      | Redundant explicit super() call                                                 |
 15 | Minor    | DeckOfCards                    | shuffleDeck() copies to ArrayList, shuffles, clears, adds back — verbose        |
+16 | Medium   | Test suite                     | No end-to-end integration test: PokerTable.playPoker() is never exercised with real input through the full stack |
