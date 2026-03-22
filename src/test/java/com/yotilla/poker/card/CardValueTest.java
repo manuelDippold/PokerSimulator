@@ -56,7 +56,7 @@ class CardValueTest
 	void getCardValueByCodeIsNullSafe()
 	{
 		CardValue value = CardValue.getByCode(null);
-		assertNull(value, "Null shouldn't match anything and the function should be able to handle it wihtout NPE.");
+		assertNull(value, "Null shouldn't match anything and the function should be able to handle it without NPE.");
 	}
 
 	/**

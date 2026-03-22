@@ -22,8 +22,8 @@ public enum CardValue {
     KING("K", 13),
     ACE("A", 14);
 
-    private String code;
-    private int numericalValue;
+    private final String code;
+    private final int numericalValue;
 
     /**
      * @param code           code to set

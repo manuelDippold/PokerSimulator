@@ -268,7 +268,7 @@ class DealerTest
 
 		assertThrows(PokerParseException.class, () -> {
 			sut.evaluatePlayerHand(playerOneSpy);
-		}, "Exception expected on dealing with a player wihtout a hand.");
+		}, "Exception expected on dealing with a player without a hand.");
 
 		HandOfCards emptyHand = Mockito.mock(HandOfCards.class);
 		Mockito.when(emptyHand.isEmpty()).thenReturn(true);
