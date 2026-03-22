@@ -65,11 +65,9 @@ public class DeckOfCards {
         }
 
         // Find the card, remove it and return it.
-        Card ret = cards.stream().filter(c -> c.equals(toDraw)).findFirst().orElse(null);
+        Card ret = cards.stream().filter(c -> c.equals(toDraw)).findFirst()
+                .orElseThrow(() -> new DeckException(DeckExceptionCause.CARD_ALREADY_DRAWN, toDraw));
 
-        if (ret == null) {
-            throw new DeckException(DeckExceptionCause.CARD_ALREADY_DRAWN, toDraw);
-        }
 
         cards.remove(ret);
 
