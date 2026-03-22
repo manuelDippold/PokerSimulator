@@ -31,7 +31,7 @@ public class RoyalFlushEvaluator extends StraightFlushEvaluator {
             // A royal flush is a straight flush that leads with an ace.
             PokerHand straightFlush = super.evaluate(hand);
 
-            if (straightFlush != null && straightFlush.getRankCards().get(0) == CardValue.ACE) {
+            if (straightFlush != null && straightFlush.getRankCards().getFirst() == CardValue.ACE) {
                 // A straight flush with an Ace leading it. That's called a royal flush.
                 return new PokerHand(PokerHandRanking.ROYAL_FLUSH, Collections.emptyList(), Collections.emptyList());
             }

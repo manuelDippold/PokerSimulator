@@ -18,7 +18,6 @@ import java.util.stream.Collectors;
 public class GameResult {
     private List<Player> winners;
 
-    private final PokerHandComparator pokerHandComparator;
     private final SortedMap<PokerHand, List<Player>> ranking;
 
     /**
@@ -27,7 +26,7 @@ public class GameResult {
      * Reversed for highest scores first.
      */
     public GameResult() {
-        pokerHandComparator = new PokerHandComparator();
+        PokerHandComparator pokerHandComparator = new PokerHandComparator();
         ranking = new TreeMap<>(pokerHandComparator.reversed());
     }
 
@@ -37,7 +36,7 @@ public class GameResult {
      * @return the winner
      */
     public Player getWinner() {
-        if (winners == null || winners.isEmpty() || winners.size() > 1) {
+        if (winners == null || winners.size() != 1) {
             return null;
         }
 
@@ -74,8 +73,7 @@ public class GameResult {
         if (player != null && player.getPokerHand() != null) {
             PokerHand playerHand = player.getPokerHand();
 
-            if (!ranking.containsKey(playerHand)) // NOSONAR- computeIfAbsent doesn't fit
-            {
+            if (!ranking.containsKey(playerHand)) {
                 ranking.put(playerHand, new ArrayList<>());
             }
 
@@ -136,14 +134,16 @@ public class GameResult {
 
         while (cardIterator.hasNext()) {
             Card card = cardIterator.next();
-            builder.append(card.getCardValue().getCode() + card.getCardSuit().getCode());
+            builder.append(card.getCardValue().getCode())
+                    .append(card.getCardSuit().getCode());
 
             if (cardIterator.hasNext()) {
                 builder.append(" ");
             }
         }
 
-        builder.append("\t" + playerHand.toString());
+        builder.append("\t")
+                .append(playerHand.toString());
 
         return builder.toString();
     }
@@ -163,11 +163,7 @@ public class GameResult {
 
             List<String> names = winners.stream().map(Player::getName).collect(Collectors.toList());
 
-            StringBuilder sb = new StringBuilder("Players ");
-            sb.append(String.join(", ", names));
-            sb.append(" split the pot.");
-
-            return sb.toString();
+            return "Players " + String.join(", ", names) + " split the pot.";
         }
 
         return "";
