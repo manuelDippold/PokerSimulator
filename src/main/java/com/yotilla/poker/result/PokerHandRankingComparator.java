@@ -11,11 +11,9 @@ import com.yotilla.poker.util.NullSafeComparator;
  * @author Manuel
  *
  */
-public class PokerHandRankingComparator implements NullSafeComparator<PokerHandRanking>
-{
-	@Override
-	public int compareNonNull(PokerHandRanking oneRaking, PokerHandRanking otherRanking)
-	{
-		return Integer.compare(oneRaking.getScore(), otherRanking.getScore());
-	}
+public class PokerHandRankingComparator implements NullSafeComparator<PokerHandRanking> {
+    @Override
+    public int compareNonNull(PokerHandRanking oneRaking, PokerHandRanking otherRanking) {
+        return Integer.compare(oneRaking.getScore(), otherRanking.getScore());
+    }
 }

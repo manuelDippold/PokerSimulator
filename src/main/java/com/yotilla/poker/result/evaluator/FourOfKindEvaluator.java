@@ -13,19 +13,17 @@ import com.yotilla.poker.result.PokerHand;
  * @author Manuel
  *
  */
-public class FourOfKindEvaluator extends MultiplesEvaluator
-{
+public class FourOfKindEvaluator extends MultiplesEvaluator {
 
-	/**
-	 * Attempts to find four of a kind in this hand and returns an according result.
-	 *
-	 * @param hand hand to analyze
-	 * @return poker hand or null.
-	 * @throws HandExceededException in case of an error
-	 */
-	@Override
-	public PokerHand evaluate(HandOfCards hand)
-	{
-		return evaluateMultipleHand(hand, 4);
-	}
+    /**
+     * Attempts to find four of a kind in this hand and returns an according result.
+     *
+     * @param hand hand to analyze
+     * @return poker hand or null.
+     * @throws HandExceededException in case of an error
+     */
+    @Override
+    public PokerHand evaluate(HandOfCards hand) {
+        return evaluateMultipleHand(hand, 4);
+    }
 }

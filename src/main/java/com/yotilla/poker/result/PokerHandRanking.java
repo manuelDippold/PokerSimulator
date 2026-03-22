@@ -8,34 +8,31 @@ package com.yotilla.poker.result;
  * @author Manuel
  *
  */
-public enum PokerHandRanking
-{
-	HIGH_CARD(1),
-	ONE_PAIR(2),
-	TWO_PAIRS(3),
-	THREE_OF_A_KIND(4),
-	STRAIGHT(5),
-	FLUSH(6),
-	FULL_HOUSE(7),
-	FOUR_OF_A_KIND(8),
-	STRAIGHT_FLUSH(9),
-	ROYAL_FLUSH(10);
+public enum PokerHandRanking {
+    HIGH_CARD(1),
+    ONE_PAIR(2),
+    TWO_PAIRS(3),
+    THREE_OF_A_KIND(4),
+    STRAIGHT(5),
+    FLUSH(6),
+    FULL_HOUSE(7),
+    FOUR_OF_A_KIND(8),
+    STRAIGHT_FLUSH(9),
+    ROYAL_FLUSH(10);
 
-	private final int score;
+    private final int score;
 
-	/**
-	 * @param argScore
-	 */
-	private PokerHandRanking(int argScore)
-	{
-		score = argScore;
-	}
+    /**
+     * @param argScore
+     */
+    private PokerHandRanking(int argScore) {
+        score = argScore;
+    }
 
-	/**
-	 * @return the score
-	 */
-	public int getScore()
-	{
-		return score;
-	}
+    /**
+     * @return the score
+     */
+    public int getScore() {
+        return score;
+    }
 }
