@@ -11,108 +11,92 @@ import java.util.Objects;
  * @author Manuel
  *
  */
-public class Card implements Comparable<Card>
-{
-	private CardSuit cardSuit;
-	private CardValue cardValue;
+public class Card implements Comparable<Card> {
+    private final CardSuit cardSuit;
+    private final CardValue cardValue;
 
-	/**
-	 * @param argCardSuit  card suit, or color.
-	 * @param argCardValue card value
-	 */
-	public Card(CardSuit argCardSuit, CardValue argCardValue)
-	{
-		cardSuit = argCardSuit;
-		cardValue = argCardValue;
-	}
+    /**
+     * @param argCardSuit  card suit, or color.
+     * @param argCardValue card value
+     */
+    public Card(CardSuit argCardSuit, CardValue argCardValue) {
+        cardSuit = argCardSuit;
+        cardValue = argCardValue;
+    }
 
-	/**
-	 * @return the cardSuit
-	 */
-	public CardSuit getCardSuit()
-	{
-		return cardSuit;
-	}
+    /**
+     * @return the cardSuit
+     */
+    public CardSuit getCardSuit() {
+        return cardSuit;
+    }
 
-	/**
-	 * @return the cardValue
-	 */
-	public CardValue getCardValue()
-	{
-		return cardValue;
-	}
+    /**
+     * @return the cardValue
+     */
+    public CardValue getCardValue() {
+        return cardValue;
+    }
 
-	/**
-	 * Compares two cards based on their value. Returns: <br>
-	 * -1 if this card is worth less than otherCard <br>
-	 * 0 if this card is of equal value to otherCard <br>
-	 * 1 if this card is worth more than otherCard <br>
-	 * <br>
-	 * The suit does not play a role in the comparison, as it has no bearing on the
-	 * order.
-	 *
-	 * @param otherCard Card to compare this one to
-	 */
-	@Override
-	public int compareTo(Card otherCard)
-	{
-		// Even the smallest card wins when compared to nothing.
-		if (otherCard == null || otherCard.getCardValue() == null)
-		{
-			return 1;
-		}
+    /**
+     * Compares two cards based on their value. Returns: <br>
+     * -1 if this card is worth less than otherCard <br>
+     * 0 if this card is of equal value to otherCard <br>
+     * 1 if this card is worth more than otherCard <br>
+     * <br>
+     * The suit does not play a role in the comparison, as it has no bearing on the
+     * order.
+     *
+     * @param otherCard Card to compare this one to
+     */
+    @Override
+    public int compareTo(Card otherCard) {
+        // Even the smallest card wins when compared to nothing.
+        if (otherCard == null || otherCard.getCardValue() == null) {
+            return 1;
+        }
 
-		return Integer.compare(getCardValue().getNumericalValue(), otherCard.getCardValue().getNumericalValue());
-	}
+        return Integer.compare(getCardValue().getNumericalValue(), otherCard.getCardValue().getNumericalValue());
+    }
 
-	@Override
-	public int hashCode()
-	{
-		return Objects.hash(cardSuit, cardValue);
-	}
+    @Override
+    public int hashCode() {
+        return Objects.hash(cardSuit, cardValue);
+    }
 
-	/**
-	 * Two cards are equal when they are identical in both suit and value.
-	 */
-	@Override
-	public boolean equals(Object otherObject)
-	{
-		if (!(otherObject instanceof Card))
-		{
-			return false;
-		}
+    /**
+     * Two cards are equal when they are identical in both suit and value.
+     */
+    @Override
+    public boolean equals(Object otherObject) {
+        if (!(otherObject instanceof Card)) {
+            return false;
+        }
 
-		Card otherCard = (Card) otherObject;
+        Card otherCard = (Card) otherObject;
 
-		return otherCard.getCardSuit() == cardSuit && otherCard.getCardValue() == cardValue;
-	}
+        return otherCard.getCardSuit() == cardSuit && otherCard.getCardValue() == cardValue;
+    }
 
-	@Override
-	public String toString()
-	{
-		StringBuilder sb = new StringBuilder();
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
 
-		if (cardValue != null)
-		{
-			sb.append(cardValue.name());
-		}
-		else
-		{
-			sb.append("?");
-		}
+        if (cardValue != null) {
+            sb.append(cardValue.name());
+        } else {
+            sb.append("?");
+        }
 
-		sb.append(" of ");
+        sb.append(" of ");
 
-		if (cardSuit != null)
-		{
-			sb.append(cardSuit.name());
-		}
-		else
-		{
-			sb.append("?");
-		}
+        if (cardSuit != null) {
+            sb.append(cardSuit.name());
+        } else {
+            sb.append("?");
+        }
 
-		return sb.toString();
-	}
+        return sb.toString();
+    }
 
 }

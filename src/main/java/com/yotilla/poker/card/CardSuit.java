@@ -7,50 +7,44 @@ package com.yotilla.poker.card;
  * @author Manuel
  *
  */
-public enum CardSuit
-{
-	CLUBS("C"),
-	DIAMONDS("D"),
-	HEARTS("H"),
-	SPADES("S");
+public enum CardSuit {
+    CLUBS("C"),
+    DIAMONDS("D"),
+    HEARTS("H"),
+    SPADES("S");
 
-	private String code;
+    private final String code;
 
-	/**
-	 * Constructor.
-	 *
-	 * @param code code to set
-	 */
-	private CardSuit(String argCode)
-	{
-		code = argCode;
-	}
+    /**
+     * Constructor.
+     *
+     * @param code code to set
+     */
+    private CardSuit(String code) {
+        this.code = code;
+    }
 
-	/**
-	 * @return the code
-	 */
-	public String getCode()
-	{
-		return code;
-	}
+    /**
+     * @return the code
+     */
+    public String getCode() {
+        return code;
+    }
 
-	/**
-	 * Finds and returns the suit matching the provided code, if there is one. Case
-	 * insensitive, i.e. both 'c' and 'C' match Clubs.
-	 *
-	 * @param codeToMatch code to match
-	 * @return CardSuit, if found. Null, if not.
-	 */
-	public static CardSuit getByCode(final String codeToMatch)
-	{
-		for (CardSuit suit : values())
-		{
-			if (suit.getCode().equalsIgnoreCase(codeToMatch))
-			{
-				return suit;
-			}
-		}
+    /**
+     * Finds and returns the suit matching the provided code, if there is one. Case
+     * insensitive, i.e. both 'c' and 'C' match Clubs.
+     *
+     * @param codeToMatch code to match
+     * @return CardSuit, if found. Null, if not.
+     */
+    public static CardSuit getByCode(final String codeToMatch) {
+        for (CardSuit suit : values()) {
+            if (suit.getCode().equalsIgnoreCase(codeToMatch)) {
+                return suit;
+            }
+        }
 
-		return null;
-	}
+        return null;
+    }
 }

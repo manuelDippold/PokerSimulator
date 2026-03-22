@@ -1,5 +1,7 @@
 package com.yotilla.poker.error;
 
+import java.io.Serial;
+
 /**
  * Description:
  *
@@ -9,17 +11,16 @@ package com.yotilla.poker.error;
  * @author Manuel
  *
  */
-public class PokerParseException extends Exception
-{
-	private static final long serialVersionUID = 1551204055933202984L;
+public class PokerParseException extends Exception {
+    @Serial
+    private static final long serialVersionUID = 1551204055933202984L;
 
-	/**
-	 * Constructor
-	 *
-	 * @param argMessage error message
-	 */
-	public PokerParseException(final String argMessage)
-	{
-		super(argMessage);
-	}
+    /**
+     * Constructor
+     *
+     * @param argMessage error message
+     */
+    public PokerParseException(final String argMessage) {
+        super(argMessage);
+    }
 }

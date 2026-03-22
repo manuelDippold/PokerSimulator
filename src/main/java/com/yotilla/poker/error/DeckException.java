@@ -11,33 +11,26 @@ import com.yotilla.poker.card.Card;
  * @author Manuel
  *
  */
-public class DeckException extends Exception
-{
-	private static final long serialVersionUID = 6491164068858261591L;
+public class DeckException extends Exception {
+    private static final long serialVersionUID = 6491164068858261591L;
 
-	private final DeckExceptionCause deckExceptionCause;
+    private final DeckExceptionCause deckExceptionCause;
 
-	/**
-	 * @param argCause
-	 */
-	public DeckException(DeckExceptionCause argDeckExceptionCause)
-	{
-		super(argDeckExceptionCause.getErrorMessage());
-		deckExceptionCause = argDeckExceptionCause;
-	}
+    public DeckException(DeckExceptionCause argDeckExceptionCause) {
+        super(argDeckExceptionCause.getErrorMessage());
+        deckExceptionCause = argDeckExceptionCause;
+    }
 
-	public DeckException(final DeckExceptionCause argDeckExceptionCause, final Card culprit)
-	{
-		super(argDeckExceptionCause.getErrorMessage() + ": " + culprit);
-		deckExceptionCause = argDeckExceptionCause;
-	}
+    public DeckException(final DeckExceptionCause argDeckExceptionCause, final Card culprit) {
+        super(argDeckExceptionCause.getErrorMessage() + ": " + culprit);
+        deckExceptionCause = argDeckExceptionCause;
+    }
 
-	/**
-	 * @return the deckExceptionCause
-	 */
-	public DeckExceptionCause getDeckExceptionCause()
-	{
-		return deckExceptionCause;
-	}
+    /**
+     * @return the deckExceptionCause
+     */
+    public DeckExceptionCause getDeckExceptionCause() {
+        return deckExceptionCause;
+    }
 
 }
