@@ -5,6 +5,7 @@ import com.yotilla.poker.error.HandExceededException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Description: A hand of cards. <br>
@@ -58,7 +59,9 @@ public class HandOfCards {
      * @throws HandExceededException if cards contains more elements than allowed
      */
     public void setCards(List<Card> cards) throws HandExceededException {
-        if (cards != null && cards.size() > HAND_SIZE) {
+        Objects.requireNonNull(cards, "Cards must not be null.");
+
+        if (cards.size() > HAND_SIZE) {
             throw new HandExceededException(
                     String.format("A hand of cards must not hold more than %d cards.", HAND_SIZE));
         }

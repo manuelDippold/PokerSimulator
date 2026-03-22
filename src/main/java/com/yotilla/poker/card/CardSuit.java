@@ -32,8 +32,8 @@ public enum CardSuit {
     }
 
     /**
-     * Finds and returns the suit matching the provided code, if there is one. Case
-     * insensitive, i.e. both 'c' and 'C' match Clubs.
+     * Finds and returns the suit matching the provided code, if there is one.
+     * Case-insensitive, i.e. both 'c' and 'C' match Clubs.
      *
      * @param codeToMatch code to match
      * @return CardSuit, if found. Null, if not.

@@ -75,9 +75,7 @@ public interface PokerHandEvaluator {
      * @throws HandExceededException when the cards exceed the limit
      */
     default HandOfCards copyHandOfCards(final HandOfCards toCopy) {
-        if (toCopy == null) {
-            return null;
-        }
+        Objects.requireNonNull(toCopy, "Cannot copy a null hand.");
 
         HandOfCards copy = new HandOfCards();
 

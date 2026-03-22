@@ -15,7 +15,7 @@ import com.yotilla.poker.result.PokerHand;
 public class PairEvaluator extends MultiplesEvaluator {
 
     /**
-     * Determines whether or not this hand of cards contains at least one Pair. If
+     * Determines whether this hand of cards contains at least one Pair. If
      * it does, returns the card value of the pair. Null, if not.
      *
      * @param hand hand of cards we wish to check

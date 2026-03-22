@@ -110,8 +110,8 @@ class EvaluatorTest extends AbstractEvaluatorTest {
      * @throws HandExceededException error case
      */
     @Test
-    void copyIsNullSafe() throws HandExceededException {
-        HandOfCards result = new PairEvaluator().copyHandOfCards(null);
-        assertNull(result, "A copy of null should be null.");
+    void copyThrowsNPEIfNull() throws HandExceededException {
+        PairEvaluator sut = new PairEvaluator();
+        assertThrows(NullPointerException.class, () -> sut.copyHandOfCards(null));
     }
 }
