@@ -6,7 +6,6 @@ import com.yotilla.poker.card.HandOfCards;
 import com.yotilla.poker.result.PokerHand;
 import com.yotilla.poker.result.PokerHandRanking;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -24,7 +23,7 @@ public abstract class MultiplesEvaluator implements PokerHandEvaluator {
      * Attempts to find multiples (pairs, triples, fours) in this hand and returns an according result.
      * Does not work for two pairs, though.
      *
-     * @param handOfCards     hand of cards to analyze
+     * @param hand            hand of cards to analyze
      * @param desiredMultiple desired multiple we want. 2, 3 or 4
      * @return poker hand or null
      */
@@ -63,7 +62,7 @@ public abstract class MultiplesEvaluator implements PokerHandEvaluator {
 
                 }
 
-                return new PokerHand(ranking, Arrays.asList(multipleCardValue),
+                return new PokerHand(ranking, List.of(multipleCardValue),
                         cardsToSortedCardValues(remainingCards));
             }
         }

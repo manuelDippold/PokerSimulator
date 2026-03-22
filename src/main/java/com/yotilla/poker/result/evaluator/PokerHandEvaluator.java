@@ -8,8 +8,6 @@ import com.yotilla.poker.error.HandExceededException;
 import com.yotilla.poker.result.PokerHand;
 
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Description:
@@ -72,17 +70,14 @@ public interface PokerHandEvaluator {
      *
      * @param toCopy hand to copy
      * @return hand of cards
-     * @throws HandExceededException when the cards exceed the limit
      */
     default HandOfCards copyHandOfCards(final HandOfCards toCopy) {
         Objects.requireNonNull(toCopy, "Cannot copy a null hand.");
 
-        HandOfCards copy = new HandOfCards();
-
         try {
-            if (toCopy.getCards() == null) {
-                return copy;
-            } else if (toCopy.getAmountOfCards() == 0) {
+            HandOfCards copy = new HandOfCards();
+            
+            if (toCopy.getAmountOfCards() == 0) {
                 copy.setCards(Collections.emptyList());
                 return copy;
             }
@@ -90,12 +85,11 @@ public interface PokerHandEvaluator {
             for (Card existing : toCopy.getCards()) {
                 copy.addCard(existing);
             }
-        } catch (HandExceededException e) {
-            Logger.getGlobal().log(Level.SEVERE,
-                    String.format("An error occurred while copying a hand of cards: %s", e.getMessage()), e);
-        }
 
-        return copy;
+            return copy;
+        } catch (HandExceededException e) {
+            throw new IllegalStateException("Failed to copy hand of cards — this is a bug.", e);
+        }
     }
 
     /**
@@ -118,25 +112,19 @@ public interface PokerHandEvaluator {
             return hand.getCards();
         }
 
-        // Make a working copy of the hand and remove the cards that are part of the ranking.
-        HandOfCards workingCopy = null;
         try {
-            workingCopy = copyHandOfCards(hand);
+            HandOfCards workingCopy = copyHandOfCards(hand);
 
             if (!workingCopy.removeCards(partOfRanking)) {
-                throw new HandExceededException(String.format("Failed to remove cards from hand: %s", partOfRanking));
+                throw new IllegalStateException(
+                        String.format("Failed to remove ranking cards from hand — this is a bug: %s", partOfRanking));
             }
-        } catch (HandExceededException e) {
-            Logger.getGlobal().log(Level.SEVERE,
-                    String.format("An error occurred while deducing the kicker cards from a hand: %s", e.getMessage()),
-                    e);
-        }
 
-        // The remaining cards are the Kicker cards. Sort and return.
-        // Cards implement comparable, so we don't need a comparator here.
-        // Use reverse order so the highest Card comes first.
-        List<Card> kickerCards = workingCopy.getCards();
-        kickerCards.sort(Collections.reverseOrder());
-        return kickerCards;
+            List<Card> kickerCards = workingCopy.getCards();
+            kickerCards.sort(Collections.reverseOrder());
+            return kickerCards;
+        } catch (HandExceededException e) {
+            throw new IllegalStateException("Failed to determine kicker cards — this is a bug.", e);
+        }
     }
 }
