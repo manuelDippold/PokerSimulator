@@ -31,11 +31,11 @@ public class HandOfCards
 	}
 
 	/**
-	 * @return the cards
+	 * @return a defensive copy of the cards
 	 */
 	public List<Card> getCards()
 	{
-		return cards;
+		return cards != null ? new ArrayList<>(cards) : new ArrayList<>();
 	}
 
 	/**

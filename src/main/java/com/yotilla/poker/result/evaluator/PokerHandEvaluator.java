@@ -164,6 +164,6 @@ public interface PokerHandEvaluator
 		// Use reverse order so the highest Card comes first.
 		List<Card> kickerCards = workingCopy.getCards();
 		kickerCards.sort(Collections.reverseOrder());
-		return workingCopy.getCards();
+		return kickerCards;
 	}
 }
