@@ -1,8 +1,7 @@
 package com.yotilla.poker.resultevaluator;
 
-import org.junit.jupiter.api.BeforeEach;
-
 import com.yotilla.poker.card.DeckOfCards;
+import org.junit.jupiter.api.BeforeEach;
 
 /**
  * Description:
@@ -13,16 +12,14 @@ import com.yotilla.poker.card.DeckOfCards;
  * @author Manuel
  *
  */
-abstract class AbstractEvaluatorTest
-{
-	protected DeckOfCards deck;
+abstract class AbstractEvaluatorTest {
+    protected DeckOfCards deck;
 
-	/**
-	 * Spin up a fresh deck and dealer before each test
-	 */
-	@BeforeEach
-	protected void setUp()
-	{
-		deck = new DeckOfCards();
-	}
+    /**
+     * Spin up a fresh deck and dealer before each test
+     */
+    @BeforeEach
+    protected void setUp() {
+        deck = new DeckOfCards();
+    }
 }

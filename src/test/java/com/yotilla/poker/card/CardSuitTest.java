@@ -1,9 +1,9 @@
 package com.yotilla.poker.card;
 
+import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
-
-import org.junit.jupiter.api.Test;
 
 /**
  * Description:
@@ -14,46 +14,41 @@ import org.junit.jupiter.api.Test;
  * @author Manuel
  *
  */
-class CardSuitTest
-{
-	/**
-	 * capitalCMatchesClubs
-	 */
-	@Test
-	void capitalCMatchesClubs()
-	{
-		CardSuit suit = CardSuit.getByCode("C");
-		assertEquals(CardSuit.CLUBS, suit, "A 'C' should match the clubs.");
-	}
+class CardSuitTest {
+    /**
+     * capitalCMatchesClubs
+     */
+    @Test
+    void capitalCMatchesClubs() {
+        CardSuit suit = CardSuit.getByCode("C");
+        assertEquals(CardSuit.CLUBS, suit, "A 'C' should match the clubs.");
+    }
 
-	/**
-	 * lowerCaseHMatchesHearts()
-	 */
-	@Test
-	void lowerCaseHMatchesHearts()
-	{
-		CardSuit suit = CardSuit.getByCode("h");
-		assertEquals(CardSuit.HEARTS, suit, "A 'h' should match the hearts.");
-	}
+    /**
+     * lowerCaseHMatchesHearts()
+     */
+    @Test
+    void lowerCaseHMatchesHearts() {
+        CardSuit suit = CardSuit.getByCode("h");
+        assertEquals(CardSuit.HEARTS, suit, "A 'h' should match the hearts.");
+    }
 
-	/**
-	 * theLetterXDoesNotMatchAnySuit
-	 */
-	@Test
-	void theLetterXDoesNotMatchAnySuit()
-	{
-		CardSuit suit = CardSuit.getByCode("X");
-		assertNull(suit, "An 'X' should not match anything.");
-	}
+    /**
+     * theLetterXDoesNotMatchAnySuit
+     */
+    @Test
+    void theLetterXDoesNotMatchAnySuit() {
+        CardSuit suit = CardSuit.getByCode("X");
+        assertNull(suit, "An 'X' should not match anything.");
+    }
 
-	/**
-	 * getByCodeIsNullSafe
-	 */
-	@Test
-	void getByCodeIsNullSafe()
-	{
-		CardSuit suit = CardSuit.getByCode(null);
-		assertNull(suit,
-				"A null value should not match anything and the method should be able to handle it without an NPE.");
-	}
+    /**
+     * getByCodeIsNullSafe
+     */
+    @Test
+    void getByCodeIsNullSafe() {
+        CardSuit suit = CardSuit.getByCode(null);
+        assertNull(suit,
+                "A null value should not match anything and the method should be able to handle it without an NPE.");
+    }
 }
