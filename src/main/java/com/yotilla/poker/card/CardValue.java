@@ -7,6 +7,8 @@ package com.yotilla.poker.card;
  * @author Manuel
  *
  */
+import java.util.Objects;
+
 public enum CardValue {
     TWO("2", 2),
     THREE("3", 3),
@@ -55,13 +57,15 @@ public enum CardValue {
      * @return card value, if found. Null, if not.
      */
     public static CardValue getByCode(final String codeToMatch) {
+        Objects.requireNonNull(codeToMatch, "Card value code must not be null.");
+
         for (CardValue cardValue : values()) {
             if (cardValue.getCode().equalsIgnoreCase(codeToMatch)) {
                 return cardValue;
             }
         }
 
-        return null;
+        throw new IllegalArgumentException(String.format("No card value found for code: %s", codeToMatch));
     }
 
     /**
@@ -77,6 +81,7 @@ public enum CardValue {
             }
         }
 
-        return null;
+        throw new IllegalArgumentException(
+                String.format("No card value found for numerical value: %d", numericalValueToMatch));
     }
 }

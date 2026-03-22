@@ -3,7 +3,7 @@ package com.yotilla.poker.card;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Description:
@@ -33,22 +33,16 @@ class CardSuitTest {
         assertEquals(CardSuit.HEARTS, suit, "A 'h' should match the hearts.");
     }
 
-    /**
-     * theLetterXDoesNotMatchAnySuit
-     */
     @Test
-    void theLetterXDoesNotMatchAnySuit() {
-        CardSuit suit = CardSuit.getByCode("X");
-        assertNull(suit, "An 'X' should not match anything.");
+    void invalidInputThrowsIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> CardSuit.getByCode("x"));
+        assertThrows(IllegalArgumentException.class, () -> CardSuit.getByCode(""));
+        assertThrows(IllegalArgumentException.class, () -> CardSuit.getByCode("Bandierra rossa"));
     }
 
-    /**
-     * getByCodeIsNullSafe
-     */
+
     @Test
-    void getByCodeIsNullSafe() {
-        CardSuit suit = CardSuit.getByCode(null);
-        assertNull(suit,
-                "A null value should not match anything and the method should be able to handle it without an NPE.");
+    void getByCodeThrowsOnNull() {
+        assertThrows(NullPointerException.class, () -> CardSuit.getByCode(null));
     }
 }

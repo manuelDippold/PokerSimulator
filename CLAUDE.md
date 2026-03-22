@@ -68,6 +68,8 @@ com.yotilla.poker
 
 Prefer self-documenting code over comments. Variable and method names should express intent clearly enough that inline comments become unnecessary. A comment explaining *what* the code does is a signal to rename or extract — only use comments to explain *why* when the reasoning is non-obvious from the code itself.
 
+Do not add Javadoc to any new methods, test or otherwise. Method names should be expressive enough to make documentation redundant.
+
 ## Code Style
 
 - 4-space indentation, K&R braces
@@ -92,4 +94,4 @@ JUnit 5 + Mockito. Test classes mirror the main package structure under `src/tes
 
 `TestUtils` provides shared helpers: `getCardMock`, `getHandSpy`, `getPokerHandSpy`, and `getRandomCardMock` (uses a shared `Random` instance).
 
-**When creating tests:** Create the test class and empty test methods with descriptive names — never write the test body. The developer fills in the implementation. This avoids AI-generated tests that compile and pass but miss edge cases or assert the wrong thing.
+**When creating tests:** Create the test class and empty test methods with descriptive names — never write the test body. Always put `Assertions.fail("implement me!")` as the sole body so the test fails visibly until implemented. The developer fills in the implementation. This avoids AI-generated tests that compile and pass but miss edge cases or assert the wrong thing.

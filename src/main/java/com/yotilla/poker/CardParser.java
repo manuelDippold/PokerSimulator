@@ -47,13 +47,12 @@ public class CardParser {
                     "Parse error: A card must consist of two characters for suit and value. Faulty input: %s", input));
         }
 
-        CardValue value = CardValue.getByCode(input.substring(0, 1));
-        CardSuit suit = CardSuit.getByCode(input.substring(1, 2));
-
-        if (suit == null || value == null) {
+        try {
+            CardValue value = CardValue.getByCode(input.substring(0, 1));
+            CardSuit suit = CardSuit.getByCode(input.substring(1, 2));
+            return new Card(suit, value);
+        } catch (IllegalArgumentException e) {
             throw new PokerParseException(String.format("Parse error: Card not recognized: %s", input));
         }
-
-        return new Card(suit, value);
     }
 }

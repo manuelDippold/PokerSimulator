@@ -7,6 +7,8 @@ package com.yotilla.poker.card;
  * @author Manuel
  *
  */
+import java.util.Objects;
+
 public enum CardSuit {
     CLUBS("C"),
     DIAMONDS("D"),
@@ -39,12 +41,14 @@ public enum CardSuit {
      * @return CardSuit, if found. Null, if not.
      */
     public static CardSuit getByCode(final String codeToMatch) {
+        Objects.requireNonNull(codeToMatch, "Card suit code must not be null.");
+
         for (CardSuit suit : values()) {
             if (suit.getCode().equalsIgnoreCase(codeToMatch)) {
                 return suit;
             }
         }
 
-        return null;
+        throw new IllegalArgumentException(String.format("No card suit found for code: %s", codeToMatch));
     }
 }

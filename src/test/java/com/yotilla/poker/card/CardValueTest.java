@@ -3,7 +3,7 @@ package com.yotilla.poker.card;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Description:
@@ -36,22 +36,19 @@ class CardValueTest {
         assertEquals(CardValue.ACE, value, "The String \"a\" should match the Ace.");
     }
 
-    /**
-     * xMatchesNoCardValue
-     */
     @Test
-    void xMatchesNoCardValue() {
-        CardValue value = CardValue.getByCode("X");
-        assertNull(value, "The String \"X\" shouldn't match anything.");
+    void invalidInputThrowsIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> CardValue.getByCode("x"));
+        assertThrows(IllegalArgumentException.class, () -> CardValue.getByCode(""));
+        assertThrows(IllegalArgumentException.class, () -> CardValue.getByCode("Bandierra rossa"));
     }
 
     /**
      * getCardValueByCodeIsNullSafe
      */
     @Test
-    void getCardValueByCodeIsNullSafe() {
-        CardValue value = CardValue.getByCode(null);
-        assertNull(value, "Null shouldn't match anything and the function should be able to handle it without NPE.");
+    void getByCodeThrowsOnNull() {
+        assertThrows(NullPointerException.class, () -> CardValue.getByCode(null));
     }
 
     /**
@@ -67,17 +64,15 @@ class CardValueTest {
      * zeroMatchesNoCardValue
      */
     @Test
-    void zeroMatchesNoCardValue() {
-        CardValue value = CardValue.getByNumericalValue(0);
-        assertNull(value, "Zero shouldn't match anything.");
+    void zeroThrowsIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> CardValue.getByCode("0"));
     }
 
     /**
      * twentyMatchesNoCardValue
      */
     @Test
-    void twentyMatchesNoCardValue() {
-        CardValue value = CardValue.getByNumericalValue(20);
-        assertNull(value, "Twenty shouldn't match anything.");
+    void twentyThrowsIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, () -> CardValue.getByCode("20"));
     }
 }
