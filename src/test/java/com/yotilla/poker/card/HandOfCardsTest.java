@@ -142,7 +142,7 @@ class HandOfCardsTest
 
 		hand.addCards(aceOfSpades, aceOfHearts);
 
-		assertTrue(hand.getCards().containsAll(Arrays.asList(aceOfHearts, aceOfHearts)),
+		assertTrue(hand.getCards().containsAll(Arrays.asList(aceOfSpades, aceOfHearts)),
 				"We added two cards to this hand, both ought to be in there.");
 	}
 

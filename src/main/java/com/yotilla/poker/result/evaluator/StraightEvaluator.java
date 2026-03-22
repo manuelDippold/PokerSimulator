@@ -8,6 +8,7 @@ import com.yotilla.poker.result.PokerHandRanking;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -31,7 +32,7 @@ public class StraightEvaluator implements PokerHandEvaluator {
         if (hand != null) {
             // make a working copy of the hand and order it
             List<Card> workingCopy = copyHandOfCards(hand).getCards();
-            workingCopy.sort(null);
+            workingCopy.sort(Comparator.naturalOrder());
 
             // special case: If the hand contains an ace, it can be the starting or the ending card.
             accountForAceBeginningStraight(workingCopy);
@@ -40,7 +41,7 @@ public class StraightEvaluator implements PokerHandEvaluator {
             int highestvalue = 0;
             int runningCardValue = 0;
 
-            // See if we can step trough the ordered cards without skipping one.
+            // See if we can step through the ordered cards without skipping one.
             for (Card card : workingCopy) {
                 int thisCardValue = card.getCardValue().getNumericalValue();
 

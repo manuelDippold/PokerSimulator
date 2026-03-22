@@ -77,8 +77,8 @@ public class HandOfCards {
             return;
         }
 
-        for (int i = 0; i < toAdd.length; i++) {
-            addCard(toAdd[i]);
+        for (Card card : toAdd) {
+            addCard(card);
         }
 
     }
