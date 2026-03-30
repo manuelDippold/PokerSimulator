@@ -10,11 +10,11 @@ Issue list - perpetually updated during code quality improvements.
 6  | High     | PokerHandEvaluator             | copyHandOfCards() / getKickerCards(): exceptions swallowed                      | Fixed
 7  | High     | HandOfCards                    | setCards() stores passed-in list directly — no defensive copy                  | Fixed
 8  | Medium   | GameResult                     | addToRanks() recomputes winners as side effect on every call                    | Fixed
-9  | Medium   | GameResult                     | printPlayerAndHand() has chain of 5 nested null checks                         |
+9  | Medium   | GameResult                     | printPlayerAndHand() has chain of 5 nested null checks                         | Fixed
 10 | Medium   | Player                         | dealHand() throws IllegalArgumentException for a business rule violation        |
-11 | Smell    | PokerTable                     | print() makes two separate log.log() calls for one message                      |
+11 | Smell    | LogPrinter                     | print() makes two separate log.log() calls for one message                      |
 12 | Smell    | StraightFlushEvaluator         | Creates StraightEvaluator and FlushEvaluator as field instances rather than injecting |
 13 | Smell    | CardValue, CardSuit             | Lookup methods use manual for loops instead of streams                          |
 14 | Minor    | PokerHand                      | Redundant explicit super() call                                                 |
 15 | Minor    | DeckOfCards                    | shuffleDeck() copies to ArrayList, shuffles, clears, adds back — verbose        |
-16 | Medium   | Test suite                     | No end-to-end integration test: PokerTable.playPoker() is never exercised with real input through the full stack |
+16 | Medium   | Test suite                     | No end-to-end integration test: PokerTable.playPoker() is never exercised with real input through the full stack | Fixed

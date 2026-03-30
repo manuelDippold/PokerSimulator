@@ -74,7 +74,9 @@ Prefer self-documenting code over comments. Variable and method names should exp
 
 Do not add Javadoc to any new methods, test or otherwise. Method names should be expressive enough to make documentation redundant.
 
-## Code Style
+## Method Ordering
+
+Methods within a class are ordered top-down by call hierarchy: the caller comes first, then its callees, then their callees. Reading the file top to bottom should read like a newspaper — high-level intent first, details below. When extracting a helper, place it directly below the method that calls it.
 
 - 4-space indentation, K&R braces
 - `this.field = field` in constructors when parameter name matches field name

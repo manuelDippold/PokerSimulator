@@ -99,17 +99,8 @@ public class GameResult {
         return builder.toString();
     }
 
-    /**
-     * Print a players result that game:<br>
-     * rank Name Hand PokerHand
-     *
-     * @param rank   rank the player scored. One is highest
-     * @param player player to be printed
-     * @return String
-     */
     public String printPlayerAndHand(final int rank, final Player player) {
-        if (player == null || player.getPokerHand() == null || player.getPokerHand().ranking() == null
-                || player.getHand() == null || player.getHand().getCards() == null) {
+        if (!isPlayerPrintable(player)) {
             return "";
         }
 
@@ -133,6 +124,14 @@ public class GameResult {
                 .append(playerHand.toString());
 
         return builder.toString();
+    }
+
+    private boolean isPlayerPrintable(Player player) {
+        return player != null
+                && player.getPokerHand() != null
+                && player.getPokerHand().ranking() != null
+                && player.getHand() != null
+                && player.getHand().getCards() != null;
     }
 
     /**
