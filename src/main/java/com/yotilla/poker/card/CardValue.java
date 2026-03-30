@@ -1,5 +1,8 @@
 package com.yotilla.poker.card;
 
+import java.util.Arrays;
+import java.util.Objects;
+
 /**
  * Description: card values assigned with value and code <br>
  * Date: 20.12.2020
@@ -7,8 +10,6 @@ package com.yotilla.poker.card;
  * @author Manuel
  *
  */
-import java.util.Objects;
-
 public enum CardValue {
     TWO("2", 2),
     THREE("3", 3),
@@ -59,13 +60,10 @@ public enum CardValue {
     public static CardValue getByCode(final String codeToMatch) {
         Objects.requireNonNull(codeToMatch, "Card value code must not be null.");
 
-        for (CardValue cardValue : values()) {
-            if (cardValue.getCode().equalsIgnoreCase(codeToMatch)) {
-                return cardValue;
-            }
-        }
-
-        throw new IllegalArgumentException(String.format("No card value found for code: %s", codeToMatch));
+        return Arrays.stream(values())
+                .filter(cardValue -> cardValue.getCode().equalsIgnoreCase(codeToMatch))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException(String.format("No card value found for code: %s", codeToMatch)));
     }
 
     /**
@@ -75,13 +73,10 @@ public enum CardValue {
      * @return card value, if found. Null, if not.
      */
     public static CardValue getByNumericalValue(final int numericalValueToMatch) {
-        for (CardValue cardValue : values()) {
-            if (cardValue.getNumericalValue() == numericalValueToMatch) {
-                return cardValue;
-            }
-        }
-
-        throw new IllegalArgumentException(
-                String.format("No card value found for numerical value: %d", numericalValueToMatch));
+        return Arrays.stream(values())
+                .filter(cardValue -> cardValue.getNumericalValue() == numericalValueToMatch)
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException(
+                        String.format("No card value found for numerical value: %d", numericalValueToMatch)));
     }
 }
