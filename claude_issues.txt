@@ -11,8 +11,8 @@ Issue list - perpetually updated during code quality improvements.
 7  | High     | HandOfCards                    | setCards() stores passed-in list directly — no defensive copy                  | Fixed
 8  | Medium   | GameResult                     | addToRanks() recomputes winners as side effect on every call                    | Fixed
 9  | Medium   | GameResult                     | printPlayerAndHand() has chain of 5 nested null checks                         | Fixed
-10 | Medium   | Player                         | dealHand() throws IllegalArgumentException for a business rule violation        |
-11 | Smell    | LogPrinter                     | print() makes two separate log.log() calls for one message                      |
+10 | Medium   | Player                         | dealHand() throws IllegalArgumentException for a business rule violation        | Fixed
+11 | Smell    | LogPrinter                     | print() makes two separate log.log() calls for one message                      | Fixed
 12 | Smell    | StraightFlushEvaluator         | Creates StraightEvaluator and FlushEvaluator as field instances rather than injecting |
 13 | Smell    | CardValue, CardSuit             | Lookup methods use manual for loops instead of streams                          |
 14 | Minor    | PokerHand                      | Redundant explicit super() call                                                 |

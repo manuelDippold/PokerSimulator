@@ -15,7 +15,6 @@ public class LogPrinter {
     }
 
     public void print(final String message) {
-        log.log(Level.INFO, message);
-        log.log(Level.INFO, "\n");
+        log.log(Level.INFO, () -> message + "\n");
     }
 }
