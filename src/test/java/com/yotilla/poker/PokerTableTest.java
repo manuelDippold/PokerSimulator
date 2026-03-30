@@ -1,66 +1,104 @@
 package com.yotilla.poker;
 
-import java.util.logging.Logger;
-
+import com.yotilla.poker.card.CardValue;
+import com.yotilla.poker.card.DeckOfCards;
+import com.yotilla.poker.result.GameResult;
+import com.yotilla.poker.result.PokerHandRanking;
+import com.yotilla.poker.util.LogPrinter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InOrder;
-import org.mockito.Mockito;
+import org.mockito.ArgumentCaptor;
+import org.mockito.invocation.InvocationOnMock;
 
-import com.yotilla.poker.error.DeckException;
-import com.yotilla.poker.error.HandExceededException;
-import com.yotilla.poker.error.PokerParseException;
+import java.util.List;
+import java.util.logging.Logger;
 
-/**
- * Description:
- *
- * <br>
- * Date: 30.12.2020
- *
- * @author Manuel
- *
- */
-class PokerTableTest
-{
-	private Dealer dealerMock;
-	private Logger loggerMock;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.Mockito.*;
 
-	@BeforeEach
-	void setUp()
-	{
-		dealerMock = Mockito.mock(Dealer.class);
-		loggerMock = Mockito.mock(Logger.class);
-	}
+class PokerTableTest {
+    private PokerTable sut;
+    private Dealer dealer;
+    private LogPrinter logPrinter;
 
-	/**
-	 * pokerGameOrderIsRight
-	 *
-	 * @throws DeckException         class
-	 * @throws HandExceededException class
-	 * @throws PokerParseException   class
-	 */
-	@Test
-	void pokerGameOrderIsRight() throws PokerParseException, HandExceededException, DeckException
-	{
-		String[] hands = new String[] { "2D 9C AS AH AC", "3D 6D 7D TD QD", "2C 5C 7C 8S QH" };
+    @BeforeEach
+    void setUp() {
+        dealer = spy(new Dealer(new DeckOfCards()));
+        logPrinter = spy(new LogPrinter(Logger.getLogger("PokerTableTest")));
+        sut = new PokerTable(logPrinter, dealer);
+    }
 
-		PokerTable sut = new PokerTable(loggerMock, dealerMock);
+    @Test
+    void clearWinnerIsCorrectlyIdentified() {
+        String royalFlush = "JC AC KC QC TC";
+        String straight = "6C 5S 7H 9C 8D";
+        String twoPairs = "JH 7D JD AS 7S";
+        String fullHouse = "KD KH KS 2H 2C";
 
-		InOrder order = Mockito.inOrder(dealerMock);
+        GameResult[] capturedGameResults = new GameResult[1];
+        doAnswer(invocation ->
+                captureGameResult(invocation, capturedGameResults))
+                .when(dealer).determineGameResult(anyList());
 
-		sut.playPoker(hands);
+        sut.playPoker(new String[]{royalFlush, straight, twoPairs, fullHouse});
 
-		// three players parsed and evaluated
-		order.verify(dealerMock).parseInputAndDealHand(Mockito.anyString(), Mockito.any(Player.class));
-		order.verify(dealerMock).evaluatePlayerHand(Mockito.any(Player.class));
+        ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
+        verify(logPrinter, atLeastOnce()).print(captor.capture());
+        assertTrue(captor.getAllValues().stream().anyMatch(s -> s.contains("Player 1 wins.")));
 
-		order.verify(dealerMock).parseInputAndDealHand(Mockito.anyString(), Mockito.any(Player.class));
-		order.verify(dealerMock).evaluatePlayerHand(Mockito.any(Player.class));
+        GameResult result = capturedGameResults[0];
+        Player winner = result.getWinner();
+        assertEquals("Player 1", winner.getName());
+        assertEquals(PokerHandRanking.ROYAL_FLUSH, winner.getPokerHand().ranking());
+    }
 
-		order.verify(dealerMock).parseInputAndDealHand(Mockito.anyString(), Mockito.any(Player.class));
-		order.verify(dealerMock).evaluatePlayerHand(Mockito.any(Player.class));
+    private static GameResult captureGameResult(InvocationOnMock invocation, GameResult[] capturedGameResults) throws Throwable {
+        GameResult result = (GameResult) invocation.callRealMethod();
+        capturedGameResults[0] = result;
+        return result;
+    }
 
-		// result
-		order.verify(dealerMock).determineGameResult(Mockito.anyList());
-	}
+    @Test
+    void tiedHandsResultInSplitPot() {
+        String straight = "6C 5S 7H 9C 8D";
+        String straight2 = "6H 5C 7D 9H 8S";
+        String twoPairs = "JH 3D JD AS 3S";
+        String onePair = "QH 4D 2D AC 4S";
+
+
+        GameResult[] capturedGameResults = new GameResult[1];
+        doAnswer(invocation ->
+                captureGameResult(invocation, capturedGameResults))
+                .when(dealer).determineGameResult(anyList());
+
+        sut.playPoker(new String[]{straight, straight2, twoPairs, onePair});
+
+        ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
+        verify(logPrinter, atLeastOnce()).print(captor.capture());
+        assertTrue(captor.getAllValues().stream().anyMatch(s -> s.contains("Players Player 1, Player 2 split the pot.")));
+
+
+        GameResult result = capturedGameResults[0];
+        Player winner = result.getWinner();
+        assertNull(winner);
+
+        List<Player> winners = result.getPotSplit();
+
+        Player winner1 = winners.getFirst();
+        Player winner2 = winners.getLast();
+
+        assertEquals(PokerHandRanking.STRAIGHT, winner1.getPokerHand().ranking());
+        assertEquals(CardValue.NINE, winner1.getPokerHand().rankCards().getFirst());
+
+
+        assertEquals(PokerHandRanking.STRAIGHT, winner2.getPokerHand().ranking());
+        assertEquals(CardValue.NINE, winner2.getPokerHand().rankCards().getFirst());
+    }
+
+    @Test
+    void nullInputIsHandledGracefully() {
+        assertDoesNotThrow(() -> sut.playPoker(null));
+        verify(logPrinter).print("No hands have been dealt. Quitting.");
+    }
 }

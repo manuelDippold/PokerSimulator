@@ -11,11 +11,9 @@ import com.yotilla.poker.util.NullSafeComparator;
  * @author Manuel
  *
  */
-public class CardValueComparator implements NullSafeComparator<CardValue>
-{
-	@Override
-	public int compareNonNull(CardValue one, CardValue other)
-	{
-		return Integer.compare(one.getNumericalValue(), other.getNumericalValue());
-	}
+public class CardValueComparator implements NullSafeComparator<CardValue> {
+    @Override
+    public int compareNonNull(CardValue one, CardValue other) {
+        return Integer.compare(one.getNumericalValue(), other.getNumericalValue());
+    }
 }

@@ -15,35 +15,29 @@ import java.util.logging.SimpleFormatter;
  * @author Manuel
  *
  */
-public class PureLogFormatter extends SimpleFormatter
-{
+public class PureLogFormatter extends SimpleFormatter {
 
-	@Override
-	public String getHead(Handler argH)
-	{
-		if (argH.getLevel().intValue() >= Level.WARNING.intValue())
-		{
-			return super.getHead(argH);
-		}
+    @Override
+    public String getHead(Handler h) {
+        if (h.getLevel().intValue() >= Level.WARNING.intValue()) {
+            return super.getHead(h);
+        }
 
-		return "";
-	}
+        return "";
+    }
 
-	@Override
-	public String getTail(Handler argH)
-	{
-		if (argH.getLevel().intValue() >= Level.WARNING.intValue())
-		{
-			return super.getTail(argH);
-		}
+    @Override
+    public String getTail(Handler h) {
+        if (h.getLevel().intValue() >= Level.WARNING.intValue()) {
+            return super.getTail(h);
+        }
 
-		return "";
-	}
+        return "";
+    }
 
-	@Override
-	public String format(LogRecord argRecord)
-	{
-		return argRecord.getMessage();
-	}
+    @Override
+    public String format(LogRecord logRecord) {
+        return logRecord.getMessage();
+    }
 
 }

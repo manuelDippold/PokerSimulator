@@ -1,20 +1,13 @@
 package com.yotilla.poker.result.evaluator;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import com.yotilla.poker.card.Card;
 import com.yotilla.poker.card.CardValue;
 import com.yotilla.poker.card.CardValueComparator;
 import com.yotilla.poker.card.HandOfCards;
 import com.yotilla.poker.error.HandExceededException;
 import com.yotilla.poker.result.PokerHand;
+
+import java.util.*;
 
 /**
  * Description:
@@ -25,145 +18,113 @@ import com.yotilla.poker.result.PokerHand;
  * @author Manuel
  *
  */
-public interface PokerHandEvaluator
-{
-	/**
-	 * Attempt to find a PokerHand in this HandOfCards and return the according result.<br>
-	 * If the hand we're looking for is not present, return null.
-	 *
-	 * @param hand Hand of cards provided
-	 * @return PokerHand as a result. Null, if nothing was found.
-	 */
-	public PokerHand evaluate(final HandOfCards hand);
+public interface PokerHandEvaluator {
+    /**
+     * Attempt to find a PokerHand in this HandOfCards and return the according result.<br>
+     * If the hand we're looking for is not present, return null.
+     *
+     * @param hand Hand of cards provided
+     * @return PokerHand as a result. Null, if nothing was found.
+     */
+    public PokerHand evaluate(final HandOfCards hand);
 
-	/**
-	 * transform a list of cards to their values. Sorts them descending, i.e. highest first.
-	 *
-	 * @param cards cards of interest
-	 * @return List of card values. Sorted in descending order.
-	 */
-	default List<CardValue> cardsToSortedCardValues(final List<Card> cards)
-	{
-		if (cards == null)
-		{
-			return Collections.emptyList();
-		}
+    /**
+     * transform a list of cards to their values. Sorts them descending, i.e. highest first.
+     *
+     * @param cards cards of interest
+     * @return List of card values. Sorted in descending order.
+     */
+    default List<CardValue> cardsToSortedCardValues(final List<Card> cards) {
+        if (cards == null) {
+            return Collections.emptyList();
+        }
 
-		List<CardValue> values = new ArrayList<>();
-		cards.stream().forEach(c -> values.add(c.getCardValue()));
+        List<CardValue> values = new ArrayList<>();
+        cards.stream().forEach(c -> values.add(c.cardValue()));
 
-		// sort, highest first
-		values.sort(new CardValueComparator().reversed());
+        // sort, highest first
+        values.sort(new CardValueComparator().reversed());
 
-		return values;
-	}
+        return values;
+    }
 
-	/**
-	 * Transform a list of cards to sorted list of their unique values
-	 *
-	 * @param cards cards to analyze
-	 * @return list of cards.
-	 */
-	default List<CardValue> cardsToSortedSetList(final List<Card> cards)
-	{
-		List<CardValue> valueList = cardsToSortedCardValues(cards);
+    /**
+     * Transform a list of cards to sorted list of their unique values
+     *
+     * @param cards cards to analyze
+     * @return list of cards.
+     */
+    default List<CardValue> cardsToSortedSetList(final List<Card> cards) {
+        List<CardValue> valueList = cardsToSortedCardValues(cards);
 
-		// Linked hash set to remember the order.
-		Set<CardValue> cardValues = new LinkedHashSet<>(valueList);
+        // Linked hash set to remember the order.
+        Set<CardValue> cardValues = new LinkedHashSet<>(valueList);
 
-		List<CardValue> ret = new ArrayList<>();
-		ret.addAll(cardValues);
-		return ret;
-	}
+        List<CardValue> ret = new ArrayList<>();
+        ret.addAll(cardValues);
+        return ret;
+    }
 
-	/**
-	 * Make a quick copy of a hand of cards
-	 *
-	 * @param toCopy hand to copy
-	 * @return hand of cards
-	 * @throws HandExceededException when the cards exceed the limit
-	 */
-	default HandOfCards copyHandOfCards(final HandOfCards toCopy)
-	{
-		if (toCopy == null)
-		{
-			return null;
-		}
+    /**
+     * Make a quick copy of a hand of cards
+     *
+     * @param toCopy hand to copy
+     * @return hand of cards
+     */
+    default HandOfCards copyHandOfCards(final HandOfCards toCopy) {
+        Objects.requireNonNull(toCopy, "Cannot copy a null hand.");
 
-		HandOfCards copy = new HandOfCards();
+        try {
+            HandOfCards copy = new HandOfCards();
 
-		try
-		{
-			if (toCopy.getCards() == null)
-			{
-				return copy;
-			}
-			else if (toCopy.getAmountOfCards() == 0)
-			{
-				copy.setCards(Collections.emptyList());
-				return copy;
-			}
+            if (toCopy.getAmountOfCards() == 0) {
+                copy.setCards(Collections.emptyList());
+                return copy;
+            }
 
-			for (Card existing : toCopy.getCards())
-			{
-				copy.addCard(new Card(existing.getCardSuit(), existing.getCardValue()));
-			}
-		}
-		catch (HandExceededException e)
-		{
-			Logger.getGlobal().log(Level.SEVERE,
-					String.format("An error occurred while copying a hand of cards: %s", e.getMessage()), e);
-		}
+            for (Card existing : toCopy.getCards()) {
+                copy.addCard(existing);
+            }
 
-		return copy;
-	}
+            return copy;
+        } catch (HandExceededException e) {
+            throw new IllegalStateException("Failed to copy hand of cards — this is a bug.", e);
+        }
+    }
 
-	/**
-	 * Get the cards of this hand that can serve as kickers, i.e. that are not part
-	 * of the ranking.<br>
-	 * For example, in a hand with one pair, the three remaining cards will be
-	 * returned if the pair is in {@code partOfRanking}<br>
-	 * The kicker cards will be sorted in descending order, i.e. highest first.
-	 *
-	 * @param hand          the hand
-	 * @param partOfRanking cards that are part of the ranking
-	 * @return List of cards.
-	 */
-	default List<Card> getKickerCards(final HandOfCards hand, final Collection<Card> partOfRanking)
-	{
-		if (hand == null)
-		{
-			return Collections.emptyList();
-		}
+    /**
+     * Get the cards of this hand that can serve as kickers, i.e. that are not part
+     * of the ranking.<br>
+     * For example, in a hand with one pair, the three remaining cards will be
+     * returned if the pair is in {@code partOfRanking}<br>
+     * The kicker cards will be sorted in descending order, i.e. highest first.
+     *
+     * @param hand          the hand
+     * @param partOfRanking cards that are part of the ranking
+     * @return List of cards.
+     */
+    default List<Card> getKickerCards(final HandOfCards hand, final Collection<Card> partOfRanking) {
+        if (hand == null) {
+            return Collections.emptyList();
+        }
 
-		if (partOfRanking == null)
-		{
-			return hand.getCards();
-		}
+        if (partOfRanking == null) {
+            return hand.getCards();
+        }
 
-		// Make a working copy of the hand and remove the cards that are part of the ranking.
-		HandOfCards workingCopy = null;
-		try
-		{
-			workingCopy = copyHandOfCards(hand);
+        try {
+            HandOfCards workingCopy = copyHandOfCards(hand);
 
-			if (!workingCopy.removeCards(partOfRanking))
-			{
-				throw new HandExceededException(String.format("Failed to remove cards from hand: %s", partOfRanking));
-			}
-		}
-		catch (HandExceededException e)
-		{
-			Logger.getGlobal().log(Level.SEVERE,
-					String.format("An error occurred while deducing the kicker cards from a hand: %s", e.getMessage()),
-					e);
-		}
+            if (!workingCopy.removeCards(partOfRanking)) {
+                throw new IllegalStateException(
+                        String.format("Failed to remove ranking cards from hand — this is a bug: %s", partOfRanking));
+            }
 
-		// The remaining cards are the Kicker cards. Sort and return.
-		// Cards implement comparable, so we don't need a comparator here.
-		// Use reverse order so the highest Card comes first.
-		List<Card> kickerCards = workingCopy.getCards();
-		kickerCards.sort(Collections.reverseOrder());
-		return workingCopy.getCards();
-	}
+            List<Card> kickerCards = workingCopy.getCards();
+            kickerCards.sort(Collections.reverseOrder());
+            return kickerCards;
+        } catch (HandExceededException e) {
+            throw new IllegalStateException("Failed to determine kicker cards — this is a bug.", e);
+        }
+    }
 }

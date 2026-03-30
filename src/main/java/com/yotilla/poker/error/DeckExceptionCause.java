@@ -9,26 +9,18 @@ package com.yotilla.poker.error;
  * @author Manuel
  *
  */
-public enum DeckExceptionCause
-{
-	CARD_ALREADY_DRAWN("A card was already drawn from the deck"),
-	DECK_IS_EMPTY("The deck is empty, no more cards can be drawn");
+public enum DeckExceptionCause {
+    CARD_ALREADY_DRAWN("A card was already drawn from the deck"),
+    DECK_IS_EMPTY("The deck is empty, no more cards can be drawn");
 
-	private final String errorMessage;
+    private final String errorMessage;
 
-	/**
-	 * @param argErrorMessage
-	 */
-	private DeckExceptionCause(String argErrorMessage)
-	{
-		errorMessage = argErrorMessage;
-	}
 
-	/**
-	 * @return the errorMessage
-	 */
-	public String getErrorMessage()
-	{
-		return errorMessage;
-	}
+    private DeckExceptionCause(String errorMessage) {
+        this.errorMessage = errorMessage;
+    }
+
+    public String getErrorMessage() {
+        return errorMessage;
+    }
 }

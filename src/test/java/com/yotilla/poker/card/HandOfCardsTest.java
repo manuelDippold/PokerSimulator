@@ -1,18 +1,14 @@
 package com.yotilla.poker.card;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import com.yotilla.poker.TestUtils;
+import com.yotilla.poker.error.HandExceededException;
+import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.junit.jupiter.api.Test;
-
-import com.yotilla.poker.TestUtils;
-import com.yotilla.poker.error.HandExceededException;
+import static com.yotilla.poker.card.HandOfCards.HAND_SIZE;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Description: Test hand mechanics <br>
@@ -21,226 +17,218 @@ import com.yotilla.poker.error.HandExceededException;
  * @author Manuel
  *
  */
-class HandOfCardsTest
-{
-	/**
-	 * Create a list filled with randomly - generated cards
-	 *
-	 * @param argAmountOfCards amount of cards to be added to the list. Positive
-	 *                         integer expected, negatives will be assumed zero.
-	 * @return list of card mocks
-	 */
-	private List<Card> getRandomCardMocksAsList(final int argAmountOfCards)
-	{
-		List<Card> mocks = new LinkedList<>();
+class HandOfCardsTest {
+    /**
+     * Create a list filled with randomly - generated cards
+     *
+     * @param amountOfCards amount of cards to be added to the list. Positive
+     *                      integer expected, negatives will be assumed zero.
+     * @return list of card mocks
+     */
+    private List<Card> getRandomCardMocksAsList(int amountOfCards) {
+        List<Card> mocks = new LinkedList<>();
 
-		int amountOfCards = argAmountOfCards;
+        if (amountOfCards < 0) {
+            amountOfCards = 0;
+        }
 
-		if (amountOfCards < 0)
-		{
-			amountOfCards = 0;
-		}
+        for (int i = 0; i < amountOfCards; i++) {
+            mocks.add(TestUtils.getRandomCardMock());
+        }
 
-		for (int i = 0; i < amountOfCards; i++)
-		{
-			mocks.add(TestUtils.getRandomCardMock());
-		}
+        return mocks;
+    }
 
-		return mocks;
-	}
+    /**
+     * Create an array filled with randomly - generated cards
+     *
+     * @param amountOfCards amount of cards to be added to the array. Positive
+     *                      integer expected, negatives will be assumed zero.
+     * @return array of card mocks
+     */
+    private Card[] getRandomCardMocksAsArray(int amountOfCards) {
+        if (amountOfCards < 0) {
+            amountOfCards = 0;
+        }
 
-	/**
-	 * Create an array filled with randomly - generated cards
-	 *
-	 * @param argAmountOfCards amount of cards to be added to the array. Positive
-	 *                         integer expected, negatives will be assumed zero.
-	 * @return array of card mocks
-	 */
-	private Card[] getRandomCardMocksAsArray(final int argAmountOfCards)
-	{
-		int amountOfCards = argAmountOfCards;
+        Card[] mocks = new Card[amountOfCards];
 
-		if (amountOfCards < 0)
-		{
-			amountOfCards = 0;
-		}
+        for (int i = 0; i < amountOfCards; i++) {
+            mocks[i] = TestUtils.getRandomCardMock();
+        }
 
-		Card[] mocks = new Card[amountOfCards];
+        return mocks;
+    }
 
-		for (int i = 0; i < amountOfCards; i++)
-		{
-			mocks[i] = TestUtils.getRandomCardMock();
-		}
+    /**
+     * addCardsCreatesCardsListIfThereIsNone
+     *
+     * @throws HandExceededException error case
+     */
+    @Test
+    void addCardsCreatesCardsListIfThereIsNone() throws HandExceededException {
+        // Create a new, empty hand
+        HandOfCards hand = new HandOfCards();
 
-		return mocks;
-	}
+        // Assert that this hand is indeed empty.
+        assertTrue(hand.getCards().isEmpty(), "New hand, shouldn't hold any cards");
 
-	/**
-	 * addCardsCreatesCardsListIfThereIsNone
-	 *
-	 * @throws HandExceededException error case
-	 */
-	@Test
-	void addCardsCreatesCardsListIfThereIsNone() throws HandExceededException
-	{
-		// Create a new, empty hand
-		HandOfCards hand = new HandOfCards();
+        // Add a card.
+        hand.addCards(TestUtils.getCardMock(CardSuit.SPADES, CardValue.SEVEN));
 
-		// Assert that this hand is indeed empty.
-		assertTrue(hand.getCards().isEmpty(), "New hand, shouldn't hold any cards");
+        // An internal list has been created to store the cards.
+        assertNotNull(hand.getCards(), "We added a card, there ought to be a collection of cards now.");
+    }
 
-		// Add a card.
-		hand.addCards(TestUtils.getCardMock(CardSuit.SPADES, CardValue.SEVEN));
+    /**
+     * addCardsActuallyAddsACard
+     *
+     * @throws HandExceededException error case
+     */
+    @Test
+    void addCardActuallyAddsACard() throws HandExceededException {
+        HandOfCards hand = new HandOfCards();
 
-		// An internal list has been created to store the cards.
-		assertNotNull(hand.getCards(), "We added a card, there ought to be a collection of cards now.");
-	}
+        Card aceOfSpades = TestUtils.getCardMock(CardSuit.SPADES, CardValue.ACE);
+        hand.addCard(aceOfSpades);
 
-	/**
-	 * addCardsActuallyAddsACard
-	 *
-	 * @throws HandExceededException error case
-	 */
-	@Test
-	void addCardActuallyAddsACard() throws HandExceededException
-	{
-		HandOfCards hand = new HandOfCards();
+        assertTrue(hand.getCards().contains(aceOfSpades));
+    }
 
-		Card aceOfSpades = TestUtils.getCardMock(CardSuit.SPADES, CardValue.ACE);
-		hand.addCard(aceOfSpades);
+    /**
+     * addCardIsNullSafe
+     *
+     * @throws HandExceededException error case
+     */
+    @Test
+    void addCardIsNullSafe() throws HandExceededException {
+        // Create a new hand and assure it is empty
+        HandOfCards hand = new HandOfCards();
+        assertTrue(hand.getCards().isEmpty(), "New hand, shouldn't hold any cards");
 
-		assertTrue(hand.getCards().contains(aceOfSpades));
-	}
+        // add nothing
+        hand.addCard(null);
 
-	/**
-	 * addCardIsNullSafe
-	 *
-	 * @throws HandExceededException error case
-	 */
-	@Test
-	void addCardIsNullSafe() throws HandExceededException
-	{
-		// Create a new hand and assure it is empty
-		HandOfCards hand = new HandOfCards();
-		assertTrue(hand.getCards().isEmpty(), "New hand, shouldn't hold any cards");
+        // assure hand is still empty
+        assertTrue(hand.getCards().isEmpty(), "Adding null as a card doesn't make sense, hand ought to ignore that.");
+    }
 
-		// add nothing
-		hand.addCard(null);
+    /**
+     * addCardsActuallyAddsMultipleCards
+     *
+     * @throws HandExceededException error case
+     */
+    @Test
+    void addCardsActuallyAddsMultipleCards() throws HandExceededException {
+        HandOfCards hand = new HandOfCards();
 
-		// assure hand is still empty
-		assertTrue(hand.getCards().isEmpty(), "Adding null as a card doesn't make sense, hand ought to ignore that.");
-	}
+        Card aceOfSpades = TestUtils.getCardMock(CardSuit.SPADES, CardValue.ACE);
+        Card aceOfHearts = TestUtils.getCardMock(CardSuit.HEARTS, CardValue.ACE);
 
-	/**
-	 * addCardsActuallyAddsMultipleCards
-	 *
-	 * @throws HandExceededException error case
-	 */
-	@Test
-	void addCardsActuallyAddsMultipleCards() throws HandExceededException
-	{
-		HandOfCards hand = new HandOfCards();
+        hand.addCards(aceOfSpades, aceOfHearts);
 
-		Card aceOfSpades = TestUtils.getCardMock(CardSuit.SPADES, CardValue.ACE);
-		Card aceOfHearts = TestUtils.getCardMock(CardSuit.HEARTS, CardValue.ACE);
+        assertTrue(hand.getCards().containsAll(List.of(aceOfSpades, aceOfHearts)),
+                "We added two cards to this hand, both ought to be in there.");
+    }
 
-		hand.addCards(aceOfSpades, aceOfHearts);
+    /**
+     * addCardsIsNullsafe
+     *
+     * @throws HandExceededException in case of an error
+     */
+    @Test
+    void addCardsIsNullsafe() throws HandExceededException {
+        HandOfCards hand = new HandOfCards();
+        hand.addCards((Card[]) null);
 
-		assertTrue(hand.getCards().containsAll(Arrays.asList(aceOfHearts, aceOfHearts)),
-				"We added two cards to this hand, both ought to be in there.");
-	}
+        assertTrue(hand.getCards().isEmpty(), "Adding null as cards doesn't make sense, hand ought to ignore that.");
+    }
 
-	/**
-	 * addCardsIsNullsafe
-	 *
-	 * @throws HandExceededException in case of an error
-	 */
-	@Test
-	void addCardsIsNullsafe() throws HandExceededException
-	{
-		HandOfCards hand = new HandOfCards();
-		hand.addCards((Card[]) null);
+    /**
+     * settingSixCardsThrowsException
+     */
+    @Test
+    void settingSixCardsThrowsException() {
+        HandOfCards hand = new HandOfCards();
 
-		assertTrue(hand.getCards().isEmpty(), "Adding null as cards doesn't make sense, hand ought to ignore that.");
-	}
+        List<Card> tooManyCards = getRandomCardMocksAsList(HAND_SIZE + 1);
 
-	/**
-	 * settingSixCardsThrowsException
-	 */
-	@Test
-	void settingSixCardsThrowsException()
-	{
-		HandOfCards hand = new HandOfCards();
+        assertThrows(HandExceededException.class, () -> {
+            hand.setCards(tooManyCards);
+        }, "Setting the hand to six cards ought to throw an exception.");
+    }
 
-		List<Card> tooManyCards = getRandomCardMocksAsList(HandOfCards.HAND_SIZE + 1);
+    /**
+     * settingFiveCardsWorksFine
+     *
+     * @throws HandExceededException error case
+     */
+    @Test
+    void settingFiveCardsWorksFine() throws HandExceededException {
+        HandOfCards hand = new HandOfCards();
+        List<Card> maximumCards = getRandomCardMocksAsList(HAND_SIZE);
 
-		assertThrows(HandExceededException.class, () -> {
-			hand.setCards(tooManyCards);
-		}, "Setting the hand to six cards ought to throw an exception.");
-	}
+        hand.setCards(maximumCards);
 
-	/**
-	 * settingFiveCardsWorksFine
-	 *
-	 * @throws HandExceededException error case
-	 */
-	@Test
-	void settingFiveCardsWorksFine() throws HandExceededException
-	{
-		HandOfCards hand = new HandOfCards();
-		List<Card> maximumCards = getRandomCardMocksAsList(HandOfCards.HAND_SIZE);
+        assertEquals(maximumCards, hand.getCards(), "Adding this many cards shouldn't be a problem.");
+    }
 
-		hand.setCards(maximumCards);
+    /**
+     * addingSixCardsAtOnceThrowsException
+     */
+    @Test
+    void addingSixCardsAtOnceThrowsException() {
+        HandOfCards hand = new HandOfCards();
 
-		assertEquals(maximumCards, hand.getCards(), "Adding this many cards shouldn't be a problem.");
-	}
+        Card[] tooManyCards = getRandomCardMocksAsArray(HAND_SIZE + 1);
 
-	/**
-	 * addingSixCardsAtOnceThrowsException
-	 */
-	@Test
-	void addingSixCardsAtOnceThrowsException()
-	{
-		HandOfCards hand = new HandOfCards();
+        assertThrows(HandExceededException.class, () -> {
+            hand.addCards(tooManyCards);
+        }, "Setting the hand to six cards ought to throw an exception.");
+    }
 
-		Card[] tooManyCards = getRandomCardMocksAsArray(HandOfCards.HAND_SIZE + 1);
+    /**
+     * addingFiveCardsAtOnceIsFine
+     *
+     * @throws HandExceededException error case
+     */
+    @Test
+    void addingFiveCardsAtOnceIsFine() throws HandExceededException {
+        HandOfCards hand = new HandOfCards();
+        Card[] maximumCards = getRandomCardMocksAsArray(HAND_SIZE);
 
-		assertThrows(HandExceededException.class, () -> {
-			hand.addCards(tooManyCards);
-		}, "Setting the hand to six cards ought to throw an exception.");
-	}
+        hand.addCards(maximumCards);
+        assertEquals(maximumCards.length, hand.getCards().size(), "Adding this many cards shouldn't be a problem.");
+    }
 
-	/**
-	 * addingFiveCardsAtOnceIsFine
-	 *
-	 * @throws HandExceededException error case
-	 */
-	@Test
-	void addingFiveCardsAtOnceIsFine() throws HandExceededException
-	{
-		HandOfCards hand = new HandOfCards();
-		Card[] maximumCards = getRandomCardMocksAsArray(HandOfCards.HAND_SIZE);
+    @Test
+    void setCardsDoesNotExposeInternalListToCallerMutation() throws HandExceededException {
+        HandOfCards hand = new HandOfCards();
+        hand.addCards(getRandomCardMocksAsArray(3));
 
-		hand.addCards(maximumCards);
-		assertEquals(maximumCards.length, hand.getCards().size(), "Adding this many cards shouldn't be a problem.");
-	}
+        List<Card> cards = hand.getCards();
 
-	/**
-	 * addingTheSixthCardThrowsException
-	 *
-	 * @throws HandExceededException first error, then expected
-	 */
-	@Test
-	void addingTheSixthCardThrowsException() throws HandExceededException
-	{
-		// Create a hand and add five cards
-		HandOfCards hand = new HandOfCards();
-		Card[] maximumCards = getRandomCardMocksAsArray(HandOfCards.HAND_SIZE);
+        hand.addCards(getRandomCardMocksAsArray(1));
 
-		hand.addCards(maximumCards);
+        assertEquals(3, cards.size());
+        assertEquals(4, hand.getCards().size());
+    }
 
-		assertThrows(HandExceededException.class, () -> {
-			hand.addCard(TestUtils.getRandomCardMock());
-		}, "Adding a sixth card to this hand should have thrown an exception.");
-	}
+    /**
+     * addingTheSixthCardThrowsException
+     *
+     * @throws HandExceededException first error, then expected
+     */
+    @Test
+    void addingTheSixthCardThrowsException() throws HandExceededException {
+        // Create a hand and add five cards
+        HandOfCards hand = new HandOfCards();
+        Card[] maximumCards = getRandomCardMocksAsArray(HAND_SIZE);
+
+        hand.addCards(maximumCards);
+
+        assertThrows(HandExceededException.class, () -> {
+            hand.addCard(TestUtils.getRandomCardMock());
+        }, "Adding a sixth card to this hand should have thrown an exception.");
+    }
 }

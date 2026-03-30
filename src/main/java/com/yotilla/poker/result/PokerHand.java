@@ -1,9 +1,9 @@
 package com.yotilla.poker.result;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import com.yotilla.poker.card.CardValue;
+import org.apache.commons.collections4.CollectionUtils;
+
+import java.util.List;
 
 /**
  * Description: This data structure resembles the result after the dealer
@@ -17,75 +17,36 @@ import com.yotilla.poker.card.CardValue;
  * Date: 27.12.2020
  *
  * @author Manuel
- *
+ * <p>
+ * <p>
+ * * @param ranking     The overall ranking of the result: Pair, Straight etc.
+ * * @param rankCards   The rank cards of the result in descending order.
+ * * @param kickerCards Kicker cards in descending order. A
  */
-public class PokerHand
-{
-	private final PokerHandRanking ranking;
-	private final List<CardValue> rankCards;
-	private final List<CardValue> kickerCards;
+public record PokerHand(PokerHandRanking ranking, List<CardValue> rankCards, List<CardValue> kickerCards) {
+    
 
-	/**
-	 * @param argRanking     The overall ranking of the result: Pair, Straight etc.
-	 * @param argRankCards   The rank cards of the result in descending order.
-	 * @param argKickerCards Kicker cards in descending order. A
-	 */
-	public PokerHand(PokerHandRanking argRanking, List<CardValue> argRankCards, List<CardValue> argKickerCards)
-	{
-		super();
-		ranking = argRanking;
-		rankCards = argRankCards;
-		kickerCards = argKickerCards;
-	}
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder(ranking().name());
 
-	/**
-	 * @return the ranking
-	 */
-	public PokerHandRanking getRanking()
-	{
-		return ranking;
-	}
+        if (!CollectionUtils.isEmpty(rankCards())) {
+            sb.append(", ");
 
-	/**
-	 * @return the rankCards
-	 */
-	public List<CardValue> getRankCards()
-	{
-		return rankCards;
-	}
+            List<String> rankCardNames = rankCards().stream().map(CardValue::name).toList();
+            sb.append(String.join(", ", rankCardNames));
+        }
 
-	/**
-	 * @return the kickerCards
-	 */
-	public List<CardValue> getKickerCards()
-	{
-		return kickerCards;
-	}
+        sb.append(".");
 
-	@Override
-	public String toString()
-	{
-		StringBuilder sb = new StringBuilder(getRanking().name());
+        if (kickerCards() != null && !kickerCards().isEmpty()) {
+            sb.append(" Kickers: ");
 
-		if (getRankCards() != null)
-		{
-			sb.append(", ");
+            List<String> kickerCardNames = kickerCards().stream().map(CardValue::name).toList();
+            sb.append(String.join(", ", kickerCardNames));
+            sb.append(".");
+        }
 
-			List<String> rankCardNames = getRankCards().stream().map(CardValue::name).collect(Collectors.toList());
-			sb.append(String.join(", ", rankCardNames));
-		}
-
-		sb.append(".");
-
-		if (getKickerCards() != null && !getKickerCards().isEmpty())
-		{
-			sb.append(" Kickers: ");
-
-			List<String> kickerCardNames = getKickerCards().stream().map(CardValue::name).collect(Collectors.toList());
-			sb.append(String.join(", ", kickerCardNames));
-			sb.append(".");
-		}
-
-		return sb.toString();
-	}
+        return sb.toString();
+    }
 }
