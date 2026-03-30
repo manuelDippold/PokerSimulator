@@ -1,6 +1,7 @@
 package com.yotilla.poker.result;
 
 import com.yotilla.poker.card.CardValue;
+import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -54,10 +55,10 @@ public record PokerHand(PokerHandRanking ranking, List<CardValue> rankCards, Lis
     public String toString() {
         StringBuilder sb = new StringBuilder(ranking().name());
 
-        if (rankCards() != null) {
+        if (!CollectionUtils.isEmpty(rankCards())) {
             sb.append(", ");
 
-            List<String> rankCardNames = rankCards().stream().map(CardValue::name).collect(Collectors.toList());
+            List<String> rankCardNames = rankCards().stream().map(CardValue::name).toList();
             sb.append(String.join(", ", rankCardNames));
         }
 
