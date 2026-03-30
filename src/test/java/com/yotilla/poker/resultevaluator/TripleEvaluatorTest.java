@@ -54,11 +54,11 @@ class TripleEvaluatorTest extends AbstractEvaluatorTest {
 
         PokerHand result = new TripleEvaluator().evaluate(hand);
 
-        assertEquals(PokerHandRanking.THREE_OF_A_KIND, result.getRanking(), "Three of a kind is the expected result.");
-        assertEquals(CardValue.TEN, result.getRankCards().get(0), "A triple of tens, result should reflect the ten.");
+        assertEquals(PokerHandRanking.THREE_OF_A_KIND, result.ranking(), "Three of a kind is the expected result.");
+        assertEquals(CardValue.TEN, result.rankCards().get(0), "A triple of tens, result should reflect the ten.");
 
-        assertEquals(CardValue.FIVE, result.getKickerCards().get(0), "First kicker card should be a five.");
-        assertEquals(CardValue.TWO, result.getKickerCards().get(1), "Second kicker card should be a two.");
+        assertEquals(CardValue.FIVE, result.kickerCards().get(0), "First kicker card should be a five.");
+        assertEquals(CardValue.TWO, result.kickerCards().get(1), "Second kicker card should be a two.");
     }
 
     /**

@@ -77,10 +77,10 @@ class StraightEvaluatorTest extends AbstractEvaluatorTest {
 
         PokerHand result = new StraightEvaluator().evaluate(hand);
 
-        assertEquals(PokerHandRanking.STRAIGHT, result.getRanking(), "This should result in a straight");
-        assertEquals(CardValue.SEVEN, result.getRankCards().get(0),
+        assertEquals(PokerHandRanking.STRAIGHT, result.ranking(), "This should result in a straight");
+        assertEquals(CardValue.SEVEN, result.rankCards().get(0),
                 "Straight is lead by a seven, result should reflect that.");
-        assertTrue(result.getKickerCards().isEmpty(), "A Straight does not leave room for kicker cards.");
+        assertTrue(result.kickerCards().isEmpty(), "A Straight does not leave room for kicker cards.");
     }
 
     /**
@@ -102,10 +102,10 @@ class StraightEvaluatorTest extends AbstractEvaluatorTest {
 
         PokerHand result = new StraightEvaluator().evaluate(hand);
 
-        assertEquals(PokerHandRanking.STRAIGHT, result.getRanking(), "This should result in a straight");
-        assertEquals(CardValue.ACE, result.getRankCards().get(0),
+        assertEquals(PokerHandRanking.STRAIGHT, result.ranking(), "This should result in a straight");
+        assertEquals(CardValue.ACE, result.rankCards().get(0),
                 "Straight is lead by an Ace, result should reflect that.");
-        assertTrue(result.getKickerCards().isEmpty(), "A Straight does not leave room for kicker cards.");
+        assertTrue(result.kickerCards().isEmpty(), "A Straight does not leave room for kicker cards.");
     }
 
     /**
@@ -148,9 +148,9 @@ class StraightEvaluatorTest extends AbstractEvaluatorTest {
 
         PokerHand result = new StraightEvaluator().evaluate(hand);
 
-        assertEquals(PokerHandRanking.STRAIGHT, result.getRanking(), "This should result in a straight");
-        assertEquals(CardValue.FIVE, result.getRankCards().get(0),
+        assertEquals(PokerHandRanking.STRAIGHT, result.ranking(), "This should result in a straight");
+        assertEquals(CardValue.FIVE, result.rankCards().get(0),
                 "Straight contains an Ace, but this in this special case, the ace acts as 'one', so the ranking card is the five. The result should reflect that.");
-        assertTrue(result.getKickerCards().isEmpty(), "A Straight does not leave room for kicker cards.");
+        assertTrue(result.kickerCards().isEmpty(), "A Straight does not leave room for kicker cards.");
     }
 }

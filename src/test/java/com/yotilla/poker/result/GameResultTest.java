@@ -16,6 +16,9 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import static com.yotilla.poker.card.CardSuit.*;
+import static com.yotilla.poker.card.CardValue.*;
+import static com.yotilla.poker.result.PokerHandRanking.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -30,7 +33,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class GameResultTest {
     private static final String PLAYER_JANE_NAME = "Jane Doe";
     private static final String PLAYER_JOHN_NAME = "John Doe";
-    private static final String PLAYER_PETE_NAME = "Peter Pumnpkin";
+    private static final String PLAYER_PETE_NAME = "Peter Pumpkin";
     private static final String PLAYER_OLAF_NAME = "Olaf Original";
 
     // subject under test
@@ -90,7 +93,7 @@ class GameResultTest {
      */
     @Test
     void addFirstPlayerToRanks() {
-        PokerHand janesHand = TestUtils.getPokerHandSpy(PokerHandRanking.STRAIGHT, Arrays.asList(CardValue.KING),
+        PokerHand janesHand = TestUtils.getPokerHand(STRAIGHT, Arrays.asList(KING),
                 Collections.emptyList());
         Mockito.when(playerJaneMock.getPokerHand()).thenReturn(janesHand);
 
@@ -109,7 +112,7 @@ class GameResultTest {
      */
     @Test
     void addTwoPlayersWithEqualResultToRanks() {
-        PokerHand janesHand = TestUtils.getPokerHandSpy(PokerHandRanking.STRAIGHT, Arrays.asList(CardValue.KING),
+        PokerHand janesHand = TestUtils.getPokerHand(STRAIGHT, Arrays.asList(KING),
                 Collections.emptyList());
         Mockito.when(playerJaneMock.getPokerHand()).thenReturn(janesHand);
         Mockito.when(playerJohnMock.getPokerHand()).thenReturn(janesHand);
@@ -137,20 +140,20 @@ class GameResultTest {
      */
     @Test
     void addFourPlayers() {
-        PokerHand janesHand = TestUtils.getPokerHandSpy(PokerHandRanking.STRAIGHT, Arrays.asList(CardValue.KING),
+        PokerHand janesHand = TestUtils.getPokerHand(STRAIGHT, Arrays.asList(KING),
                 Collections.emptyList());
         Mockito.when(playerJaneMock.getPokerHand()).thenReturn(janesHand);
 
-        PokerHand johnsHand = TestUtils.getPokerHandSpy(PokerHandRanking.FULL_HOUSE,
-                Arrays.asList(CardValue.JACK, CardValue.NINE), Collections.emptyList());
+        PokerHand johnsHand = TestUtils.getPokerHand(FULL_HOUSE,
+                Arrays.asList(JACK, NINE), Collections.emptyList());
         Mockito.when(playerJohnMock.getPokerHand()).thenReturn(johnsHand);
 
-        PokerHand petesHand = TestUtils.getPokerHandSpy(PokerHandRanking.FOUR_OF_A_KIND, Arrays.asList(CardValue.FOUR),
-                Arrays.asList(CardValue.TWO));
+        PokerHand petesHand = TestUtils.getPokerHand(FOUR_OF_A_KIND, Arrays.asList(FOUR),
+                Arrays.asList(TWO));
         Mockito.when(playerPeteMock.getPokerHand()).thenReturn(petesHand);
 
-        PokerHand olafsHand = TestUtils.getPokerHandSpy(PokerHandRanking.TWO_PAIRS,
-                Arrays.asList(CardValue.SIX, CardValue.FIVE), Arrays.asList(CardValue.THREE));
+        PokerHand olafsHand = TestUtils.getPokerHand(TWO_PAIRS,
+                Arrays.asList(SIX, FIVE), Arrays.asList(THREE));
         Mockito.when(playerOlafMock.getPokerHand()).thenReturn(olafsHand);
 
         sut.addToRanks(playerJaneMock);
@@ -185,7 +188,7 @@ class GameResultTest {
         result = sut.printPlayerAndHand(-1, playerJaneMock);
         assertEquals(empty, result, "No hand ought to return an empty String.");
 
-        PokerHand handResult = Mockito.mock(PokerHand.class);
+        PokerHand handResult = new PokerHand(null, null, null);
         Mockito.when(playerJaneMock.getPokerHand()).thenReturn(handResult);
         result = sut.printPlayerAndHand(-1, playerJaneMock);
         assertEquals(empty, result, "No cards in their hand ought to return an empty String.");
@@ -194,7 +197,7 @@ class GameResultTest {
         result = sut.printPlayerAndHand(-1, playerJaneMock);
         assertEquals(empty, result, "Hand with no rank hand ought to return an empty String.");
 
-        PokerHand pokerHandMock = Mockito.mock(PokerHand.class);
+        PokerHand pokerHandMock = new PokerHand(null, null, null);
         Mockito.when(playerJaneMock.getPokerHand()).thenReturn(pokerHandMock);
         Mockito.when(playerJaneMock.getHand()).thenReturn(null);
         result = sut.printPlayerAndHand(-1, playerJaneMock);
@@ -216,15 +219,15 @@ class GameResultTest {
     void printPlayerHandStraight() throws HandExceededException, PokerParseException {
         // Straight
         List<CardValue> values = Arrays.asList(
-                CardValue.EIGHT, CardValue.NINE, CardValue.TEN, CardValue.JACK, CardValue.QUEEN);
+                EIGHT, NINE, TEN, JACK, QUEEN);
         List<CardSuit> suits = Arrays.asList(
-                CardSuit.HEARTS, CardSuit.SPADES, CardSuit.SPADES, CardSuit.DIAMONDS, CardSuit.DIAMONDS);
+                HEARTS, SPADES, SPADES, DIAMONDS, DIAMONDS);
         HandOfCards hand = TestUtils.getHandSpy(suits, values);
 
         Mockito.when(playerJohnMock.getHand()).thenReturn(hand);
 
-        PokerHand pokerHand = TestUtils.getPokerHandSpy(
-                PokerHandRanking.STRAIGHT, Arrays.asList(CardValue.QUEEN), Collections.emptyList());
+        PokerHand pokerHand = TestUtils.getPokerHand(
+                STRAIGHT, Arrays.asList(QUEEN), Collections.emptyList());
 
         Mockito.when(playerJohnMock.getPokerHand()).thenReturn(pokerHand);
 
@@ -248,15 +251,15 @@ class GameResultTest {
     void printPlayerFullHouse() throws HandExceededException, PokerParseException {
         // Full House
         List<CardValue> values = Arrays.asList(
-                CardValue.TEN, CardValue.TEN, CardValue.FIVE, CardValue.FIVE, CardValue.FIVE);
+                TEN, TEN, FIVE, FIVE, FIVE);
         List<CardSuit> suits = Arrays.asList(
-                CardSuit.HEARTS, CardSuit.SPADES, CardSuit.SPADES, CardSuit.DIAMONDS, CardSuit.HEARTS);
+                HEARTS, SPADES, SPADES, DIAMONDS, HEARTS);
 
         HandOfCards hand = TestUtils.getHandSpy(suits, values);
         Mockito.when(playerJohnMock.getHand()).thenReturn(hand);
 
-        PokerHand pokerHand = TestUtils.getPokerHandSpy(
-                PokerHandRanking.FULL_HOUSE, Arrays.asList(CardValue.FIVE, CardValue.TEN), Collections.emptyList());
+        PokerHand pokerHand = TestUtils.getPokerHand(
+                FULL_HOUSE, Arrays.asList(FIVE, TEN), Collections.emptyList());
 
         Mockito.when(playerJohnMock.getPokerHand()).thenReturn(pokerHand);
 
@@ -275,17 +278,17 @@ class GameResultTest {
     @Test
     void printPlayerOnePair() throws HandExceededException, PokerParseException {
         // One Pair
-        List<CardValue> values = Arrays.asList(CardValue.TEN, CardValue.TEN, CardValue.THREE, CardValue.FIVE,
-                CardValue.QUEEN);
-        List<CardSuit> suits = Arrays.asList(CardSuit.HEARTS, CardSuit.SPADES, CardSuit.SPADES, CardSuit.DIAMONDS,
-                CardSuit.HEARTS);
+        List<CardValue> values = Arrays.asList(TEN, TEN, THREE, FIVE,
+                QUEEN);
+        List<CardSuit> suits = Arrays.asList(HEARTS, SPADES, SPADES, DIAMONDS,
+                HEARTS);
 
         HandOfCards hand = TestUtils.getHandSpy(suits, values);
         Mockito.when(playerJohnMock.getHand()).thenReturn(hand);
 
-        PokerHand pokerHand = TestUtils.getPokerHandSpy(
-                PokerHandRanking.ONE_PAIR, Arrays.asList(CardValue.TEN),
-                Arrays.asList(CardValue.QUEEN, CardValue.FIVE, CardValue.THREE));
+        PokerHand pokerHand = TestUtils.getPokerHand(
+                ONE_PAIR, Arrays.asList(TEN),
+                Arrays.asList(QUEEN, FIVE, THREE));
 
         Mockito.when(playerJohnMock.getPokerHand()).thenReturn(pokerHand);
 
@@ -304,28 +307,28 @@ class GameResultTest {
     void addTwoPlayersToRanksAndPrint() throws HandExceededException {
         // Straight
         List<CardValue> janesValues = Arrays.asList(
-                CardValue.EIGHT, CardValue.NINE, CardValue.TEN, CardValue.JACK, CardValue.QUEEN);
+                EIGHT, NINE, TEN, JACK, QUEEN);
         List<CardSuit> janesSuits = Arrays.asList(
-                CardSuit.HEARTS, CardSuit.SPADES, CardSuit.SPADES, CardSuit.DIAMONDS, CardSuit.DIAMONDS);
+                HEARTS, SPADES, SPADES, DIAMONDS, DIAMONDS);
 
         HandOfCards janesCards = TestUtils.getHandSpy(janesSuits, janesValues);
         Mockito.when(playerJaneMock.getHand()).thenReturn(janesCards);
 
-        PokerHand janesHand = TestUtils.getPokerHandSpy(PokerHandRanking.STRAIGHT, Arrays.asList(CardValue.KING),
+        PokerHand janesHand = TestUtils.getPokerHand(STRAIGHT, Arrays.asList(KING),
                 Collections.emptyList());
         Mockito.when(playerJaneMock.getPokerHand()).thenReturn(janesHand);
 
         // Full House
         List<CardValue> johnsValues = Arrays.asList(
-                CardValue.TEN, CardValue.TEN, CardValue.FIVE, CardValue.FIVE, CardValue.FIVE);
+                TEN, TEN, FIVE, FIVE, FIVE);
         List<CardSuit> johnsSuits = Arrays.asList(
-                CardSuit.HEARTS, CardSuit.SPADES, CardSuit.SPADES, CardSuit.DIAMONDS, CardSuit.HEARTS);
+                HEARTS, SPADES, SPADES, DIAMONDS, HEARTS);
 
         HandOfCards johnsCards = TestUtils.getHandSpy(johnsSuits, johnsValues);
         Mockito.when(playerJohnMock.getHand()).thenReturn(johnsCards);
 
-        PokerHand johnsHand = TestUtils.getPokerHandSpy(PokerHandRanking.FULL_HOUSE,
-                Arrays.asList(CardValue.JACK, CardValue.NINE), Collections.emptyList());
+        PokerHand johnsHand = TestUtils.getPokerHand(FULL_HOUSE,
+                Arrays.asList(JACK, NINE), Collections.emptyList());
         Mockito.when(playerJohnMock.getPokerHand()).thenReturn(johnsHand);
 
         sut.addToRanks(playerJaneMock);

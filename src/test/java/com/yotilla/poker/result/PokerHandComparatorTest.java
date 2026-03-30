@@ -27,7 +27,7 @@ class PokerHandComparatorTest {
      */
     @Test
     void comparatorIsNullSafe() {
-        PokerHand hand = TestUtils.getPokerHandSpy(null, null, null);
+        PokerHand hand = TestUtils.getPokerHand(null, null, null);
 
         int result = comp.compare(null, null);
         assertSame(0, result, "Null and null are equal.");
@@ -44,8 +44,8 @@ class PokerHandComparatorTest {
      */
     @Test
     void twoPairsRankHigherThanOnePair() {
-        PokerHand onePair = TestUtils.getPokerHandSpy(PokerHandRanking.ONE_PAIR, null, null);
-        PokerHand twoPairs = TestUtils.getPokerHandSpy(PokerHandRanking.TWO_PAIRS, null, null);
+        PokerHand onePair = TestUtils.getPokerHand(PokerHandRanking.ONE_PAIR, null, null);
+        PokerHand twoPairs = TestUtils.getPokerHand(PokerHandRanking.TWO_PAIRS, null, null);
 
         int result = comp.compare(twoPairs, onePair);
         assertTrue(result > 0, "Two pairs must rank above one pair.");
@@ -56,8 +56,8 @@ class PokerHandComparatorTest {
      */
     @Test
     void straightScoresLessThanFullHouse() {
-        PokerHand straight = TestUtils.getPokerHandSpy(PokerHandRanking.STRAIGHT, null, null);
-        PokerHand fullHouse = TestUtils.getPokerHandSpy(PokerHandRanking.FULL_HOUSE, null, null);
+        PokerHand straight = TestUtils.getPokerHand(PokerHandRanking.STRAIGHT, null, null);
+        PokerHand fullHouse = TestUtils.getPokerHand(PokerHandRanking.FULL_HOUSE, null, null);
 
         int result = comp.compare(straight, fullHouse);
         assertTrue(result < 0, "A straight must rank below a full house.");
@@ -68,8 +68,8 @@ class PokerHandComparatorTest {
      */
     @Test
     void onePairTieIsBrokenByRankCard() {
-        PokerHand pairOfFives = TestUtils.getPokerHandSpy(PokerHandRanking.ONE_PAIR, Arrays.asList(CardValue.FIVE), null);
-        PokerHand pairOfKings = TestUtils.getPokerHandSpy(PokerHandRanking.ONE_PAIR, Arrays.asList(CardValue.KING), null);
+        PokerHand pairOfFives = TestUtils.getPokerHand(PokerHandRanking.ONE_PAIR, Arrays.asList(CardValue.FIVE), null);
+        PokerHand pairOfKings = TestUtils.getPokerHand(PokerHandRanking.ONE_PAIR, Arrays.asList(CardValue.KING), null);
 
         int result = comp.compare(pairOfKings, pairOfFives);
         assertTrue(result > 0, "A pair of Kings beats a pair of fives.");
@@ -80,9 +80,9 @@ class PokerHandComparatorTest {
      */
     @Test
     void twoPairTieCanBeBrokenByFirstRankCard() {
-        PokerHand pairOfKingsAndPairOfFours = TestUtils.getPokerHandSpy(PokerHandRanking.TWO_PAIRS,
+        PokerHand pairOfKingsAndPairOfFours = TestUtils.getPokerHand(PokerHandRanking.TWO_PAIRS,
                 Arrays.asList(CardValue.KING, CardValue.FOUR), null);
-        PokerHand pairOfQueensAndPairOfJacks = TestUtils.getPokerHandSpy(PokerHandRanking.TWO_PAIRS,
+        PokerHand pairOfQueensAndPairOfJacks = TestUtils.getPokerHand(PokerHandRanking.TWO_PAIRS,
                 Arrays.asList(CardValue.QUEEN, CardValue.JACK), null);
 
         int result = comp.compare(pairOfKingsAndPairOfFours, pairOfQueensAndPairOfJacks);
@@ -94,9 +94,9 @@ class PokerHandComparatorTest {
      */
     @Test
     void twoPairTieCanBeBrokenBySecondRankCard() {
-        PokerHand pairOfKingsAndPairOfJacks = TestUtils.getPokerHandSpy(PokerHandRanking.TWO_PAIRS,
+        PokerHand pairOfKingsAndPairOfJacks = TestUtils.getPokerHand(PokerHandRanking.TWO_PAIRS,
                 Arrays.asList(CardValue.KING, CardValue.JACK), null);
-        PokerHand pairOfKingsAndPairOfFours = TestUtils.getPokerHandSpy(PokerHandRanking.TWO_PAIRS,
+        PokerHand pairOfKingsAndPairOfFours = TestUtils.getPokerHand(PokerHandRanking.TWO_PAIRS,
                 Arrays.asList(CardValue.KING, CardValue.FOUR), null);
 
         int result = comp.compare(pairOfKingsAndPairOfJacks, pairOfKingsAndPairOfFours);
@@ -110,10 +110,10 @@ class PokerHandComparatorTest {
     void twoPairTieCanBeBrokenByKickerCard() {
         // Assume the very unlikely case that two players managed to draw the exact same
         // pairs. The only difference is in the high card.
-        PokerHand minorPairOfKingsAndPairOfJacks = TestUtils.getPokerHandSpy(PokerHandRanking.TWO_PAIRS,
+        PokerHand minorPairOfKingsAndPairOfJacks = TestUtils.getPokerHand(PokerHandRanking.TWO_PAIRS,
                 Arrays.asList(CardValue.KING, CardValue.JACK), Arrays.asList(CardValue.FOUR));
 
-        PokerHand majorPairOfKingsAndPairOfJacks = TestUtils.getPokerHandSpy(PokerHandRanking.TWO_PAIRS,
+        PokerHand majorPairOfKingsAndPairOfJacks = TestUtils.getPokerHand(PokerHandRanking.TWO_PAIRS,
                 Arrays.asList(CardValue.KING, CardValue.JACK), Arrays.asList(CardValue.TEN));
 
         int result = comp.compare(minorPairOfKingsAndPairOfJacks, majorPairOfKingsAndPairOfJacks);
@@ -126,8 +126,8 @@ class PokerHandComparatorTest {
      */
     @Test
     void voidOfAnyRankingsHighCardWins() {
-        PokerHand justQueenHighCard = TestUtils.getPokerHandSpy(null, null, Arrays.asList(CardValue.QUEEN));
-        PokerHand justNineHighCard = TestUtils.getPokerHandSpy(null, null, Arrays.asList(CardValue.NINE));
+        PokerHand justQueenHighCard = TestUtils.getPokerHand(null, null, Arrays.asList(CardValue.QUEEN));
+        PokerHand justNineHighCard = TestUtils.getPokerHand(null, null, Arrays.asList(CardValue.NINE));
 
         int result = comp.compare(justQueenHighCard, justNineHighCard);
         assertTrue(result > 0, "High cards only, queen should beat nine.");
@@ -138,8 +138,8 @@ class PokerHandComparatorTest {
      */
     @Test
     void straightTieCanBeBrokenByTopCard() {
-        PokerHand kingStraight = TestUtils.getPokerHandSpy(PokerHandRanking.STRAIGHT, Arrays.asList(CardValue.KING), null);
-        PokerHand nineStraight = TestUtils.getPokerHandSpy(PokerHandRanking.STRAIGHT, Arrays.asList(CardValue.NINE), null);
+        PokerHand kingStraight = TestUtils.getPokerHand(PokerHandRanking.STRAIGHT, Arrays.asList(CardValue.KING), null);
+        PokerHand nineStraight = TestUtils.getPokerHand(PokerHandRanking.STRAIGHT, Arrays.asList(CardValue.NINE), null);
 
         int result = comp.compare(nineStraight, kingStraight);
         assertTrue(result < 0, "A straight lead by a nine should lose to a straight lead by a King.");
@@ -152,9 +152,9 @@ class PokerHandComparatorTest {
     void fullHouseTieCanBeBrokenBySeconRankCard() {
         // This combination is currently impossible to happen at this feature status,
         // but if we ever play, say, Texas hold'em, this can be the case.
-        PokerHand fullHouseQueensAndNines = TestUtils.getPokerHandSpy(PokerHandRanking.FULL_HOUSE,
+        PokerHand fullHouseQueensAndNines = TestUtils.getPokerHand(PokerHandRanking.FULL_HOUSE,
                 Arrays.asList(CardValue.QUEEN, CardValue.NINE), null);
-        PokerHand fullHouseQueensAndFours = TestUtils.getPokerHandSpy(PokerHandRanking.FULL_HOUSE,
+        PokerHand fullHouseQueensAndFours = TestUtils.getPokerHand(PokerHandRanking.FULL_HOUSE,
                 Arrays.asList(CardValue.QUEEN, CardValue.FOUR), null);
 
         int result = comp.compare(fullHouseQueensAndNines, fullHouseQueensAndFours);
@@ -166,9 +166,9 @@ class PokerHandComparatorTest {
      */
     @Test
     void fourTieIsBrokenByRankCardBeforeKickerCard() {
-        PokerHand fourKingsAndOneThree = TestUtils.getPokerHandSpy(PokerHandRanking.FOUR_OF_A_KIND,
+        PokerHand fourKingsAndOneThree = TestUtils.getPokerHand(PokerHandRanking.FOUR_OF_A_KIND,
                 Arrays.asList(CardValue.KING), Arrays.asList(CardValue.THREE));
-        PokerHand fourTensAndOneAce = TestUtils.getPokerHandSpy(PokerHandRanking.FOUR_OF_A_KIND,
+        PokerHand fourTensAndOneAce = TestUtils.getPokerHand(PokerHandRanking.FOUR_OF_A_KIND,
                 Arrays.asList(CardValue.TEN), Arrays.asList(CardValue.ACE));
 
         int result = comp.compare(fourTensAndOneAce, fourKingsAndOneThree);
@@ -180,9 +180,9 @@ class PokerHandComparatorTest {
      */
     @Test
     void flushTieCanBeBrokenByFirstCard() {
-        PokerHand flushWithKing = TestUtils.getPokerHandSpy(PokerHandRanking.FLUSH,
+        PokerHand flushWithKing = TestUtils.getPokerHand(PokerHandRanking.FLUSH,
                 Arrays.asList(CardValue.KING, CardValue.TEN), Collections.emptyList());
-        PokerHand flushWithQueen = TestUtils.getPokerHandSpy(PokerHandRanking.FLUSH,
+        PokerHand flushWithQueen = TestUtils.getPokerHand(PokerHandRanking.FLUSH,
                 Arrays.asList(CardValue.QUEEN, CardValue.TEN), Collections.emptyList());
 
         int result = comp.compare(flushWithKing, flushWithQueen);
@@ -194,11 +194,11 @@ class PokerHandComparatorTest {
      */
     @Test
     void flushTieCanBeBrokenByFifthCard() {
-        PokerHand minorFlush = TestUtils.getPokerHandSpy(PokerHandRanking.FLUSH,
+        PokerHand minorFlush = TestUtils.getPokerHand(PokerHandRanking.FLUSH,
                 Arrays.asList(CardValue.TWO, CardValue.TEN, CardValue.FIVE, CardValue.SIX, CardValue.TEN),
                 Collections.emptyList());
 
-        PokerHand majorFlush = TestUtils.getPokerHandSpy(PokerHandRanking.FLUSH,
+        PokerHand majorFlush = TestUtils.getPokerHand(PokerHandRanking.FLUSH,
                 Arrays.asList(CardValue.THREE, CardValue.TEN, CardValue.FIVE, CardValue.SIX, CardValue.TEN),
                 Collections.emptyList());
 

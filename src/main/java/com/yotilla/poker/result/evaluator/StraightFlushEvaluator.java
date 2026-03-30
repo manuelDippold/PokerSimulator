@@ -36,7 +36,7 @@ public class StraightFlushEvaluator implements PokerHandEvaluator {
 
                 if (flush != null) {
                     // We found a straight flush. Build an according result.
-                    return new PokerHand(PokerHandRanking.STRAIGHT_FLUSH, straight.getRankCards(),
+                    return new PokerHand(PokerHandRanking.STRAIGHT_FLUSH, straight.rankCards(),
                             Collections.emptyList());
                 }
             }

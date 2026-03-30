@@ -54,11 +54,11 @@ class StraightFlushEvaluatorTest extends AbstractEvaluatorTest {
 
         PokerHand result = new StraightFlushEvaluator().evaluate(hand);
 
-        assertEquals(PokerHandRanking.STRAIGHT_FLUSH, result.getRanking(), "This should result in a straight flush");
-        assertEquals(CardValue.KING, result.getRankCards().get(0),
+        assertEquals(PokerHandRanking.STRAIGHT_FLUSH, result.ranking(), "This should result in a straight flush");
+        assertEquals(CardValue.KING, result.rankCards().get(0),
                 "The rank card is the king. The result should reflect that.");
 
-        assertTrue(result.getKickerCards().isEmpty(), "A straight flush does not leave room for kicker cards.");
+        assertTrue(result.kickerCards().isEmpty(), "A straight flush does not leave room for kicker cards.");
     }
 
     /**
@@ -80,11 +80,11 @@ class StraightFlushEvaluatorTest extends AbstractEvaluatorTest {
 
         PokerHand result = new StraightFlushEvaluator().evaluate(hand);
 
-        assertEquals(PokerHandRanking.STRAIGHT_FLUSH, result.getRanking(), "This should result in a straight flush");
-        assertEquals(CardValue.FIVE, result.getRankCards().get(0),
+        assertEquals(PokerHandRanking.STRAIGHT_FLUSH, result.ranking(), "This should result in a straight flush");
+        assertEquals(CardValue.FIVE, result.rankCards().get(0),
                 "The rank card is the five. The result should reflect that.");
 
-        assertTrue(result.getKickerCards().isEmpty(), "A straight flush does not leave room for kicker cards.");
+        assertTrue(result.kickerCards().isEmpty(), "A straight flush does not leave room for kicker cards.");
     }
 
     /**

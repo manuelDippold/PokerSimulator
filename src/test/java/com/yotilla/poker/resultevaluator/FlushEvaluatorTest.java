@@ -52,10 +52,10 @@ class FlushEvaluatorTest extends AbstractEvaluatorTest {
 
         PokerHand result = new FlushEvaluator().evaluate(hand);
 
-        assertEquals(PokerHandRanking.FLUSH, result.getRanking(), "This should result in a flush");
-        assertEquals(CardValue.KING, result.getRankCards().get(0),
+        assertEquals(PokerHandRanking.FLUSH, result.ranking(), "This should result in a flush");
+        assertEquals(CardValue.KING, result.rankCards().get(0),
                 "Highest card in this flush is a king. The result should reflect that.");
-        assertTrue(result.getKickerCards().isEmpty(), "A Straight does not leave room for kicker cards.");
+        assertTrue(result.kickerCards().isEmpty(), "A Straight does not leave room for kicker cards.");
     }
 
     /**

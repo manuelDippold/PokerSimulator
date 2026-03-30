@@ -44,13 +44,13 @@ class HighCardEvaluatorTest extends AbstractEvaluatorTest {
 
         PokerHand result = new HighCardEvaluator().evaluate(hand);
 
-        assertEquals(PokerHandRanking.HIGH_CARD, result.getRanking(), "This is supposed to be a high card ranking.");
-        assertEquals(CardValue.ACE, result.getRankCards().get(0),
+        assertEquals(PokerHandRanking.HIGH_CARD, result.ranking(), "This is supposed to be a high card ranking.");
+        assertEquals(CardValue.ACE, result.rankCards().get(0),
                 "There is an ace in this hand, it ought to be the high card, no matter what.");
-        assertEquals(CardValue.JACK, result.getRankCards().get(1), "Second card: Jack.");
-        assertEquals(CardValue.EIGHT, result.getRankCards().get(2), "Third card: Eight.");
-        assertEquals(CardValue.FIVE, result.getRankCards().get(3), "Fourth card: Five.");
-        assertEquals(CardValue.THREE, result.getRankCards().get(4), "Fifth card: Three.");
+        assertEquals(CardValue.JACK, result.rankCards().get(1), "Second card: Jack.");
+        assertEquals(CardValue.EIGHT, result.rankCards().get(2), "Third card: Eight.");
+        assertEquals(CardValue.FIVE, result.rankCards().get(3), "Fourth card: Five.");
+        assertEquals(CardValue.THREE, result.rankCards().get(4), "Fifth card: Three.");
     }
 
     /**

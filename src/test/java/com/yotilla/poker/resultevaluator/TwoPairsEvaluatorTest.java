@@ -45,16 +45,16 @@ class TwoPairsEvaluatorTest extends AbstractEvaluatorTest {
 
         PokerHand result = new TwoPairsEvaluator().evaluate(hand);
 
-        assertEquals(PokerHandRanking.TWO_PAIRS, result.getRanking(),
+        assertEquals(PokerHandRanking.TWO_PAIRS, result.ranking(),
                 "This hand had two pairs, one of them was of aces. This should be the result.");
 
-        assertEquals(CardValue.ACE, result.getRankCards().get(0),
+        assertEquals(CardValue.ACE, result.rankCards().get(0),
                 "This hand had two pairs, one of them was of aces. This should be the result.");
 
-        assertEquals(CardValue.KING, result.getRankCards().get(1),
+        assertEquals(CardValue.KING, result.rankCards().get(1),
                 "This hand had two pairs, the second one was of kings. This should be the result.");
 
-        assertEquals(CardValue.FOUR, result.getKickerCards().get(0),
+        assertEquals(CardValue.FOUR, result.kickerCards().get(0),
                 "The high card of the hand was a four. This shoul reflect in the result.");
     }
 

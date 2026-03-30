@@ -17,63 +17,56 @@ import java.util.stream.Collectors;
  * Date: 27.12.2020
  *
  * @author Manuel
- *
+ * <p>
+ * <p>
+ * * @param ranking     The overall ranking of the result: Pair, Straight etc.
+ * * @param rankCards   The rank cards of the result in descending order.
+ * * @param kickerCards Kicker cards in descending order. A
  */
-public class PokerHand {
-    private final PokerHandRanking ranking;
-    private final List<CardValue> rankCards;
-    private final List<CardValue> kickerCards;
+public record PokerHand(PokerHandRanking ranking, List<CardValue> rankCards, List<CardValue> kickerCards) {
 
-    /**
-     * @param ranking     The overall ranking of the result: Pair, Straight etc.
-     * @param rankCards   The rank cards of the result in descending order.
-     * @param kickerCards Kicker cards in descending order. A
-     */
-    public PokerHand(PokerHandRanking ranking, List<CardValue> rankCards, List<CardValue> kickerCards) {
-        super();
-        this.ranking = ranking;
-        this.rankCards = rankCards;
-        this.kickerCards = kickerCards;
-    }
 
     /**
      * @return the ranking
      */
-    public PokerHandRanking getRanking() {
+    @Override
+    public PokerHandRanking ranking() {
         return ranking;
     }
 
     /**
      * @return the rankCards
      */
-    public List<CardValue> getRankCards() {
+    @Override
+    public List<CardValue> rankCards() {
         return rankCards;
     }
 
     /**
      * @return the kickerCards
      */
-    public List<CardValue> getKickerCards() {
+    @Override
+    public List<CardValue> kickerCards() {
         return kickerCards;
     }
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder(getRanking().name());
+        StringBuilder sb = new StringBuilder(ranking().name());
 
-        if (getRankCards() != null) {
+        if (rankCards() != null) {
             sb.append(", ");
 
-            List<String> rankCardNames = getRankCards().stream().map(CardValue::name).collect(Collectors.toList());
+            List<String> rankCardNames = rankCards().stream().map(CardValue::name).collect(Collectors.toList());
             sb.append(String.join(", ", rankCardNames));
         }
 
         sb.append(".");
 
-        if (getKickerCards() != null && !getKickerCards().isEmpty()) {
+        if (kickerCards() != null && !kickerCards().isEmpty()) {
             sb.append(" Kickers: ");
 
-            List<String> kickerCardNames = getKickerCards().stream().map(CardValue::name).collect(Collectors.toList());
+            List<String> kickerCardNames = kickerCards().stream().map(CardValue::name).collect(Collectors.toList());
             sb.append(String.join(", ", kickerCardNames));
             sb.append(".");
         }

@@ -55,11 +55,11 @@ class FourOfKindEvaluatorTest extends AbstractEvaluatorTest {
 
         PokerHand result = new FourOfKindEvaluator().evaluate(hand);
 
-        assertEquals(PokerHandRanking.FOUR_OF_A_KIND, result.getRanking(), "This should result in four of a kind");
-        assertEquals(CardValue.QUEEN, result.getRankCards().getFirst(),
+        assertEquals(PokerHandRanking.FOUR_OF_A_KIND, result.ranking(), "This should result in four of a kind");
+        assertEquals(CardValue.QUEEN, result.rankCards().getFirst(),
                 "The rank card is the queen. The result should reflect that.");
 
-        assertEquals(CardValue.EIGHT, result.getKickerCards().getFirst(), "The kicker card here should be the eight left.");
+        assertEquals(CardValue.EIGHT, result.kickerCards().getFirst(), "The kicker card here should be the eight left.");
     }
 
     /**

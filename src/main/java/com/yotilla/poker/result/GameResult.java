@@ -71,7 +71,7 @@ public class GameResult {
     public void addToRanks(final Player player) {
         if (player != null && player.getPokerHand() != null) {
             PokerHand playerHand = player.getPokerHand();
-            
+
             ranking.computeIfAbsent(playerHand, hand -> new ArrayList<>()).add(player);
 
             List<Player> winningPlayers = ranking.values().stream().findFirst().orElse(null);
@@ -116,7 +116,7 @@ public class GameResult {
      * @return String
      */
     public String printPlayerAndHand(final int rank, final Player player) {
-        if (player == null || player.getPokerHand() == null || player.getPokerHand().getRanking() == null
+        if (player == null || player.getPokerHand() == null || player.getPokerHand().ranking() == null
                 || player.getHand() == null || player.getHand().getCards() == null) {
             return "";
         }

@@ -23,7 +23,7 @@ public class PokerHandComparator implements NullSafeComparator<PokerHand> {
     @Override
     public int compareNonNull(PokerHand oneHand, PokerHand otherHand) {
         // First tier: Do the rankings differ?
-        int result = rankingComparator.compare(oneHand.getRanking(), otherHand.getRanking());
+        int result = rankingComparator.compare(oneHand.ranking(), otherHand.ranking());
 
         // If they don't, this ends here.
         if (result != 0) {
@@ -33,7 +33,7 @@ public class PokerHandComparator implements NullSafeComparator<PokerHand> {
         // If the rankings are equal, their rank cards must serve as a tie breaker.
         // For example: If you hold a pair of kings and a pair of nines,
         // your rank cards are king and nine, in that order.
-        int rankCardResult = getHighCardComparisonResult(oneHand.getRankCards(), otherHand.getRankCards());
+        int rankCardResult = getHighCardComparisonResult(oneHand.rankCards(), otherHand.rankCards());
 
         if (rankCardResult != 0) {
             // We reached a rank result.
@@ -44,7 +44,7 @@ public class PokerHandComparator implements NullSafeComparator<PokerHand> {
         // kicker card decides. That means we must go down the kicker cards of both
         // players until we reach a decision.
         // If we don't, the tie is a decision in itself.
-        return getHighCardComparisonResult(oneHand.getKickerCards(), otherHand.getKickerCards());
+        return getHighCardComparisonResult(oneHand.kickerCards(), otherHand.kickerCards());
     }
 
     /**

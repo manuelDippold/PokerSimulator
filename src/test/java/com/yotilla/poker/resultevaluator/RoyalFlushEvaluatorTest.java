@@ -52,10 +52,10 @@ class RoyalFlushEvaluatorTest extends AbstractEvaluatorTest {
         hand.addCard(deck.drawCard(CardSuit.DIAMONDS, CardValue.JACK));
 
         PokerHand result = new RoyalFlushEvaluator().evaluate(hand);
-        assertEquals(PokerHandRanking.ROYAL_FLUSH, result.getRanking(), "This should result in a royal flush");
-        assertTrue(result.getRankCards().isEmpty(),
+        assertEquals(PokerHandRanking.ROYAL_FLUSH, result.ranking(), "This should result in a royal flush");
+        assertTrue(result.rankCards().isEmpty(),
                 "A royal flush does not leave room for rank cards. There is no tie breaker.");
-        assertTrue(result.getKickerCards().isEmpty(), "A royal flush does not leave room for kicker cards.");
+        assertTrue(result.kickerCards().isEmpty(), "A royal flush does not leave room for kicker cards.");
     }
 
     /**

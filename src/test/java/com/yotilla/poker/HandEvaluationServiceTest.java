@@ -10,7 +10,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -31,7 +30,7 @@ class HandEvaluationServiceTest {
 
         PokerHand result = sut.evaluate(hand);
 
-        assertEquals(PokerHandRanking.ROYAL_FLUSH, result.getRanking(), "Royal flush expected.");
+        assertEquals(PokerHandRanking.ROYAL_FLUSH, result.ranking(), "Royal flush expected.");
     }
 
     @Test
@@ -42,9 +41,9 @@ class HandEvaluationServiceTest {
 
         PokerHand result = sut.evaluate(hand);
 
-        assertEquals(PokerHandRanking.FULL_HOUSE, result.getRanking(), "Full house expected.");
-        assertEquals(CardValue.FIVE, result.getRankCards().get(0), "First rank card is the triple, five.");
-        assertEquals(CardValue.TEN, result.getRankCards().get(1), "Second rank card is the pair, ten.");
+        assertEquals(PokerHandRanking.FULL_HOUSE, result.ranking(), "Full house expected.");
+        assertEquals(CardValue.FIVE, result.rankCards().get(0), "First rank card is the triple, five.");
+        assertEquals(CardValue.TEN, result.rankCards().get(1), "Second rank card is the pair, ten.");
     }
 
     @Test
@@ -55,8 +54,8 @@ class HandEvaluationServiceTest {
 
         PokerHand result = sut.evaluate(hand);
 
-        assertEquals(PokerHandRanking.STRAIGHT, result.getRanking(), "Straight expected.");
-        assertEquals(CardValue.QUEEN, result.getRankCards().get(0), "Queen is the rank card.");
+        assertEquals(PokerHandRanking.STRAIGHT, result.ranking(), "Straight expected.");
+        assertEquals(CardValue.QUEEN, result.rankCards().get(0), "Queen is the rank card.");
     }
 
     @Test
@@ -67,11 +66,11 @@ class HandEvaluationServiceTest {
 
         PokerHand result = sut.evaluate(hand);
 
-        assertEquals(PokerHandRanking.HIGH_CARD, result.getRanking(), "High card expected.");
-        assertEquals(CardValue.JACK, result.getRankCards().get(0), "Rank card 1, jack.");
-        assertEquals(CardValue.TEN, result.getRankCards().get(1), "Rank card 2, ten.");
-        assertEquals(CardValue.FIVE, result.getRankCards().get(2), "Rank card 3, five.");
-        assertEquals(CardValue.FOUR, result.getRankCards().get(3), "Rank card 4, four.");
-        assertEquals(CardValue.TWO, result.getRankCards().get(4), "Rank card 5, two.");
+        assertEquals(PokerHandRanking.HIGH_CARD, result.ranking(), "High card expected.");
+        assertEquals(CardValue.JACK, result.rankCards().get(0), "Rank card 1, jack.");
+        assertEquals(CardValue.TEN, result.rankCards().get(1), "Rank card 2, ten.");
+        assertEquals(CardValue.FIVE, result.rankCards().get(2), "Rank card 3, five.");
+        assertEquals(CardValue.FOUR, result.rankCards().get(3), "Rank card 4, four.");
+        assertEquals(CardValue.TWO, result.rankCards().get(4), "Rank card 5, two.");
     }
 }

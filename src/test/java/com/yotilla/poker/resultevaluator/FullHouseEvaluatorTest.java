@@ -52,13 +52,13 @@ class FullHouseEvaluatorTest extends AbstractEvaluatorTest {
 
         PokerHand result = new FullHouseEvaluator().evaluate(hand);
 
-        assertEquals(PokerHandRanking.FULL_HOUSE, result.getRanking(), "This should result in a full house");
-        assertEquals(CardValue.EIGHT, result.getRankCards().get(0),
+        assertEquals(PokerHandRanking.FULL_HOUSE, result.ranking(), "This should result in a full house");
+        assertEquals(CardValue.EIGHT, result.rankCards().get(0),
                 "The triple card is an eight. The result should reflect that.");
-        assertEquals(CardValue.KING, result.getRankCards().get(1),
+        assertEquals(CardValue.KING, result.rankCards().get(1),
                 "The pair card is a king. The result should reflect that.");
 
-        assertTrue(result.getKickerCards().isEmpty(), "A full house does not leave room for kicker cards.");
+        assertTrue(result.kickerCards().isEmpty(), "A full house does not leave room for kicker cards.");
     }
 
     /**

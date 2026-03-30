@@ -43,12 +43,12 @@ class PairEvaluatorTest extends AbstractEvaluatorTest {
 
         PokerHand result = new PairEvaluator().evaluate(hand);
 
-        assertEquals(PokerHandRanking.ONE_PAIR, result.getRanking(), "This hand definitely contains a pair of aces.");
+        assertEquals(PokerHandRanking.ONE_PAIR, result.ranking(), "This hand definitely contains a pair of aces.");
 
-        assertEquals(CardValue.ACE, result.getRankCards().iterator().next(),
+        assertEquals(CardValue.ACE, result.rankCards().iterator().next(),
                 "This hand definitely contains a pair of aces.");
 
-        assertSame(3, result.getKickerCards().size(), "One Pair should leave three kicker cards.");
+        assertSame(3, result.kickerCards().size(), "One Pair should leave three kicker cards.");
     }
 
     /**

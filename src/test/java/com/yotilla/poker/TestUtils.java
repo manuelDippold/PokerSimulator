@@ -80,9 +80,9 @@ public class TestUtils {
      * @param kickerCards kicker cards, if necessary
      * @return Poker hand mock
      */
-    public static PokerHand getPokerHandSpy(final PokerHandRanking ranking, final List<CardValue> rankCards,
-                                            final List<CardValue> kickerCards) {
-        return Mockito.spy(new PokerHand(ranking, rankCards, kickerCards));
+    public static PokerHand getPokerHand(final PokerHandRanking ranking, final List<CardValue> rankCards,
+                                         final List<CardValue> kickerCards) {
+        return new PokerHand(ranking, rankCards, kickerCards);
     }
 
     /**
