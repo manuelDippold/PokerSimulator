@@ -5,7 +5,7 @@ standard poker rankings, and determines winners with full tiebreaker and split-p
 
 ## Build & Test
 
-**Requirements:** Java 26, Maven 3.6+
+**Requirements:** Java 25, Maven 3.6+
 
 ```bash
 # Run tests
@@ -18,7 +18,7 @@ mvn clean package
 java -jar target/poker-1.0.jar "2D 9C AS AH AC" "3D 6D 7D TD QD" "2C 5C 9D 8S QH"
 ```
 
-Tests require `JAVA_HOME` pointing to JDK 26. Surefire runs with `forkCount=0`. JaCoCo enforces a minimum 60% cyclomatic
+Tests require `JAVA_HOME` pointing to JDK 25. JaCoCo enforces a minimum 60% cyclomatic
 complexity coverage — `mvn verify` will fail if this is not met.
 
 ## Project Structure
