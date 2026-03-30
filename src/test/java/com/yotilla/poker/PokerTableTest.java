@@ -1,62 +1,42 @@
 package com.yotilla.poker;
 
-import com.yotilla.poker.error.DeckException;
-import com.yotilla.poker.error.HandExceededException;
-import com.yotilla.poker.error.PokerParseException;
+import com.yotilla.poker.card.DeckOfCards;
+import com.yotilla.poker.util.LogPrinter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InOrder;
-import org.mockito.Mockito;
 
 import java.util.logging.Logger;
 
-/**
- * Description:
- *
- * <br>
- * Date: 30.12.2020
- *
- * @author Manuel
- *
- */
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
+
 class PokerTableTest {
-    private Dealer dealerMock;
-    private Logger loggerMock;
+    private PokerTable sut;
+    private Dealer dealer;
+    private LogPrinter logPrinter;
 
     @BeforeEach
     void setUp() {
-        dealerMock = Mockito.mock(Dealer.class);
-        loggerMock = Mockito.mock(Logger.class);
+        dealer = spy(new Dealer(new DeckOfCards()));
+        logPrinter = spy(new LogPrinter(Logger.getLogger("PokerTableTest")));
+        sut = new PokerTable(logPrinter, dealer);
     }
 
-    /**
-     * pokerGameOrderIsRight
-     *
-     * @throws DeckException         class
-     * @throws HandExceededException class
-     * @throws PokerParseException   class
-     */
     @Test
-    void pokerGameOrderIsRight() throws PokerParseException, HandExceededException, DeckException {
-        String[] hands = new String[]{"2D 9C AS AH AC", "3D 6D 7D TD QD", "2C 5C 7C 8S QH"};
+    void clearWinnerIsCorrectlyIdentified() {
+        fail("implement me!");
+    }
 
-        PokerTable sut = new PokerTable(loggerMock, dealerMock);
+    @Test
+    void tiedHandsResultInSplitPot() {
+        fail("implement me!");
+    }
 
-        InOrder order = Mockito.inOrder(dealerMock);
-
-        sut.playPoker(hands);
-
-        // three players parsed and evaluated
-        order.verify(dealerMock).parseInputAndDealHand(Mockito.anyString(), Mockito.any(Player.class));
-        order.verify(dealerMock).evaluatePlayerHand(Mockito.any(Player.class));
-
-        order.verify(dealerMock).parseInputAndDealHand(Mockito.anyString(), Mockito.any(Player.class));
-        order.verify(dealerMock).evaluatePlayerHand(Mockito.any(Player.class));
-
-        order.verify(dealerMock).parseInputAndDealHand(Mockito.anyString(), Mockito.any(Player.class));
-        order.verify(dealerMock).evaluatePlayerHand(Mockito.any(Player.class));
-
-        // result
-        order.verify(dealerMock).determineGameResult(Mockito.anyList());
+    @Test
+    void nullInputIsHandledGracefully() {
+        assertDoesNotThrow(() -> sut.playPoker(null));
+        verify(logPrinter).print("No hands have been dealt. Quitting.");
     }
 }

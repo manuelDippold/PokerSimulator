@@ -5,6 +5,7 @@ import com.yotilla.poker.error.DeckException;
 import com.yotilla.poker.error.HandExceededException;
 import com.yotilla.poker.error.PokerParseException;
 import com.yotilla.poker.result.GameResult;
+import com.yotilla.poker.util.LogPrinter;
 import com.yotilla.poker.util.PureLogFormatter;
 
 import java.util.ArrayList;
@@ -24,24 +25,12 @@ import java.util.logging.Logger;
  *
  */
 public class PokerTable {
-    private final Logger log;
     private final Dealer dealer;
+    private final LogPrinter printer;
 
-    /**
-     * Constructor. Binds a logger and a dealer.
-     *
-     * @param log    Logger to use. Will print to console only, without head nor tail.
-     * @param dealer dealer to use.
-     */
-    public PokerTable(final Logger log, Dealer dealer) {
-        this.log = log;
+    public PokerTable(final LogPrinter printer, Dealer dealer) {
+        this.printer = printer;
         this.dealer = dealer;
-
-        // Use direct print to the console, no heads or tails, except warning or higher.
-        Handler consoleHandler = new ConsoleHandler();
-        consoleHandler.setFormatter(new PureLogFormatter());
-        log.addHandler(consoleHandler);
-        log.setUseParentHandlers(false);
     }
 
     /**
@@ -51,10 +40,14 @@ public class PokerTable {
      *              "2D 9C AS AH AC" "3D 6D 7D TD QD" "2C 5C 7C 8S QH"
      */
     public static void main(String[] hands) {
-        // Summon a dealer and prepare a deck of cards.
-        Dealer dealer = new Dealer(new DeckOfCards());
+        Logger logger = Logger.getGlobal();
+        Handler consoleHandler = new ConsoleHandler();
+        consoleHandler.setFormatter(new PureLogFormatter());
+        logger.addHandler(consoleHandler);
+        logger.setUseParentHandlers(false);
 
-        new PokerTable(Logger.getGlobal(), dealer).playPoker(hands);
+        Dealer dealer = new Dealer(new DeckOfCards());
+        new PokerTable(new LogPrinter(logger), dealer).playPoker(hands);
     }
 
     /**
@@ -64,7 +57,7 @@ public class PokerTable {
      */
     void playPoker(final String[] hands) {
         if (hands == null) {
-            print("No hands have been dealt. Quitting.");
+            printer.print("No hands have been dealt. Quitting.");
             return;
         }
 
@@ -72,7 +65,7 @@ public class PokerTable {
 
         // Seat the players at the table.
         List<Player> players = createPlayers(amountOfPlayers);
-        print(amountOfPlayers + " Players at the table.\n");
+        printer.print(amountOfPlayers + " Players at the table.\n");
 
         // Deal the cards to the players
         for (int i = 0; i < hands.length; i++) {
@@ -85,10 +78,10 @@ public class PokerTable {
                 // Evaluate each player's hand, tell them what they hold.
                 dealer.evaluatePlayerHand(player);
             } catch (PokerParseException e) {
-                log.log(Level.WARNING,
+                printer.getLogger().log(Level.WARNING,
                         String.format("Invalid hand input for %s: %s — skipping.", player.getName(), e.getMessage()));
             } catch (HandExceededException | DeckException e) {
-                log.log(Level.SEVERE,
+                printer.getLogger().log(Level.SEVERE,
                         String.format("Internal error while dealing cards: %s", e.getMessage()), e);
                 return;
             }
@@ -97,18 +90,8 @@ public class PokerTable {
         // determine and print result
         GameResult result = dealer.determineGameResult(players);
         if (result != null) {
-            print("Ranking:\n" + result.printRanks() + "\n" + result.printFinalResult() + "\n");
+            printer.print("Ranking:\n" + result.printRanks() + "\n" + result.printFinalResult() + "\n");
         }
-    }
-
-    /**
-     * Log something to the console as info. Info and below are not written with heads or tails.
-     *
-     * @param message message to print
-     */
-    private void print(final String message) {
-        log.log(Level.INFO, message);
-        log.log(Level.INFO, "\n");
     }
 
     /**
