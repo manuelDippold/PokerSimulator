@@ -45,22 +45,12 @@ public abstract class MultiplesEvaluator implements PokerHandEvaluator {
                 // We found it. Build a result.
                 List<Card> remainingCards = getKickerCards(hand, collector.get(multipleCardValue));
 
-                PokerHandRanking ranking;
-
-                switch (desiredMultiple) {
-                    case 2:
-                        ranking = PokerHandRanking.ONE_PAIR;
-                        break;
-                    case 3:
-                        ranking = PokerHandRanking.THREE_OF_A_KIND;
-                        break;
-                    case 4:
-                        ranking = PokerHandRanking.FOUR_OF_A_KIND;
-                        break;
-                    default: // Impossible, but alas...
-                        return null;
-
-                }
+                PokerHandRanking ranking = switch (desiredMultiple) {
+                    case 2 -> PokerHandRanking.ONE_PAIR;
+                    case 3 -> PokerHandRanking.THREE_OF_A_KIND;
+                    case 4 -> PokerHandRanking.FOUR_OF_A_KIND;
+                    default -> throw new IllegalStateException("Unexpected multiple: " + desiredMultiple);
+                };
 
                 return new PokerHand(ranking, List.of(multipleCardValue),
                         cardsToSortedCardValues(remainingCards));
