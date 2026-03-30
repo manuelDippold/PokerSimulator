@@ -1,0 +1,26 @@
+Issue list - perpetually updated during code quality improvements.
+
+#  | Severity | Class                          | Issue                                                                          | Status
+---|----------|--------------------------------|--------------------------------------------------------------------------------|-------
+1  | Critical | PokerHandEvaluator             | copyHandOfCards() returned null for null input — chained call could NPE        | Fixed
+2  | Critical | HandOfCards                    | setCards() allowed null assignment                                              | Fixed
+3  | Critical | CardValue, CardSuit             | Lookup methods returned null on failure                                         | Fixed
+4  | Critical | DeckOfCards                    | drawCard() used .orElse(null) then immediately null-checked                     | Fixed
+5  | High     | PokerHandEvaluator             | getKickerCards(): workingCopy null initialization                               | Fixed
+6  | High     | PokerHandEvaluator             | copyHandOfCards() / getKickerCards(): exceptions swallowed                      | Fixed
+7  | High     | HandOfCards                    | setCards() stores passed-in list directly — no defensive copy                  | Fixed
+8  | Medium   | GameResult                     | addToRanks() recomputes winners as side effect on every call                    | Fixed
+9  | Medium   | GameResult                     | printPlayerAndHand() has chain of 5 nested null checks                         | Fixed
+10 | Medium   | Player                         | dealHand() throws IllegalArgumentException for a business rule violation        | Fixed
+11 | Smell    | LogPrinter                     | print() makes two separate log.log() calls for one message                      | Fixed
+12 | Smell    | StraightFlushEvaluator         | Creates StraightEvaluator and FlushEvaluator as field instances rather than injecting | Fixed
+13 | Smell    | CardValue, CardSuit             | Lookup methods use manual for loops instead of streams                          | Fixed
+14 | Minor    | PokerHand                      | Redundant explicit super() call                                                 | Fixed
+15 | Minor    | DeckOfCards                    | shuffleDeck() copies to ArrayList, shuffles, clears, adds back — verbose        | Fixed
+16 | Medium   | Test suite                     | No end-to-end integration test: PokerTable.playPoker() is never exercised with real input through the full stack | Fixed
+17 | Medium   | MultiplesEvaluator             | Unreachable default branch in switch — guard condition makes it dead code       | Fixed
+18 | Minor    | FullHouseEvaluator             | Uses Arrays.asList() — inconsistent with rest of codebase which uses List.of() | Fixed
+19 | Minor    | PokerHand                      | Record explicitly overrides all three auto-generated accessors with identical implementations | Fixed
+20 | Minor    | GameResult                     | printFinalResult() calls getWinner() and getPotSplit() separately, each invoking resolveWinners() — ranking traversed twice | Fixed
+21 | Minor    | StraightEvaluator              | highestvalue not in camelCase                                                   | Fixed
+22 | Minor    | FlushEvaluator                 | flush = true initialisation is dead — variable only ever set to false in loop   | Fixed

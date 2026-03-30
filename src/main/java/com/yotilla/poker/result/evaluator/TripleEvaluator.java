@@ -12,17 +12,15 @@ import com.yotilla.poker.result.PokerHand;
  * @author Manuel
  *
  */
-public class TripleEvaluator extends MultiplesEvaluator
-{
-	/**
-	 * Attempts to find three of a kind in this hand and returns an according result.
-	 *
-	 * @param hand hand to analyze
-	 * @return poker hand
-	 */
-	@Override
-	public PokerHand evaluate(HandOfCards hand)
-	{
-		return evaluateMultipleHand(hand, 3);
-	}
+public class TripleEvaluator extends MultiplesEvaluator {
+    /**
+     * Attempts to find three of a kind in this hand and returns an according result.
+     *
+     * @param hand hand to analyze
+     * @return poker hand
+     */
+    @Override
+    public PokerHand evaluate(HandOfCards hand) {
+        return evaluateMultipleHand(hand, 3);
+    }
 }

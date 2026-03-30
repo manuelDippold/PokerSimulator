@@ -1,13 +1,12 @@
 package com.yotilla.poker.result.evaluator;
 
-import java.util.Arrays;
-import java.util.List;
-
 import com.yotilla.poker.card.Card;
 import com.yotilla.poker.card.CardValue;
 import com.yotilla.poker.card.HandOfCards;
 import com.yotilla.poker.result.PokerHand;
 import com.yotilla.poker.result.PokerHandRanking;
+
+import java.util.List;
 
 /**
  * Description:
@@ -18,63 +17,47 @@ import com.yotilla.poker.result.PokerHandRanking;
  * @author Manuel
  *
  */
-public abstract class MultiplesEvaluator implements PokerHandEvaluator
-{
+public abstract class MultiplesEvaluator implements PokerHandEvaluator {
 
-	/**
-	 * Attempts to find multiples (pairs, triples, fours) in this hand and returns an according result.
-	 * Does not work for two pairs, though.
-	 *
-	 * @param handOfCards     hand of cards to analyze
-	 * @param desiredMultiple desired multiple we want. 2, 3 or 4
-	 * @return poker hand or null
-	 */
-	protected PokerHand evaluateMultipleHand(final HandOfCards hand, final int desiredMultiple)
-	{
-		if (hand != null && desiredMultiple >= 2 && desiredMultiple <= 4)
-		{
-			CardCollector collector = new CardCollector();
-			CardValue multipleCardValue = null;
+    /**
+     * Attempts to find multiples (pairs, triples, fours) in this hand and returns an according result.
+     * Does not work for two pairs, though.
+     *
+     * @param hand            hand of cards to analyze
+     * @param desiredMultiple desired multiple we want. 2, 3 or 4
+     * @return poker hand or null
+     */
+    protected PokerHand evaluateMultipleHand(final HandOfCards hand, final int desiredMultiple) {
+        if (hand != null && desiredMultiple >= 2 && desiredMultiple <= 4) {
+            CardCollector collector = new CardCollector();
+            CardValue multipleCardValue = null;
 
-			for (Card card : hand.getCards())
-			{
-				collector.addCard(card);
+            for (Card card : hand.getCards()) {
+                collector.addCard(card);
 
-				CardValue val = card.getCardValue();
-				if (collector.getAmountBehindKey(val) >= desiredMultiple)
-				{
-					multipleCardValue = val;
-				}
-			}
+                CardValue val = card.cardValue();
+                if (collector.getAmountBehindKey(val) >= desiredMultiple) {
+                    multipleCardValue = val;
+                }
+            }
 
-			if (multipleCardValue != null)
-			{
-				// We found it. Build a result.
-				List<Card> remainingCards = getKickerCards(hand, collector.get(multipleCardValue));
+            if (multipleCardValue != null) {
+                // We found it. Build a result.
+                List<Card> remainingCards = getKickerCards(hand, collector.get(multipleCardValue));
 
-				PokerHandRanking ranking;
+                PokerHandRanking ranking = switch (desiredMultiple) {
+                    case 2 -> PokerHandRanking.ONE_PAIR;
+                    case 3 -> PokerHandRanking.THREE_OF_A_KIND;
+                    case 4 -> PokerHandRanking.FOUR_OF_A_KIND;
+                    default -> throw new IllegalStateException("Unexpected multiple: " + desiredMultiple);
+                };
 
-				switch (desiredMultiple) {
-				case 2:
-					ranking = PokerHandRanking.ONE_PAIR;
-					break;
-				case 3:
-					ranking = PokerHandRanking.THREE_OF_A_KIND;
-					break;
-				case 4:
-					ranking = PokerHandRanking.FOUR_OF_A_KIND;
-					break;
-				default: // Impossible, but alas...
-					return null;
+                return new PokerHand(ranking, List.of(multipleCardValue),
+                        cardsToSortedCardValues(remainingCards));
+            }
+        }
 
-				}
-
-				return new PokerHand(ranking, Arrays.asList(multipleCardValue),
-						cardsToSortedCardValues(remainingCards));
-			}
-		}
-
-		return null;
-	}
+        return null;
+    }
 
 }

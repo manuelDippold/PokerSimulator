@@ -1,15 +1,9 @@
 package com.yotilla.poker.result;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.SortedMap;
-import java.util.TreeMap;
-import java.util.stream.Collectors;
-
 import com.yotilla.poker.Player;
 import com.yotilla.poker.card.Card;
+
+import java.util.*;
 
 /**
  * Description:
@@ -20,182 +14,143 @@ import com.yotilla.poker.card.Card;
  * @author Manuel
  *
  */
-public class GameResult
-{
-	private List<Player> winners;
+public class GameResult {
+    private final SortedMap<PokerHand, List<Player>> ranking;
 
-	private final PokerHandComparator pokerHandComparator;
-	private final SortedMap<PokerHand, List<Player>> ranking;
+    /**
+     * Default constructor.
+     * Automatically creates the ranking map with a reversed poker hand comparator.
+     * Reversed for highest scores first.
+     */
+    public GameResult() {
+        PokerHandComparator pokerHandComparator = new PokerHandComparator();
+        ranking = new TreeMap<>(pokerHandComparator.reversed());
+    }
 
-	/**
-	 * Default constructor.
-	 * Automatically creates the ranking map with a reversed poker hand comparator.
-	 * Reversed for highest scores first.
-	 */
-	public GameResult()
-	{
-		pokerHandComparator = new PokerHandComparator();
-		ranking = new TreeMap<>(pokerHandComparator.reversed());
-	}
+    private List<Player> resolveWinners() {
+        if (ranking.isEmpty()) {
+            return Collections.emptyList();
+        }
+        return ranking.get(ranking.firstKey());
+    }
 
-	/**
-	 * the sole winner, if there is one.
-	 *
-	 * @return the winner
-	 */
-	public Player getWinner()
-	{
-		if (winners == null || winners.isEmpty() || winners.size() > 1)
-		{
-			return null;
-		}
+    public Player getWinner() {
+        List<Player> currentWinners = resolveWinners();
+        if (currentWinners.size() != 1) {
+            return null;
+        }
+        return currentWinners.getFirst();
+    }
 
-		return winners.stream().findFirst().orElse(null);
-	}
+    /**
+     * Players who split the pot among them
+     *
+     * @return the potSplit
+     */
+    public List<Player> getPotSplit() {
+        List<Player> currentWinners = resolveWinners();
+        if (currentWinners.size() <= 1) {
+            return Collections.emptyList();
+        }
+        return currentWinners;
+    }
 
-	/**
-	 * Players who split the pot among them
-	 *
-	 * @return the potSplit
-	 */
-	public List<Player> getPotSplit()
-	{
-		if (winners == null || winners.size() <= 1)
-		{
-			return Collections.emptyList();
-		}
+    /**
+     * @return the ranking
+     */
+    public SortedMap<PokerHand, List<Player>> getRanking() {
+        return ranking;
+    }
 
-		return winners;
-	}
+    /**
+     * Add player to the ranks of the result.<br>
+     * Winner(s) are determined automatically.
+     *
+     * @param player player to add
+     */
+    public void addToRanks(final Player player) {
+        if (player != null && player.getPokerHand() != null) {
+            PokerHand playerHand = player.getPokerHand();
 
-	/**
-	 * @return the ranking
-	 */
-	public SortedMap<PokerHand, List<Player>> getRanking()
-	{
-		return ranking;
-	}
+            ranking.computeIfAbsent(playerHand, hand -> new ArrayList<>()).add(player);
+        }
+    }
 
-	/**
-	 * Add player to the ranks of the result.<br>
-	 * Winner(s) are determined automatically.
-	 *
-	 * @param player player to add
-	 */
-	public void addToRanks(final Player player)
-	{
-		if (player != null && player.getPokerHand() != null)
-		{
-			PokerHand playerHand = player.getPokerHand();
+    /**
+     * return a printable String representation of the player ranks.
+     *
+     * @return string
+     */
+    public String printRanks() {
+        StringBuilder builder = new StringBuilder();
 
-			if (!ranking.containsKey(playerHand)) // NOSONAR- computeIfAbsent doesn't fit
-			{
-				ranking.put(playerHand, new ArrayList<>());
-			}
+        int rankCounter = 0;
 
-			ranking.get(playerHand).add(player);
+        for (List<Player> playersOnThisRank : ranking.values()) {
+            if (playersOnThisRank != null && !playersOnThisRank.isEmpty()) {
+                rankCounter++;
+                for (Player player : playersOnThisRank) {
+                    builder.append(printPlayerAndHand(rankCounter, player));
+                    builder.append("\n");
+                }
+            }
+        }
 
-			List<Player> winningPlayers = ranking.values().stream().findFirst().orElse(null);
+        return builder.toString();
+    }
 
-			if (winningPlayers == null)
-			{
-				return;
-			}
+    public String printPlayerAndHand(final int rank, final Player player) {
+        if (!isPlayerPrintable(player)) {
+            return "";
+        }
 
-			winners = Collections.unmodifiableList(winningPlayers);
-		}
-	}
+        PokerHand playerHand = player.getPokerHand();
 
-	/**
-	 * return a printable String representation of the player ranks.
-	 *
-	 * @return string
-	 */
-	public String printRanks()
-	{
-		StringBuilder builder = new StringBuilder();
+        StringBuilder builder = new StringBuilder(rank + "\t" + player.getName() + "\t");
 
-		int rankCounter = 0;
+        Iterator<Card> cardIterator = player.getHand().getCards().iterator();
 
-		for (List<Player> playersOnThisRank : ranking.values())
-		{
-			if (playersOnThisRank != null && !playersOnThisRank.isEmpty())
-			{
-				rankCounter++;
-				for (Player player : playersOnThisRank)
-				{
-					builder.append(printPlayerAndHand(rankCounter, player));
-					builder.append("\n");
-				}
-			}
-		}
+        while (cardIterator.hasNext()) {
+            Card card = cardIterator.next();
+            builder.append(card.cardValue().getCode())
+                    .append(card.cardSuit().getCode());
 
-		return builder.toString();
-	}
+            if (cardIterator.hasNext()) {
+                builder.append(" ");
+            }
+        }
 
-	/**
-	 * Print a players result that game:<br>
-	 * rank Name Hand PokerHand
-	 *
-	 * @param rank   rank the player scored. One is highest
-	 * @param player player to be printed
-	 * @return String
-	 */
-	public String printPlayerAndHand(final int rank, final Player player)
-	{
-		if (player == null || player.getPokerHand() == null || player.getPokerHand().getRanking() == null
-				|| player.getHand() == null || player.getHand().getCards() == null)
-		{
-			return "";
-		}
+        builder.append("\t")
+                .append(playerHand.toString());
 
-		PokerHand playerHand = player.getPokerHand();
+        return builder.toString();
+    }
 
-		StringBuilder builder = new StringBuilder(rank + "\t" + player.getName() + "\t");
+    private boolean isPlayerPrintable(Player player) {
+        return player != null
+                && player.getPokerHand() != null
+                && player.getPokerHand().ranking() != null
+                && player.getHand() != null
+                && player.getHand().getCards() != null;
+    }
 
-		Iterator<Card> cardIterator = player.getHand().getCards().iterator();
+    /**
+     * print winner
+     *
+     * @return String
+     */
+    public String printFinalResult() {
+        List<Player> winners = resolveWinners();
 
-		while (cardIterator.hasNext())
-		{
-			Card card = cardIterator.next();
-			builder.append(card.getCardValue().getCode() + card.getCardSuit().getCode());
+        if (winners.size() == 1) {
+            return winners.getFirst().getName() + " wins.";
+        }
 
-			if (cardIterator.hasNext())
-			{
-				builder.append(" ");
-			}
-		}
+        if (winners.size() > 1) {
+            List<String> names = winners.stream().map(Player::getName).toList();
+            return "Players " + String.join(", ", names) + " split the pot.";
+        }
 
-		builder.append("\t" + playerHand.toString());
-
-		return builder.toString();
-	}
-
-	/**
-	 * print winner
-	 *
-	 * @return String
-	 */
-	public String printFinalResult()
-	{
-		if (winners != null && !winners.isEmpty())
-		{
-			Player soleWinner = getWinner();
-
-			if (soleWinner != null)
-			{
-				return soleWinner.getName() + " wins.";
-			}
-
-			List<String> names = winners.stream().map(Player::getName).collect(Collectors.toList());
-
-			StringBuilder sb = new StringBuilder("Players ");
-			sb.append(String.join(", ", names));
-			sb.append(" split the pot.");
-
-			return sb.toString();
-		}
-
-		return "";
-	}
+        return "";
+    }
 }

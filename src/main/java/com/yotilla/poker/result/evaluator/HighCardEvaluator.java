@@ -1,10 +1,10 @@
 package com.yotilla.poker.result.evaluator;
 
-import java.util.Collections;
-
 import com.yotilla.poker.card.HandOfCards;
 import com.yotilla.poker.result.PokerHand;
 import com.yotilla.poker.result.PokerHandRanking;
+
+import java.util.Collections;
 
 /**
  * Description:
@@ -15,19 +15,16 @@ import com.yotilla.poker.result.PokerHandRanking;
  * @author Manuel
  *
  */
-public class HighCardEvaluator implements PokerHandEvaluator
-{
+public class HighCardEvaluator implements PokerHandEvaluator {
 
-	@Override
-	public PokerHand evaluate(HandOfCards hand)
-	{
-		if (hand == null)
-		{
-			return null;
-		}
+    @Override
+    public PokerHand evaluate(HandOfCards hand) {
+        if (hand == null) {
+            return null;
+        }
 
-		return new PokerHand(PokerHandRanking.HIGH_CARD, cardsToSortedCardValues(hand.getCards()),
-				Collections.emptyList());
-	}
+        return new PokerHand(PokerHandRanking.HIGH_CARD, cardsToSortedCardValues(hand.getCards()),
+                Collections.emptyList());
+    }
 
 }

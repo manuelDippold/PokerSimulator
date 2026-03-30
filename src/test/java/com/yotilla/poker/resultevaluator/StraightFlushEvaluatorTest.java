@@ -1,11 +1,5 @@
 package com.yotilla.poker.resultevaluator;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import org.junit.jupiter.api.Test;
-
 import com.yotilla.poker.card.CardSuit;
 import com.yotilla.poker.card.CardValue;
 import com.yotilla.poker.card.HandOfCards;
@@ -13,8 +7,12 @@ import com.yotilla.poker.error.DeckException;
 import com.yotilla.poker.error.HandExceededException;
 import com.yotilla.poker.result.PokerHand;
 import com.yotilla.poker.result.PokerHandRanking;
+import com.yotilla.poker.result.evaluator.FlushEvaluator;
 import com.yotilla.poker.result.evaluator.StraightEvaluator;
 import com.yotilla.poker.result.evaluator.StraightFlushEvaluator;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Description:
@@ -25,94 +23,85 @@ import com.yotilla.poker.result.evaluator.StraightFlushEvaluator;
  * @author Manuel
  *
  */
-class StraightFlushEvaluatorTest extends AbstractEvaluatorTest
-{
-	/**
-	 * getStraighFlushIsNullSafe
-	 *
-	 * @throws HandExceededException error
-	 */
-	@Test
-	void getStraighFlushIsNullSafe() throws HandExceededException
-	{
-		PokerHand result = new StraightEvaluator().evaluate(null);
-		assertNull(result, "Analyzing null, expected result is null.");
+class StraightFlushEvaluatorTest extends AbstractEvaluatorTest {
 
-	}
 
-	/**
-	 * straightFlushIsRecognized
-	 *
-	 * @throws DeckException         error
-	 * @throws HandExceededException error
-	 */
-	@Test
-	void straightFlushIsRecognized() throws HandExceededException, DeckException
-	{
-		HandOfCards hand = new HandOfCards();
+    @Test
+    void getStraightFlushIsNullSafe() {
+        PokerHand result = new StraightFlushEvaluator(new StraightEvaluator(), new FlushEvaluator()).evaluate(null);
+        assertNull(result, "Analyzing null, expected result is null.");
+    }
 
-		// Straight flush
-		hand.addCard(deck.drawCard(CardSuit.DIAMONDS, CardValue.KING));
-		hand.addCard(deck.drawCard(CardSuit.DIAMONDS, CardValue.QUEEN));
-		hand.addCard(deck.drawCard(CardSuit.DIAMONDS, CardValue.JACK));
-		hand.addCard(deck.drawCard(CardSuit.DIAMONDS, CardValue.TEN));
-		hand.addCard(deck.drawCard(CardSuit.DIAMONDS, CardValue.NINE));
+    /**
+     * straightFlushIsRecognized
+     *
+     * @throws DeckException         error
+     * @throws HandExceededException error
+     */
+    @Test
+    void straightFlushIsRecognized() throws HandExceededException, DeckException {
+        HandOfCards hand = new HandOfCards();
 
-		PokerHand result = new StraightFlushEvaluator().evaluate(hand);
+        // Straight flush
+        hand.addCard(deck.drawCard(CardSuit.DIAMONDS, CardValue.KING));
+        hand.addCard(deck.drawCard(CardSuit.DIAMONDS, CardValue.QUEEN));
+        hand.addCard(deck.drawCard(CardSuit.DIAMONDS, CardValue.JACK));
+        hand.addCard(deck.drawCard(CardSuit.DIAMONDS, CardValue.TEN));
+        hand.addCard(deck.drawCard(CardSuit.DIAMONDS, CardValue.NINE));
 
-		assertEquals(PokerHandRanking.STRAIGHT_FLUSH, result.getRanking(), "This should result in a straight flush");
-		assertEquals(CardValue.KING, result.getRankCards().get(0),
-				"The rank card is the king. The result should reflect that.");
+        PokerHand result = new StraightFlushEvaluator(new StraightEvaluator(), new FlushEvaluator()).evaluate(hand);
 
-		assertTrue(result.getKickerCards().isEmpty(), "A straight flush does not leave room for kicker cards.");
-	}
+        assertEquals(PokerHandRanking.STRAIGHT_FLUSH, result.ranking(), "This should result in a straight flush");
+        assertEquals(CardValue.KING, result.rankCards().get(0),
+                "The rank card is the king. The result should reflect that.");
 
-	/**
-	 * straightFlushIsRecognizedWithLeadingAce
-	 *
-	 * @throws DeckException         error
-	 * @throws HandExceededException error
-	 */
-	@Test
-	void straightFlushIsRecognizedWithLeadingAce() throws HandExceededException, DeckException
-	{
-		HandOfCards hand = new HandOfCards();
+        assertTrue(result.kickerCards().isEmpty(), "A straight flush does not leave room for kicker cards.");
+    }
 
-		// Straight flush, leading ace
-		hand.addCard(deck.drawCard(CardSuit.DIAMONDS, CardValue.TWO));
-		hand.addCard(deck.drawCard(CardSuit.DIAMONDS, CardValue.FOUR));
-		hand.addCard(deck.drawCard(CardSuit.DIAMONDS, CardValue.ACE));
-		hand.addCard(deck.drawCard(CardSuit.DIAMONDS, CardValue.FIVE));
-		hand.addCard(deck.drawCard(CardSuit.DIAMONDS, CardValue.THREE));
+    /**
+     * straightFlushIsRecognizedWithLeadingAce
+     *
+     * @throws DeckException         error
+     * @throws HandExceededException error
+     */
+    @Test
+    void straightFlushIsRecognizedWithLeadingAce() throws HandExceededException, DeckException {
+        HandOfCards hand = new HandOfCards();
 
-		PokerHand result = new StraightFlushEvaluator().evaluate(hand);
+        // Straight flush, leading ace
+        hand.addCard(deck.drawCard(CardSuit.DIAMONDS, CardValue.TWO));
+        hand.addCard(deck.drawCard(CardSuit.DIAMONDS, CardValue.FOUR));
+        hand.addCard(deck.drawCard(CardSuit.DIAMONDS, CardValue.ACE));
+        hand.addCard(deck.drawCard(CardSuit.DIAMONDS, CardValue.FIVE));
+        hand.addCard(deck.drawCard(CardSuit.DIAMONDS, CardValue.THREE));
 
-		assertEquals(PokerHandRanking.STRAIGHT_FLUSH, result.getRanking(), "This should result in a straight flush");
-		assertEquals(CardValue.FIVE, result.getRankCards().get(0),
-				"The rank card is the five. The result should reflect that.");
+        PokerHand result = new StraightFlushEvaluator(new StraightEvaluator(), new FlushEvaluator()).evaluate(hand);
 
-		assertTrue(result.getKickerCards().isEmpty(), "A straight flush does not leave room for kicker cards.");
-	}
+        assertEquals(PokerHandRanking.STRAIGHT_FLUSH, result.ranking(), "This should result in a straight flush");
+        assertEquals(CardValue.FIVE, result.rankCards().get(0),
+                "The rank card is the five. The result should reflect that.");
 
-	/**
-	 * straightFlushIsNotRecognizedWhenThereIsNone
-	 *
-	 * @throws DeckException         error
-	 * @throws HandExceededException error
-	 */
-	@Test
-	void straightFlushIsNotRecognizedWhenThereIsNone() throws HandExceededException, DeckException
-	{
-		HandOfCards hand = new HandOfCards();
+        assertTrue(result.kickerCards().isEmpty(), "A straight flush does not leave room for kicker cards.");
+    }
 
-		// Not a straight flush
-		hand.addCard(deck.drawCard(CardSuit.DIAMONDS, CardValue.KING));
-		hand.addCard(deck.drawCard(CardSuit.SPADES, CardValue.QUEEN));
-		hand.addCard(deck.drawCard(CardSuit.HEARTS, CardValue.TWO));
-		hand.addCard(deck.drawCard(CardSuit.CLUBS, CardValue.EIGHT));
-		hand.addCard(deck.drawCard(CardSuit.DIAMONDS, CardValue.EIGHT));
+    /**
+     * straightFlushIsNotRecognizedWhenThereIsNone
+     *
+     * @throws DeckException         error
+     * @throws HandExceededException error
+     */
+    @Test
+    void straightFlushIsNotRecognizedWhenThereIsNone() throws HandExceededException, DeckException {
+        HandOfCards hand = new HandOfCards();
 
-		PokerHand result = new StraightEvaluator().evaluate(hand);
-		assertNull(result, "No straight flush, expected result is null.");
-	}
+        // Not a straight flush
+        hand.addCard(deck.drawCard(CardSuit.DIAMONDS, CardValue.KING));
+        hand.addCard(deck.drawCard(CardSuit.SPADES, CardValue.QUEEN));
+        hand.addCard(deck.drawCard(CardSuit.HEARTS, CardValue.TWO));
+        hand.addCard(deck.drawCard(CardSuit.CLUBS, CardValue.EIGHT));
+        hand.addCard(deck.drawCard(CardSuit.DIAMONDS, CardValue.EIGHT));
+
+        PokerHand result = new StraightFlushEvaluator(new StraightEvaluator(), new FlushEvaluator()).evaluate(hand);
+        assertNull(result, "No straight flush, expected result is null.");
+    }
 }

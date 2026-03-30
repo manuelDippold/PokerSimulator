@@ -5,72 +5,47 @@ import com.yotilla.poker.result.PokerHand;
 
 /**
  * Description:
- * A poker playder
+ * A poker player
  * <br>
  * Date: 29.12.2020
  *
  * @author Manuel
  *
  */
-public class Player
-{
-	private HandOfCards hand;
-	private PokerHand pokerHand;
-	private final String name;
+public class Player {
+    private HandOfCards hand;
+    private PokerHand pokerHand;
+    private final String name;
 
-	/**
-	 * @param argName
-	 */
-	public Player(String argName)
-	{
-		super();
-		name = argName;
-	}
+    public Player(String name) {
+        super();
+        this.name = name;
+    }
 
-	/**
-	 * Deal the player a hand of cards.
-	 *
-	 * @param argHand hand player will hold
-	 */
-	public void dealHand(final HandOfCards argHand)
-	{
-		if (hand != null)
-		{
-			throw new IllegalArgumentException("Player " + name + " already holds a hand!");
-		}
+    public void dealHand(final HandOfCards hand) {
+        if (this.hand != null) {
+            throw new IllegalStateException("Player " + name + " already holds a hand!");
+        }
 
-		hand = argHand;
-	}
+        this.hand = hand;
+    }
 
-	/**
-	 * @return the hand
-	 */
-	public HandOfCards getHand()
-	{
-		return hand;
-	}
+    public HandOfCards getHand() {
+        return hand;
+    }
 
-	/**
-	 * @return the pokerHand
-	 */
-	public PokerHand getPokerHand()
-	{
-		return pokerHand;
-	}
 
-	/**
-	 * @param argPokerHand the pokerHand to set
-	 */
-	public void setPokerHand(PokerHand argPokerHand)
-	{
-		pokerHand = argPokerHand;
-	}
+    public PokerHand getPokerHand() {
+        return pokerHand;
+    }
 
-	/**
-	 * @return the name
-	 */
-	public String getName()
-	{
-		return name;
-	}
+
+    public void setPokerHand(PokerHand pokerHand) {
+        this.pokerHand = pokerHand;
+    }
+
+
+    public String getName() {
+        return name;
+    }
 }
