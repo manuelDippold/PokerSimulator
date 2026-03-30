@@ -52,7 +52,7 @@ public class CardParser {
             CardSuit suit = CardSuit.getByCode(input.substring(1, 2));
             return new Card(suit, value);
         } catch (IllegalArgumentException e) {
-            throw new PokerParseException(String.format("Parse error: Card not recognized: %s", input));
+            throw new PokerParseException(String.format("Parse error: Card not recognized: %s", input), e);
         }
     }
 }

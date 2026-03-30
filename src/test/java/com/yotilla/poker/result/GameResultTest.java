@@ -333,8 +333,10 @@ class GameResultTest {
         sut.addToRanks(playerJaneMock);
         sut.addToRanks(playerJohnMock);
 
-        String expected = "1\tJohn Doe\tTH TS 5S 5D 5H\tFULL_HOUSE, JACK, NINE.\n"
-                + "2\tJane Doe\t8H 9S TS JD QD\tSTRAIGHT, KING.\n";
+        String expected = """
+                1\tJohn Doe\tTH TS 5S 5D 5H\tFULL_HOUSE, JACK, NINE.
+                2\tJane Doe\t8H 9S TS JD QD\tSTRAIGHT, KING.
+                """;
 
         assertEquals(expected, sut.printRanks(), "printed rank result does not meet expectations.");
 
