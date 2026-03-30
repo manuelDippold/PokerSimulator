@@ -15,6 +15,6 @@ Issue list - perpetually updated during code quality improvements.
 11 | Smell    | LogPrinter                     | print() makes two separate log.log() calls for one message                      | Fixed
 12 | Smell    | StraightFlushEvaluator         | Creates StraightEvaluator and FlushEvaluator as field instances rather than injecting | Fixed
 13 | Smell    | CardValue, CardSuit             | Lookup methods use manual for loops instead of streams                          | Fixed
-14 | Minor    | PokerHand                      | Redundant explicit super() call                                                 |
-15 | Minor    | DeckOfCards                    | shuffleDeck() copies to ArrayList, shuffles, clears, adds back — verbose        |
+14 | Minor    | PokerHand                      | Redundant explicit super() call                                                 | Fixed
+15 | Minor    | DeckOfCards                    | shuffleDeck() copies to ArrayList, shuffles, clears, adds back — verbose        | Fixed
 16 | Medium   | Test suite                     | No end-to-end integration test: PokerTable.playPoker() is never exercised with real input through the full stack | Fixed

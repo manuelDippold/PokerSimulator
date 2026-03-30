@@ -4,7 +4,6 @@ import com.yotilla.poker.card.CardValue;
 import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Description: This data structure resembles the result after the dealer
@@ -67,7 +66,7 @@ public record PokerHand(PokerHandRanking ranking, List<CardValue> rankCards, Lis
         if (kickerCards() != null && !kickerCards().isEmpty()) {
             sb.append(" Kickers: ");
 
-            List<String> kickerCardNames = kickerCards().stream().map(CardValue::name).collect(Collectors.toList());
+            List<String> kickerCardNames = kickerCards().stream().map(CardValue::name).toList();
             sb.append(String.join(", ", kickerCardNames));
             sb.append(".");
         }

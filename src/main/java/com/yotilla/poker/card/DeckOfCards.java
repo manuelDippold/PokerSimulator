@@ -101,18 +101,9 @@ public class DeckOfCards {
         return cards.pop();
     }
 
-    /**
-     * shuffle the deck, randomizing the order.
-     */
     public void shuffleDeck() {
-        // get a working copy list of the remaining cards in this deck.
-        List<Card> cardList = new ArrayList<>();
-        cardList.addAll(cards);
-
-        // shuffle the list
+        List<Card> cardList = new ArrayList<>(cards);
         Collections.shuffle(cardList);
-
-        // clear the deck itself and re-add all cards from the shuffled list.
         cards.clear();
         cards.addAll(cardList);
     }
