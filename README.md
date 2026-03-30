@@ -13,7 +13,7 @@ Valid inputs for suit are: { C, D, H, S } representing Clubs, Diamonds, Hearts, 
 
 Cards are separated with a space. Each String represents a hand of five cards.
 The software analyzes the hand and prints the winner(s). It follows the poker rules as the game is decided by the
-ranking of the hand. Tie breakers are the rank cards, then the kicker cards.
+ranking of the hand. Tiebreakers are the rank cards, then the kicker cards.
 
 Consider for example this hand:
 3D KC KS AH AC
@@ -40,7 +40,7 @@ A French deck holds 52 cards which naturally limits the amount of five-card-hand
 ## Examples
 
 **A simple game:**  
-*java -jar poker-1.0.jar "2D 9C AS AH AC" "3D 6D 7D TD QD" "2C 5C 9D 8S QH"*
+*java -jar poker-1.1.0.jar "2D 9C AS AH AC" "3D 6D 7D TD QD" "2C 5C 9D 8S QH"*
 
 ![A basic game](resources/img/basic_game.png)
 
@@ -67,7 +67,7 @@ The **Player** represents a poker player. It is a simple data structure to hold 
 a *PokerHand* once the former is analyzed.
 
 The **Dealer** is the central point of logic in the game. They're in control of the *DeckOfCards* and have access to the
-necessary Logic and *PokerHandEvaluator* objects to analyze and run the game. It uses each of them in descending order
+necessary Logic and *HandEvaluationService* to analyze and run the game. It uses each of them in descending order
 to determine the most valuable hand it can derive from the cards provided.
 
 ## Card
@@ -85,7 +85,7 @@ rank or result of their cards.
 
 A **Pokerhand** is the result of analyzing a *HandOfCards*. It holds a value of the Enum **PokerHandRanking** to
 represent its value, i.e. whether it's a Pair, two Pairs, and so on.  
-Besides that, the poker hand always holds to card value collections taht represent its *rank cards* and *kicker cards*.
+Besides that, the poker hand always holds to card value collections that represent its *rank cards* and *kicker cards*.
 
 The **GameResult** comes into existence when one compare the **PokerHand**s to one another to determine a winner. This
 data structure holds the winner if there is one, or the list of players that spilt the pot among them. Furthermore, all
@@ -131,6 +131,7 @@ Utility classes.
 
 - The **PureLogFormatter** is a customized formatter that allows us to print to the console without heads or tails and
   still circumvent the usage of *System.out*
+- The **LogPrinter** wraps a Logger and exposes a simple print method used by PokerTable for console output.
 - **NullSafeComparator** is an interface every other comparator in the software uses. When comparing two objects, it
   takes care of the null checks and then forwards to the implementation.
 
