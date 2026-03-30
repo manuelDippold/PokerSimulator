@@ -9,7 +9,7 @@ Issue list - perpetually updated during code quality improvements.
 5  | High     | PokerHandEvaluator             | getKickerCards(): workingCopy null initialization                               | Fixed
 6  | High     | PokerHandEvaluator             | copyHandOfCards() / getKickerCards(): exceptions swallowed                      | Fixed
 7  | High     | HandOfCards                    | setCards() stores passed-in list directly — no defensive copy                  | Fixed
-8  | Medium   | GameResult                     | addToRanks() recomputes winners as side effect on every call                    |
+8  | Medium   | GameResult                     | addToRanks() recomputes winners as side effect on every call                    | Fixed
 9  | Medium   | GameResult                     | printPlayerAndHand() has chain of 5 nested null checks                         |
 10 | Medium   | Player                         | dealHand() throws IllegalArgumentException for a business rule violation        |
 11 | Smell    | PokerTable                     | print() makes two separate log.log() calls for one message                      |

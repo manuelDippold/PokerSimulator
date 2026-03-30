@@ -15,8 +15,6 @@ import java.util.*;
  *
  */
 public class GameResult {
-    private List<Player> winners;
-
     private final SortedMap<PokerHand, List<Player>> ranking;
 
     /**
@@ -29,17 +27,19 @@ public class GameResult {
         ranking = new TreeMap<>(pokerHandComparator.reversed());
     }
 
-    /**
-     * the sole winner, if there is one.
-     *
-     * @return the winner
-     */
+    private List<Player> resolveWinners() {
+        if (ranking.isEmpty()) {
+            return Collections.emptyList();
+        }
+        return ranking.get(ranking.firstKey());
+    }
+
     public Player getWinner() {
-        if (winners == null || winners.size() != 1) {
+        List<Player> currentWinners = resolveWinners();
+        if (currentWinners.size() != 1) {
             return null;
         }
-
-        return winners.stream().findFirst().orElse(null);
+        return currentWinners.getFirst();
     }
 
     /**
@@ -48,11 +48,11 @@ public class GameResult {
      * @return the potSplit
      */
     public List<Player> getPotSplit() {
-        if (winners == null || winners.size() <= 1) {
+        List<Player> currentWinners = resolveWinners();
+        if (currentWinners.size() <= 1) {
             return Collections.emptyList();
         }
-
-        return winners;
+        return currentWinners;
     }
 
     /**
@@ -73,14 +73,6 @@ public class GameResult {
             PokerHand playerHand = player.getPokerHand();
 
             ranking.computeIfAbsent(playerHand, hand -> new ArrayList<>()).add(player);
-
-            List<Player> winningPlayers = ranking.values().stream().findFirst().orElse(null);
-
-            if (winningPlayers == null) {
-                return;
-            }
-
-            winners = Collections.unmodifiableList(winningPlayers);
         }
     }
 
@@ -149,15 +141,14 @@ public class GameResult {
      * @return String
      */
     public String printFinalResult() {
-        if (winners != null && !winners.isEmpty()) {
-            Player soleWinner = getWinner();
+        Player soleWinner = getWinner();
+        if (soleWinner != null) {
+            return soleWinner.getName() + " wins.";
+        }
 
-            if (soleWinner != null) {
-                return soleWinner.getName() + " wins.";
-            }
-
-            List<String> names = winners.stream().map(Player::getName).toList();
-
+        List<Player> splitWinners = getPotSplit();
+        if (!splitWinners.isEmpty()) {
+            List<String> names = splitWinners.stream().map(Player::getName).toList();
             return "Players " + String.join(", ", names) + " split the pot.";
         }
 
