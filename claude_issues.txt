@@ -20,5 +20,5 @@ Issue list - perpetually updated during code quality improvements.
 16 | Medium   | Test suite                     | No end-to-end integration test: PokerTable.playPoker() is never exercised with real input through the full stack | Fixed
 17 | Medium   | MultiplesEvaluator             | Unreachable default branch in switch — guard condition makes it dead code       | Fixed
 18 | Minor    | FullHouseEvaluator             | Uses Arrays.asList() — inconsistent with rest of codebase which uses List.of() | Fixed
-19 | Minor    | PokerHand                      | Record explicitly overrides all three auto-generated accessors with identical implementations |
-20 | Minor    | GameResult                     | printFinalResult() calls getWinner() and getPotSplit() separately, each invoking resolveWinners() — ranking traversed twice |
+19 | Minor    | PokerHand                      | Record explicitly overrides all three auto-generated accessors with identical implementations | Fixed
+20 | Minor    | GameResult                     | printFinalResult() calls getWinner() and getPotSplit() separately, each invoking resolveWinners() — ranking traversed twice | Fixed

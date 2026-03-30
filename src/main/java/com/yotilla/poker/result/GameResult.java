@@ -140,14 +140,14 @@ public class GameResult {
      * @return String
      */
     public String printFinalResult() {
-        Player soleWinner = getWinner();
-        if (soleWinner != null) {
-            return soleWinner.getName() + " wins.";
+        List<Player> winners = resolveWinners();
+
+        if (winners.size() == 1) {
+            return winners.getFirst().getName() + " wins.";
         }
 
-        List<Player> splitWinners = getPotSplit();
-        if (!splitWinners.isEmpty()) {
-            List<String> names = splitWinners.stream().map(Player::getName).toList();
+        if (winners.size() > 1) {
+            List<String> names = winners.stream().map(Player::getName).toList();
             return "Players " + String.join(", ", names) + " split the pot.";
         }
 

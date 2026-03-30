@@ -24,31 +24,7 @@ import java.util.List;
  * * @param kickerCards Kicker cards in descending order. A
  */
 public record PokerHand(PokerHandRanking ranking, List<CardValue> rankCards, List<CardValue> kickerCards) {
-
-
-    /**
-     * @return the ranking
-     */
-    @Override
-    public PokerHandRanking ranking() {
-        return ranking;
-    }
-
-    /**
-     * @return the rankCards
-     */
-    @Override
-    public List<CardValue> rankCards() {
-        return rankCards;
-    }
-
-    /**
-     * @return the kickerCards
-     */
-    @Override
-    public List<CardValue> kickerCards() {
-        return kickerCards;
-    }
+    
 
     @Override
     public String toString() {
