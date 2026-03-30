@@ -16,8 +16,13 @@ import java.util.Collections;
  *
  */
 public class StraightFlushEvaluator implements PokerHandEvaluator {
-    StraightEvaluator straightEvaluator = new StraightEvaluator();
-    FlushEvaluator flushEvaluator = new FlushEvaluator();
+    private final StraightEvaluator straightEvaluator;
+    private final FlushEvaluator flushEvaluator;
+
+    public StraightFlushEvaluator(StraightEvaluator straightEvaluator, FlushEvaluator flushEvaluator) {
+        this.straightEvaluator = straightEvaluator;
+        this.flushEvaluator = flushEvaluator;
+    }
 
     /**
      * Attempts to find a straight flush in this hand and returns an according result.

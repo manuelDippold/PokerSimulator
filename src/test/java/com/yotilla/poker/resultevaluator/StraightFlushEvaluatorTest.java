@@ -7,6 +7,7 @@ import com.yotilla.poker.error.DeckException;
 import com.yotilla.poker.error.HandExceededException;
 import com.yotilla.poker.result.PokerHand;
 import com.yotilla.poker.result.PokerHandRanking;
+import com.yotilla.poker.result.evaluator.FlushEvaluator;
 import com.yotilla.poker.result.evaluator.StraightEvaluator;
 import com.yotilla.poker.result.evaluator.StraightFlushEvaluator;
 import org.junit.jupiter.api.Test;
@@ -23,16 +24,12 @@ import static org.junit.jupiter.api.Assertions.*;
  *
  */
 class StraightFlushEvaluatorTest extends AbstractEvaluatorTest {
-    /**
-     * getStraighFlushIsNullSafe
-     *
-     * @throws HandExceededException error
-     */
-    @Test
-    void getStraighFlushIsNullSafe() throws HandExceededException {
-        PokerHand result = new StraightEvaluator().evaluate(null);
-        assertNull(result, "Analyzing null, expected result is null.");
 
+
+    @Test
+    void getStraightFlushIsNullSafe() {
+        PokerHand result = new StraightFlushEvaluator(new StraightEvaluator(), new FlushEvaluator()).evaluate(null);
+        assertNull(result, "Analyzing null, expected result is null.");
     }
 
     /**
@@ -52,7 +49,7 @@ class StraightFlushEvaluatorTest extends AbstractEvaluatorTest {
         hand.addCard(deck.drawCard(CardSuit.DIAMONDS, CardValue.TEN));
         hand.addCard(deck.drawCard(CardSuit.DIAMONDS, CardValue.NINE));
 
-        PokerHand result = new StraightFlushEvaluator().evaluate(hand);
+        PokerHand result = new StraightFlushEvaluator(new StraightEvaluator(), new FlushEvaluator()).evaluate(hand);
 
         assertEquals(PokerHandRanking.STRAIGHT_FLUSH, result.ranking(), "This should result in a straight flush");
         assertEquals(CardValue.KING, result.rankCards().get(0),
@@ -78,7 +75,7 @@ class StraightFlushEvaluatorTest extends AbstractEvaluatorTest {
         hand.addCard(deck.drawCard(CardSuit.DIAMONDS, CardValue.FIVE));
         hand.addCard(deck.drawCard(CardSuit.DIAMONDS, CardValue.THREE));
 
-        PokerHand result = new StraightFlushEvaluator().evaluate(hand);
+        PokerHand result = new StraightFlushEvaluator(new StraightEvaluator(), new FlushEvaluator()).evaluate(hand);
 
         assertEquals(PokerHandRanking.STRAIGHT_FLUSH, result.ranking(), "This should result in a straight flush");
         assertEquals(CardValue.FIVE, result.rankCards().get(0),
@@ -104,7 +101,7 @@ class StraightFlushEvaluatorTest extends AbstractEvaluatorTest {
         hand.addCard(deck.drawCard(CardSuit.CLUBS, CardValue.EIGHT));
         hand.addCard(deck.drawCard(CardSuit.DIAMONDS, CardValue.EIGHT));
 
-        PokerHand result = new StraightEvaluator().evaluate(hand);
+        PokerHand result = new StraightFlushEvaluator(new StraightEvaluator(), new FlushEvaluator()).evaluate(hand);
         assertNull(result, "No straight flush, expected result is null.");
     }
 }

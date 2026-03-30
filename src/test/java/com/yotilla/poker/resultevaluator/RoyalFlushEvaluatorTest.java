@@ -7,7 +7,9 @@ import com.yotilla.poker.error.DeckException;
 import com.yotilla.poker.error.HandExceededException;
 import com.yotilla.poker.result.PokerHand;
 import com.yotilla.poker.result.PokerHandRanking;
+import com.yotilla.poker.result.evaluator.FlushEvaluator;
 import com.yotilla.poker.result.evaluator.RoyalFlushEvaluator;
+import com.yotilla.poker.result.evaluator.StraightEvaluator;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -30,7 +32,7 @@ class RoyalFlushEvaluatorTest extends AbstractEvaluatorTest {
      */
     @Test
     void getRoyalFlushIsNullSafe() throws HandExceededException {
-        PokerHand result = new RoyalFlushEvaluator().evaluate(null);
+        PokerHand result = new RoyalFlushEvaluator(new StraightEvaluator(), new FlushEvaluator()).evaluate(null);
         assertNull(result, "Analyzing null, expected result is null.");
     }
 
@@ -51,7 +53,7 @@ class RoyalFlushEvaluatorTest extends AbstractEvaluatorTest {
         hand.addCard(deck.drawCard(CardSuit.DIAMONDS, CardValue.TEN));
         hand.addCard(deck.drawCard(CardSuit.DIAMONDS, CardValue.JACK));
 
-        PokerHand result = new RoyalFlushEvaluator().evaluate(hand);
+        PokerHand result = new RoyalFlushEvaluator(new StraightEvaluator(), new FlushEvaluator()).evaluate(hand);
         assertEquals(PokerHandRanking.ROYAL_FLUSH, result.ranking(), "This should result in a royal flush");
         assertTrue(result.rankCards().isEmpty(),
                 "A royal flush does not leave room for rank cards. There is no tie breaker.");
@@ -75,7 +77,7 @@ class RoyalFlushEvaluatorTest extends AbstractEvaluatorTest {
         hand.addCard(deck.drawCard(CardSuit.CLUBS, CardValue.EIGHT));
         hand.addCard(deck.drawCard(CardSuit.DIAMONDS, CardValue.EIGHT));
 
-        PokerHand result = new RoyalFlushEvaluator().evaluate(hand);
+        PokerHand result = new RoyalFlushEvaluator(new StraightEvaluator(), new FlushEvaluator()).evaluate(hand);
         assertNull(result, "No royalflush, expected result is null.");
     }
 }

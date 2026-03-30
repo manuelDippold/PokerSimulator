@@ -18,8 +18,8 @@ import java.util.Objects;
 public class HandEvaluationService {
 
     private final List<PokerHandEvaluator> evaluators = List.of(
-            new RoyalFlushEvaluator(),
-            new StraightFlushEvaluator(),
+            new RoyalFlushEvaluator(new StraightEvaluator(), new FlushEvaluator()),
+            new StraightFlushEvaluator(new StraightEvaluator(), new FlushEvaluator()),
             new FourOfKindEvaluator(),
             new FullHouseEvaluator(),
             new FlushEvaluator(),

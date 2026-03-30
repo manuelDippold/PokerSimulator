@@ -2,7 +2,6 @@ package com.yotilla.poker.result.evaluator;
 
 import com.yotilla.poker.card.CardValue;
 import com.yotilla.poker.card.HandOfCards;
-import com.yotilla.poker.error.HandExceededException;
 import com.yotilla.poker.result.PokerHand;
 import com.yotilla.poker.result.PokerHandRanking;
 
@@ -18,13 +17,10 @@ import java.util.Collections;
  *
  */
 public class RoyalFlushEvaluator extends StraightFlushEvaluator {
-    /**
-     * Attempts to find a royal flush in this hand and returns an according result.
-     *
-     * @param hand hand to analyze
-     * @return poker hand or null.
-     * @throws HandExceededException in case of an error
-     */
+    public RoyalFlushEvaluator(StraightEvaluator straightEvaluator, FlushEvaluator flushEvaluator) {
+        super(straightEvaluator, flushEvaluator);
+    }
+
     @Override
     public PokerHand evaluate(HandOfCards hand) {
         if (hand != null) {
