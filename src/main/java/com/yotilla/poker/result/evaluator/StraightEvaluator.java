@@ -37,7 +37,7 @@ public class StraightEvaluator implements PokerHandEvaluator {
             accountForAceBeginningStraight(workingCopy);
 
             boolean skipped = false;
-            int highestvalue = 0;
+            int highestValue = 0;
             int runningCardValue = 0;
 
             // See if we can step through the ordered cards without skipping one.
@@ -51,8 +51,8 @@ public class StraightEvaluator implements PokerHandEvaluator {
                 } else {
                     runningCardValue = thisCardValue;
 
-                    if (thisCardValue > highestvalue) {
-                        highestvalue = thisCardValue;
+                    if (thisCardValue > highestValue) {
+                        highestValue = thisCardValue;
                     }
                 }
             }
@@ -60,7 +60,7 @@ public class StraightEvaluator implements PokerHandEvaluator {
             if (!skipped) {
                 // We found the straight, construct a result. The ranking card is the highest card of the straight.
                 return new PokerHand(PokerHandRanking.STRAIGHT,
-                        List.of(CardValue.getByNumericalValue(highestvalue)), Collections.emptyList());
+                        List.of(CardValue.getByNumericalValue(highestValue)), Collections.emptyList());
             }
         }
 

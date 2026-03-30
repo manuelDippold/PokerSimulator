@@ -72,7 +72,9 @@ ordered strongest-to-weakest. It iterates them until one returns a non-null resu
 ## Issue Tracking
 
 `claude_issues.txt` (next to this file) is the perpetually updated list of known code quality issues. Update it whenever
-an issue is fixed or a new one is discovered.
+an issue is fixed or a new one is discovered. Any change to the issue list — whether adding, fixing, or updating an entry —
+must be saved to `claude_issues.txt` immediately. Never report an issue status change to the user without having written it
+to the file first.
 
 ## Clean Code Philosophy
 

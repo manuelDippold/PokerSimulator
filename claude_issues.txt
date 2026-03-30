@@ -22,3 +22,5 @@ Issue list - perpetually updated during code quality improvements.
 18 | Minor    | FullHouseEvaluator             | Uses Arrays.asList() — inconsistent with rest of codebase which uses List.of() | Fixed
 19 | Minor    | PokerHand                      | Record explicitly overrides all three auto-generated accessors with identical implementations | Fixed
 20 | Minor    | GameResult                     | printFinalResult() calls getWinner() and getPotSplit() separately, each invoking resolveWinners() — ranking traversed twice | Fixed
+21 | Minor    | StraightEvaluator              | highestvalue not in camelCase                                                   | Fixed
+22 | Minor    | FlushEvaluator                 | flush = true initialisation is dead — variable only ever set to false in loop   | Fixed
