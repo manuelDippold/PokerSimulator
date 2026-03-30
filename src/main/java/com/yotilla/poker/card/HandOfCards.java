@@ -66,7 +66,7 @@ public class HandOfCards {
                     String.format("A hand of cards must not hold more than %d cards.", HAND_SIZE));
         }
 
-        this.cards = cards;
+        this.cards = new ArrayList<>(cards);
     }
 
     /**

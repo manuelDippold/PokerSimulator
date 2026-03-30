@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.yotilla.poker.card.HandOfCards.HAND_SIZE;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -151,7 +152,7 @@ class HandOfCardsTest {
     void settingSixCardsThrowsException() {
         HandOfCards hand = new HandOfCards();
 
-        List<Card> tooManyCards = getRandomCardMocksAsList(HandOfCards.HAND_SIZE + 1);
+        List<Card> tooManyCards = getRandomCardMocksAsList(HAND_SIZE + 1);
 
         assertThrows(HandExceededException.class, () -> {
             hand.setCards(tooManyCards);
@@ -166,7 +167,7 @@ class HandOfCardsTest {
     @Test
     void settingFiveCardsWorksFine() throws HandExceededException {
         HandOfCards hand = new HandOfCards();
-        List<Card> maximumCards = getRandomCardMocksAsList(HandOfCards.HAND_SIZE);
+        List<Card> maximumCards = getRandomCardMocksAsList(HAND_SIZE);
 
         hand.setCards(maximumCards);
 
@@ -180,7 +181,7 @@ class HandOfCardsTest {
     void addingSixCardsAtOnceThrowsException() {
         HandOfCards hand = new HandOfCards();
 
-        Card[] tooManyCards = getRandomCardMocksAsArray(HandOfCards.HAND_SIZE + 1);
+        Card[] tooManyCards = getRandomCardMocksAsArray(HAND_SIZE + 1);
 
         assertThrows(HandExceededException.class, () -> {
             hand.addCards(tooManyCards);
@@ -195,10 +196,23 @@ class HandOfCardsTest {
     @Test
     void addingFiveCardsAtOnceIsFine() throws HandExceededException {
         HandOfCards hand = new HandOfCards();
-        Card[] maximumCards = getRandomCardMocksAsArray(HandOfCards.HAND_SIZE);
+        Card[] maximumCards = getRandomCardMocksAsArray(HAND_SIZE);
 
         hand.addCards(maximumCards);
         assertEquals(maximumCards.length, hand.getCards().size(), "Adding this many cards shouldn't be a problem.");
+    }
+
+    @Test
+    void setCardsDoesNotExposeInternalListToCallerMutation() throws HandExceededException {
+        HandOfCards hand = new HandOfCards();
+        hand.addCards(getRandomCardMocksAsArray(3));
+
+        List<Card> cards = hand.getCards();
+
+        hand.addCards(getRandomCardMocksAsArray(1));
+
+        assertEquals(3, cards.size());
+        assertEquals(4, hand.getCards().size());
     }
 
     /**
@@ -210,7 +224,7 @@ class HandOfCardsTest {
     void addingTheSixthCardThrowsException() throws HandExceededException {
         // Create a hand and add five cards
         HandOfCards hand = new HandOfCards();
-        Card[] maximumCards = getRandomCardMocksAsArray(HandOfCards.HAND_SIZE);
+        Card[] maximumCards = getRandomCardMocksAsArray(HAND_SIZE);
 
         hand.addCards(maximumCards);
 

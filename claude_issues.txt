@@ -8,7 +8,7 @@ Issue list - perpetually updated during code quality improvements.
 4  | Critical | DeckOfCards                    | drawCard() used .orElse(null) then immediately null-checked                     | Fixed
 5  | High     | PokerHandEvaluator             | getKickerCards(): workingCopy null initialization                               | Fixed
 6  | High     | PokerHandEvaluator             | copyHandOfCards() / getKickerCards(): exceptions swallowed                      | Fixed
-7  | High     | HandOfCards                    | setCards() stores passed-in list directly — no defensive copy                  |
+7  | High     | HandOfCards                    | setCards() stores passed-in list directly — no defensive copy                  | Fixed
 8  | Medium   | GameResult                     | addToRanks() recomputes winners as side effect on every call                    |
 9  | Medium   | GameResult                     | printPlayerAndHand() has chain of 5 nested null checks                         |
 10 | Medium   | Player                         | dealHand() throws IllegalArgumentException for a business rule violation        |
