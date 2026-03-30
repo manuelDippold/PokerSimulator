@@ -36,8 +36,8 @@ public class PureLogFormatter extends SimpleFormatter {
     }
 
     @Override
-    public String format(LogRecord record) {
-        return record.getMessage();
+    public String format(LogRecord logRecord) {
+        return logRecord.getMessage();
     }
 
 }
