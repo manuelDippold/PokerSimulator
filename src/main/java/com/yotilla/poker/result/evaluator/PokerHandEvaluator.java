@@ -76,7 +76,7 @@ public interface PokerHandEvaluator {
 
         try {
             HandOfCards copy = new HandOfCards();
-            
+
             if (toCopy.getAmountOfCards() == 0) {
                 copy.setCards(Collections.emptyList());
                 return copy;

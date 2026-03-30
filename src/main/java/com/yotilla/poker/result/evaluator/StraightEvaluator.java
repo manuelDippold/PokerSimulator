@@ -6,7 +6,6 @@ import com.yotilla.poker.card.HandOfCards;
 import com.yotilla.poker.result.PokerHand;
 import com.yotilla.poker.result.PokerHandRanking;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -61,7 +60,7 @@ public class StraightEvaluator implements PokerHandEvaluator {
             if (!skipped) {
                 // We found the straight, construct a result. The ranking card is the highest card of the straight.
                 return new PokerHand(PokerHandRanking.STRAIGHT,
-                        Arrays.asList(CardValue.getByNumericalValue(highestvalue)), Collections.emptyList());
+                        List.of(CardValue.getByNumericalValue(highestvalue)), Collections.emptyList());
             }
         }
 

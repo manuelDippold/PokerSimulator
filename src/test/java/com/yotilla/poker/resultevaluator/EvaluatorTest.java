@@ -9,7 +9,6 @@ import com.yotilla.poker.error.HandExceededException;
 import com.yotilla.poker.result.evaluator.PairEvaluator;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -81,7 +80,7 @@ class EvaluatorTest extends AbstractEvaluatorTest {
 
         hand.addCard(aceOfHearts);
         hand.addCard(aceOfDiamonds);
-        List<Card> partOfRanking = Arrays.asList(aceOfHearts, aceOfDiamonds);
+        List<Card> partOfRanking = List.of(aceOfHearts, aceOfDiamonds);
 
         // add three other cards. These should come back as kickers,
         // in descending order.

@@ -1,6 +1,7 @@
 # PokerSimulator
 
-A Java-based poker hand evaluator and game simulator. Parses poker hands from string input, evaluates them against standard poker rankings, and determines winners with full tiebreaker and split-pot support.
+A Java-based poker hand evaluator and game simulator. Parses poker hands from string input, evaluates them against
+standard poker rankings, and determines winners with full tiebreaker and split-pot support.
 
 ## Build & Test
 
@@ -17,7 +18,8 @@ mvn clean package
 java -jar target/poker-1.0.jar "2D 9C AS AH AC" "3D 6D 7D TD QD" "2C 5C 9D 8S QH"
 ```
 
-Tests require `JAVA_HOME` pointing to JDK 26. Surefire runs with `forkCount=0`. JaCoCo enforces a minimum 60% cyclomatic complexity coverage — `mvn verify` will fail if this is not met.
+Tests require `JAVA_HOME` pointing to JDK 26. Surefire runs with `forkCount=0`. JaCoCo enforces a minimum 60% cyclomatic
+complexity coverage — `mvn verify` will fail if this is not met.
 
 ## Project Structure
 
@@ -53,11 +55,14 @@ com.yotilla.poker
 
 ## Architecture
 
-**Strategy + Chain of Responsibility:** `HandEvaluationService` holds a list of `PokerHandEvaluator` implementations ordered strongest-to-weakest. It iterates them until one returns a non-null result — that is the player's hand.
+**Strategy + Chain of Responsibility:** `HandEvaluationService` holds a list of `PokerHandEvaluator` implementations
+ordered strongest-to-weakest. It iterates them until one returns a non-null result — that is the player's hand.
 
-**Template Method:** `MultiplesEvaluator` provides shared pattern-detection logic extended by `PairEvaluator`, `TripleEvaluator`, and `FourOfKindEvaluator`.
+**Template Method:** `MultiplesEvaluator` provides shared pattern-detection logic extended by `PairEvaluator`,
+`TripleEvaluator`, and `FourOfKindEvaluator`.
 
 **Evaluation flow:**
+
 1. Parse string input → `Card` objects, draw from deck
 2. Fill incomplete hands with random cards from deck
 3. Run evaluator chain top-down; first match wins
@@ -66,17 +71,23 @@ com.yotilla.poker
 
 ## Issue Tracking
 
-`claude_issues.txt` (next to this file) is the perpetually updated list of known code quality issues. Update it whenever an issue is fixed or a new one is discovered.
+`claude_issues.txt` (next to this file) is the perpetually updated list of known code quality issues. Update it whenever
+an issue is fixed or a new one is discovered.
 
 ## Clean Code Philosophy
 
-Prefer self-documenting code over comments. Variable and method names should express intent clearly enough that inline comments become unnecessary. A comment explaining *what* the code does is a signal to rename or extract — only use comments to explain *why* when the reasoning is non-obvious from the code itself.
+Prefer self-documenting code over comments. Variable and method names should express intent clearly enough that inline
+comments become unnecessary. A comment explaining *what* the code does is a signal to rename or extract — only use
+comments to explain *why* when the reasoning is non-obvious from the code itself.
 
-Do not add Javadoc to any new methods, test or otherwise. Method names should be expressive enough to make documentation redundant.
+Do not add Javadoc to any new methods, test or otherwise. Method names should be expressive enough to make documentation
+redundant.
 
 ## Method Ordering
 
-Methods within a class are ordered top-down by call hierarchy: the caller comes first, then its callees, then their callees. Reading the file top to bottom should read like a newspaper — high-level intent first, details below. When extracting a helper, place it directly below the method that calls it.
+Methods within a class are ordered top-down by call hierarchy: the caller comes first, then its callees, then their
+callees. Reading the file top to bottom should read like a newspaper — high-level intent first, details below. When
+extracting a helper, place it directly below the method that calls it.
 
 - 4-space indentation, K&R braces
 - `this.field = field` in constructors when parameter name matches field name
@@ -88,7 +99,8 @@ Methods within a class are ordered top-down by call hierarchy: the caller comes 
 
 ## Input Format
 
-Card codes are 2 characters: value (`2–9`, `T`, `J`, `Q`, `K`, `A`) + suit (`C`, `D`, `H`, `S`). Case-insensitive. Cards separated by spaces.
+Card codes are 2 characters: value (`2–9`, `T`, `J`, `Q`, `K`, `A`) + suit (`C`, `D`, `H`, `S`). Case-insensitive. Cards
+separated by spaces.
 
 - Each card may appear at most once across all players
 - Hands with fewer than 5 cards are filled automatically from the deck
@@ -98,6 +110,10 @@ Card codes are 2 characters: value (`2–9`, `T`, `J`, `Q`, `K`, `A`) + suit (`C
 
 JUnit 5 + Mockito. Test classes mirror the main package structure under `src/test/java`.
 
-`TestUtils` provides shared helpers: `getCardMock`, `getHandSpy`, `getPokerHandSpy`, and `getRandomCardMock` (uses a shared `Random` instance).
+`TestUtils` provides shared helpers: `getCardMock`, `getHandSpy`, `getPokerHandSpy`, and `getRandomCardMock` (uses a
+shared `Random` instance).
 
-**When creating tests:** Create the test class and empty test methods with descriptive names — never write the test body. Always put `Assertions.fail("implement me!")` as the sole body so the test fails visibly until implemented. The developer fills in the implementation. This avoids AI-generated tests that compile and pass but miss edge cases or assert the wrong thing.
+**When creating tests:** Create the test class and empty test methods with descriptive names — never write the test
+body. Always put `Assertions.fail("implement me!")` as the sole body so the test fails visibly until implemented. The
+developer fills in the implementation. This avoids AI-generated tests that compile and pass but miss edge cases or
+assert the wrong thing.

@@ -7,6 +7,7 @@ package com.yotilla.poker.card;
  * @author Manuel
  *
  */
+
 import java.util.Arrays;
 import java.util.Objects;
 

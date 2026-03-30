@@ -9,7 +9,7 @@ import com.yotilla.poker.result.PokerHandRanking;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -25,8 +25,8 @@ class HandEvaluationServiceTest {
     @Test
     void recognizesRoyalFlush() throws HandExceededException {
         HandOfCards hand = TestUtils.getHandSpy(
-                Arrays.asList(CardSuit.HEARTS, CardSuit.HEARTS, CardSuit.HEARTS, CardSuit.HEARTS, CardSuit.HEARTS),
-                Arrays.asList(CardValue.TEN, CardValue.JACK, CardValue.QUEEN, CardValue.KING, CardValue.ACE));
+                List.of(CardSuit.HEARTS, CardSuit.HEARTS, CardSuit.HEARTS, CardSuit.HEARTS, CardSuit.HEARTS),
+                List.of(CardValue.TEN, CardValue.JACK, CardValue.QUEEN, CardValue.KING, CardValue.ACE));
 
         PokerHand result = sut.evaluate(hand);
 
@@ -36,8 +36,8 @@ class HandEvaluationServiceTest {
     @Test
     void recognizesFullHouse() throws HandExceededException {
         HandOfCards hand = TestUtils.getHandSpy(
-                Arrays.asList(CardSuit.HEARTS, CardSuit.SPADES, CardSuit.SPADES, CardSuit.DIAMONDS, CardSuit.HEARTS),
-                Arrays.asList(CardValue.TEN, CardValue.TEN, CardValue.FIVE, CardValue.FIVE, CardValue.FIVE));
+                List.of(CardSuit.HEARTS, CardSuit.SPADES, CardSuit.SPADES, CardSuit.DIAMONDS, CardSuit.HEARTS),
+                List.of(CardValue.TEN, CardValue.TEN, CardValue.FIVE, CardValue.FIVE, CardValue.FIVE));
 
         PokerHand result = sut.evaluate(hand);
 
@@ -49,8 +49,8 @@ class HandEvaluationServiceTest {
     @Test
     void recognizesStraight() throws HandExceededException {
         HandOfCards hand = TestUtils.getHandSpy(
-                Arrays.asList(CardSuit.HEARTS, CardSuit.SPADES, CardSuit.SPADES, CardSuit.DIAMONDS, CardSuit.DIAMONDS),
-                Arrays.asList(CardValue.EIGHT, CardValue.NINE, CardValue.TEN, CardValue.JACK, CardValue.QUEEN));
+                List.of(CardSuit.HEARTS, CardSuit.SPADES, CardSuit.SPADES, CardSuit.DIAMONDS, CardSuit.DIAMONDS),
+                List.of(CardValue.EIGHT, CardValue.NINE, CardValue.TEN, CardValue.JACK, CardValue.QUEEN));
 
         PokerHand result = sut.evaluate(hand);
 
@@ -61,8 +61,8 @@ class HandEvaluationServiceTest {
     @Test
     void recognizesHighCard() throws HandExceededException {
         HandOfCards hand = TestUtils.getHandSpy(
-                Arrays.asList(CardSuit.HEARTS, CardSuit.SPADES, CardSuit.SPADES, CardSuit.DIAMONDS, CardSuit.DIAMONDS),
-                Arrays.asList(CardValue.TWO, CardValue.FOUR, CardValue.TEN, CardValue.FIVE, CardValue.JACK));
+                List.of(CardSuit.HEARTS, CardSuit.SPADES, CardSuit.SPADES, CardSuit.DIAMONDS, CardSuit.DIAMONDS),
+                List.of(CardValue.TWO, CardValue.FOUR, CardValue.TEN, CardValue.FIVE, CardValue.JACK));
 
         PokerHand result = sut.evaluate(hand);
 

@@ -6,7 +6,6 @@ import com.yotilla.poker.card.HandOfCards;
 import com.yotilla.poker.result.PokerHand;
 import com.yotilla.poker.result.PokerHandRanking;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map.Entry;
@@ -53,7 +52,7 @@ public class FullHouseEvaluator implements PokerHandEvaluator {
 
             if (tripleValue != null && pairValue != null) {
                 // we found a triple and a pair => a full house. Build a result.
-                return new PokerHand(PokerHandRanking.FULL_HOUSE, Arrays.asList(tripleValue, pairValue),
+                return new PokerHand(PokerHandRanking.FULL_HOUSE, List.of(tripleValue, pairValue),
                         Collections.emptyList());
             }
         }

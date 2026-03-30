@@ -4,7 +4,6 @@ import com.yotilla.poker.TestUtils;
 import com.yotilla.poker.error.HandExceededException;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -128,7 +127,7 @@ class HandOfCardsTest {
 
         hand.addCards(aceOfSpades, aceOfHearts);
 
-        assertTrue(hand.getCards().containsAll(Arrays.asList(aceOfSpades, aceOfHearts)),
+        assertTrue(hand.getCards().containsAll(List.of(aceOfSpades, aceOfHearts)),
                 "We added two cards to this hand, both ought to be in there.");
     }
 

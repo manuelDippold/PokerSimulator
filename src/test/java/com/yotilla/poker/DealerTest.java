@@ -11,7 +11,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -181,20 +180,20 @@ class DealerTest {
      */
     @Test
     void determineGameResultWithClearWinner() throws PokerParseException {
-        PokerHand handOne = TestUtils.getPokerHand(PokerHandRanking.ONE_PAIR, Arrays.asList(CardValue.TEN),
-                Arrays.asList(CardValue.FIVE, CardValue.THREE, CardValue.TWO));
+        PokerHand handOne = TestUtils.getPokerHand(PokerHandRanking.ONE_PAIR, List.of(CardValue.TEN),
+                List.of(CardValue.FIVE, CardValue.THREE, CardValue.TWO));
         Mockito.when(playerOneSpy.getPokerHand()).thenReturn(handOne);
 
-        PokerHand handTwo = TestUtils.getPokerHand(PokerHandRanking.ONE_PAIR, Arrays.asList(CardValue.NINE),
-                Arrays.asList(CardValue.JACK, CardValue.FOUR, CardValue.TWO));
+        PokerHand handTwo = TestUtils.getPokerHand(PokerHandRanking.ONE_PAIR, List.of(CardValue.NINE),
+                List.of(CardValue.JACK, CardValue.FOUR, CardValue.TWO));
         Mockito.when(playerTwoSpy.getPokerHand()).thenReturn(handTwo);
 
         PokerHand handThree = TestUtils.getPokerHand(PokerHandRanking.FLUSH,
-                Arrays.asList(CardValue.JACK, CardValue.QUEEN, CardValue.NINE, CardValue.FOUR, CardValue.THREE),
+                List.of(CardValue.JACK, CardValue.QUEEN, CardValue.NINE, CardValue.FOUR, CardValue.THREE),
                 Collections.emptyList());
         Mockito.when(playerThreeSpy.getPokerHand()).thenReturn(handThree);
 
-        List<Player> players = Arrays.asList(playerOneSpy, playerThreeSpy, playerTwoSpy);
+        List<Player> players = List.of(playerOneSpy, playerThreeSpy, playerTwoSpy);
         GameResult result = sut.determineGameResult(players);
 
         assertEquals(playerThreeSpy, result.getWinner(), "Player three should have won that game.");
@@ -207,21 +206,21 @@ class DealerTest {
      */
     @Test
     void determineGameResultWithWinnerByRankCard() throws PokerParseException {
-        PokerHand handOne = TestUtils.getPokerHand(PokerHandRanking.ONE_PAIR, Arrays.asList(CardValue.TEN),
-                Arrays.asList(CardValue.FIVE, CardValue.THREE, CardValue.TWO));
+        PokerHand handOne = TestUtils.getPokerHand(PokerHandRanking.ONE_PAIR, List.of(CardValue.TEN),
+                List.of(CardValue.FIVE, CardValue.THREE, CardValue.TWO));
         Mockito.when(playerOneSpy.getPokerHand()).thenReturn(handOne);
 
         PokerHand handTwo = TestUtils.getPokerHand(PokerHandRanking.FLUSH,
-                Arrays.asList(CardValue.JACK, CardValue.KING, CardValue.NINE, CardValue.FOUR, CardValue.THREE),
+                List.of(CardValue.JACK, CardValue.KING, CardValue.NINE, CardValue.FOUR, CardValue.THREE),
                 Collections.emptyList());
         Mockito.when(playerTwoSpy.getPokerHand()).thenReturn(handTwo);
 
         PokerHand handThree = TestUtils.getPokerHand(PokerHandRanking.FLUSH,
-                Arrays.asList(CardValue.JACK, CardValue.QUEEN, CardValue.NINE, CardValue.FOUR, CardValue.THREE),
+                List.of(CardValue.JACK, CardValue.QUEEN, CardValue.NINE, CardValue.FOUR, CardValue.THREE),
                 Collections.emptyList());
         Mockito.when(playerThreeSpy.getPokerHand()).thenReturn(handThree);
 
-        List<Player> players = Arrays.asList(playerOneSpy, playerThreeSpy, playerTwoSpy);
+        List<Player> players = List.of(playerOneSpy, playerThreeSpy, playerTwoSpy);
         GameResult result = sut.determineGameResult(players);
 
         assertEquals(playerTwoSpy, result.getWinner(), "Player two should have won that game.");
@@ -234,21 +233,21 @@ class DealerTest {
      */
     @Test
     void determineGameResultWithWinnerByHighCard() throws PokerParseException {
-        PokerHand handOne = TestUtils.getPokerHand(PokerHandRanking.ONE_PAIR, Arrays.asList(CardValue.TEN),
-                Arrays.asList(CardValue.FIVE, CardValue.THREE, CardValue.TWO));
+        PokerHand handOne = TestUtils.getPokerHand(PokerHandRanking.ONE_PAIR, List.of(CardValue.TEN),
+                List.of(CardValue.FIVE, CardValue.THREE, CardValue.TWO));
         Mockito.when(playerOneSpy.getPokerHand()).thenReturn(handOne);
 
         PokerHand handTwo = TestUtils.getPokerHand(PokerHandRanking.TWO_PAIRS,
-                Arrays.asList(CardValue.JACK, CardValue.JACK, CardValue.NINE, CardValue.NINE, CardValue.THREE),
+                List.of(CardValue.JACK, CardValue.JACK, CardValue.NINE, CardValue.NINE, CardValue.THREE),
                 Collections.emptyList());
         Mockito.when(playerTwoSpy.getPokerHand()).thenReturn(handTwo);
 
         PokerHand handThree = TestUtils.getPokerHand(PokerHandRanking.TWO_PAIRS,
-                Arrays.asList(CardValue.JACK, CardValue.JACK, CardValue.NINE, CardValue.NINE, CardValue.TEN),
+                List.of(CardValue.JACK, CardValue.JACK, CardValue.NINE, CardValue.NINE, CardValue.TEN),
                 Collections.emptyList());
         Mockito.when(playerThreeSpy.getPokerHand()).thenReturn(handThree);
 
-        List<Player> players = Arrays.asList(playerOneSpy, playerThreeSpy, playerTwoSpy);
+        List<Player> players = List.of(playerOneSpy, playerThreeSpy, playerTwoSpy);
         GameResult result = sut.determineGameResult(players);
 
         assertEquals(playerThreeSpy, result.getWinner(), "Player three should have won that game.");
@@ -261,21 +260,21 @@ class DealerTest {
      */
     @Test
     void determineGameResultWithSplitPotBetweenTwo() throws PokerParseException {
-        PokerHand handOne = TestUtils.getPokerHand(PokerHandRanking.ONE_PAIR, Arrays.asList(CardValue.TEN),
-                Arrays.asList(CardValue.FIVE, CardValue.THREE, CardValue.TWO));
+        PokerHand handOne = TestUtils.getPokerHand(PokerHandRanking.ONE_PAIR, List.of(CardValue.TEN),
+                List.of(CardValue.FIVE, CardValue.THREE, CardValue.TWO));
         Mockito.when(playerOneSpy.getPokerHand()).thenReturn(handOne);
 
         PokerHand handTwo = TestUtils.getPokerHand(PokerHandRanking.TWO_PAIRS,
-                Arrays.asList(CardValue.JACK, CardValue.JACK, CardValue.NINE, CardValue.NINE, CardValue.THREE),
+                List.of(CardValue.JACK, CardValue.JACK, CardValue.NINE, CardValue.NINE, CardValue.THREE),
                 Collections.emptyList());
         Mockito.when(playerTwoSpy.getPokerHand()).thenReturn(handTwo);
 
         PokerHand handThree = TestUtils.getPokerHand(PokerHandRanking.TWO_PAIRS,
-                Arrays.asList(CardValue.JACK, CardValue.JACK, CardValue.NINE, CardValue.NINE, CardValue.THREE),
+                List.of(CardValue.JACK, CardValue.JACK, CardValue.NINE, CardValue.NINE, CardValue.THREE),
                 Collections.emptyList());
         Mockito.when(playerThreeSpy.getPokerHand()).thenReturn(handThree);
 
-        List<Player> players = Arrays.asList(playerOneSpy, playerThreeSpy, playerTwoSpy);
+        List<Player> players = List.of(playerOneSpy, playerThreeSpy, playerTwoSpy);
         GameResult result = sut.determineGameResult(players);
 
         assertNull(result.getWinner(), "There is no winner when the pot is split");
@@ -291,21 +290,21 @@ class DealerTest {
     @Test
     void determineGameResultWithSplitPotBetweenThree() throws PokerParseException {
         PokerHand handOne = TestUtils.getPokerHand(PokerHandRanking.HIGH_CARD,
-                Arrays.asList(CardValue.QUEEN, CardValue.TEN, CardValue.NINE, CardValue.EIGHT, CardValue.FIVE),
+                List.of(CardValue.QUEEN, CardValue.TEN, CardValue.NINE, CardValue.EIGHT, CardValue.FIVE),
                 Collections.emptyList());
         Mockito.when(playerOneSpy.getPokerHand()).thenReturn(handOne);
 
         PokerHand handTwo = TestUtils.getPokerHand(PokerHandRanking.HIGH_CARD,
-                Arrays.asList(CardValue.QUEEN, CardValue.TEN, CardValue.NINE, CardValue.EIGHT, CardValue.FIVE),
+                List.of(CardValue.QUEEN, CardValue.TEN, CardValue.NINE, CardValue.EIGHT, CardValue.FIVE),
                 Collections.emptyList());
         Mockito.when(playerTwoSpy.getPokerHand()).thenReturn(handTwo);
 
         PokerHand handThree = TestUtils.getPokerHand(PokerHandRanking.HIGH_CARD,
-                Arrays.asList(CardValue.QUEEN, CardValue.TEN, CardValue.NINE, CardValue.EIGHT, CardValue.FIVE),
+                List.of(CardValue.QUEEN, CardValue.TEN, CardValue.NINE, CardValue.EIGHT, CardValue.FIVE),
                 Collections.emptyList());
         Mockito.when(playerThreeSpy.getPokerHand()).thenReturn(handThree);
 
-        List<Player> players = Arrays.asList(playerOneSpy, playerThreeSpy, playerTwoSpy);
+        List<Player> players = List.of(playerOneSpy, playerThreeSpy, playerTwoSpy);
         GameResult result = sut.determineGameResult(players);
 
         assertNull(result.getWinner(), "There is no winner when the pot is split");
